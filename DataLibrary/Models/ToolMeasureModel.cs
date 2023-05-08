@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
-    internal class ToolMeasureModel
+    public class ToolMeasureModel
     {
         [Key]
 

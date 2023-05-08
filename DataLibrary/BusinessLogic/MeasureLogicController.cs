@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.BusinessLogic
 {
     // Uses the Daily_check to see what is in there and to add
-    internal class MeasureLogicController
+    public class MeasureLogicController
     {
         public static int CreateMeasure(string T_Date, string ToolNo, string S_Size, string WC, string EmpNo, string Condition)
         {
@@ -61,10 +61,13 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
-        public static List<ToolMeasureModel> LoadCheckedOutTools()
+        // TODO : remove all old entries in DB
+        // Get list of all entries in the DB from the last 7 days
+        public static List<ToolMeasureModel> LoadMeasures()
         {
-            string sql = @"SELECT ToolNo as toolNumber, D_Remove, P_Return, WC, EmpNo 
-                            FROM dbo.Daily_Check; ";
+            string sql = @"SELECT ID, T_Date, WC, ToolNo, S_Size, EmpNo, Condition
+                            FROM dbo.Daily_Check
+                            WHERE T_Date > TRY_CONVERT(DATETIME, '" + DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd hh:mm") + "'); ";
 
 
             return SqlDataAccess.LoadData<ToolMeasureModel>(sql);

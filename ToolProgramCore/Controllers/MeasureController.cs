@@ -1,14 +1,49 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ToolProgramCore.Models;
+using static DataLibrary.BusinessLogic.MeasureLogicController;
 
 namespace ToolProgramCore.Controllers
 {
     public class MeasureController : Controller
     {
+
+        private List<ToolMeasure>? MeasureList;
+
+        // Updates the Measure so that it gets most recent data from DB
+        public void GetMeasureList()
+        {
+            var data = LoadMeasures();
+            List<ToolMeasure> toolMeasures = new();
+
+            foreach (var row in data)
+            {
+                if (row.T_Date == null) {
+                    break;
+                }
+                DateTime ConvertedDate = DateTime.Parse(row.T_Date);
+                toolMeasures.Add(new ToolMeasure
+                {
+                    ID = row.ID,
+                    T_Date = ConvertedDate,
+                    WC = row.WC,
+                    ToolNo = row.ToolNo,
+                    S_Size = row.S_Size,
+                    EmpNo = row.EmpNo,
+                    Condition = row.Condition
+
+                });
+            }
+            MeasureList = toolMeasures;
+        }
+
         // GET: MeasureController
         public ActionResult Index()
         {
-            return View();
+
+            GetMeasureList();
+
+            return View(MeasureList);
         }
 
         // GET: MeasureController/Details/5
@@ -28,14 +63,26 @@ namespace ToolProgramCore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddMeasure(IFormCollection collection)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+
+                try
+                {
+                    CreateMeasure(collection);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            // TODO: compare to original tool Program
+            return View();
+        }
+
+        private void CreateMeasure(IFormCollection collection)
+        {
+            throw new NotImplementedException();
         }
 
         // GET: MeasureController/Edit/5

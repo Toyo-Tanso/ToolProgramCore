@@ -9,12 +9,12 @@ namespace ToolProgramCore.Models
         public string ? ID { get; set; }
 
         // Added in DataLibrary
-        [Display(Name = "Date Borrowed ")]
+        [Display(Name = "Measured Date")]
         [DisplayFormat(DataFormatString = " {0:MM/dd/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         [DataType(DataType.DateTime)]
         public DateTime? T_Date { get; set; }
 
-        [Display(Name = "Work Center")]
+        [Display(Name = "Work Center(s)")]
         [Required]
         public String? WC { get; set; }
 
