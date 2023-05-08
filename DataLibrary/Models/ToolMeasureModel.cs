@@ -23,7 +23,7 @@ namespace DataLibrary.Models
 
         public String ? EmpNo { get; set; }
 
-        public String ? condition { get; set; }
+        public String ? Condition { get; set; }
 
         
     }
