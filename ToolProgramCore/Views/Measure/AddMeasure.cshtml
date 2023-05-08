@@ -1,0 +1,63 @@
+﻿@model ToolProgramCore.Models.ToolMeasure
+
+@{
+    ViewData["Title"] = "AddMeasure";
+}
+
+<h1>AddMeasure</h1>
+
+<h4>ToolMeasure</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddMeasure">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group visually-hidden">
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" />
+                <span asp-validation-for="ID" class="text-danger"></span>
+            </div>
+            <div class="form-group visually-hidden">
+                <label asp-for="T_Date" class="control-label"></label>
+                <input asp-for="T_Date" class="form-control" />
+                <span asp-validation-for="T_Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WC" class="control-label"></label>
+                <input asp-for="WC" class="form-control" />
+                <span asp-validation-for="WC" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToolNo" class="control-label"></label>
+                <input asp-for="ToolNo" class="form-control" />
+                <span asp-validation-for="ToolNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpNo" class="control-label"></label>
+                <input asp-for="EmpNo" class="form-control" />
+                <span asp-validation-for="EmpNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="S_Size" class="control-label"></label>
+                <input asp-for="S_Size" class="form-control" />
+                <span asp-validation-for="S_Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Condition" class="control-label"></label>
+                <input asp-for="Condition" class="form-control" />
+                <span asp-validation-for="Condition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

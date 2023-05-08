@@ -18,7 +18,7 @@ namespace ToolProgramCore.Controllers
         }
 
         // GET: MeasureController/Create
-        public ActionResult Create()
+        public ActionResult AddMeasure()
         {
             return View();
         }
@@ -26,7 +26,7 @@ namespace ToolProgramCore.Controllers
         // POST: MeasureController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult AddMeasure(IFormCollection collection)
         {
             try
             {
