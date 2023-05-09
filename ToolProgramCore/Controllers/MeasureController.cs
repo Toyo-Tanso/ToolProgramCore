@@ -37,6 +37,19 @@ namespace ToolProgramCore.Controllers
             MeasureList = toolMeasures;
         }
 
+        // Is used to populate the ID Dropdown list in a tool object
+        public List<string> getFieldsList(string type)
+        {
+            var data = LoadFields(type);
+            List<string>fieldList = new List<string>();
+
+            foreach (var row in data)
+            {
+                fieldList.Add(row);
+            }
+            return fieldList;
+        }
+
         // GET: MeasureController
         public ActionResult Index()
         {
@@ -52,9 +65,21 @@ namespace ToolProgramCore.Controllers
             return View();
         }
 
-        // GET: MeasureController/Create
+        // GET: MeasureController/AddMeasure
+        // Populates the dropdown lists for the page
         public ActionResult AddMeasure()
         {
+            ToolMeasure measure = new ToolMeasure();
+            measure.WCdropDownList     = getFieldsList("WC");
+            measure.EmplDropDownList   = getFieldsList("EMP");
+            measure.ToolNoDropDownList = getFieldsList("TOOL");
+
+
+
+            measure.T_Date = DateTime.Now;
+
+
+
             return View();
         }
 
