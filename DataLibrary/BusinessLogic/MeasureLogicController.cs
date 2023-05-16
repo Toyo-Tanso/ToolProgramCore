@@ -23,7 +23,7 @@ namespace DataLibrary.BusinessLogic
 
             ToolMeasureModel data = new ToolMeasureModel
             {
-                T_Date = FormatedT_Date,
+                T_Date = T_Date,
                 WC = WC,
                 ToolNo = ToolNo,
                 S_Size = S_Size,
@@ -117,13 +117,26 @@ namespace DataLibrary.BusinessLogic
         //}
 
 
-        // TODO : new implementation
+        // TODO : Finish implementation
         // Change based on WCs, EmplNo and Tools
         public static List<string> LoadFields(string type)
         {
-            string sql = @"SELECT Item
-                            FROM dbo.siteFields
-                            WHERE type = '" + type + "';";
+            string sql = "";
+            
+            if (type.Equals("WC")) {
+                 sql = @"SELECT Name
+                            FROM dbo.WorkCenter
+                            WHERE Active = 1;";
+            }
+            else if (type.Equals("EMP"))
+            {
+
+            }
+            else
+            {
+
+            }
+            
 
             return SqlDataAccess.LoadData<string>(sql);
         }

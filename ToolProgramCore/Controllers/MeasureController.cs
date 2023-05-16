@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.MeasureLogicController;
 
@@ -67,20 +68,18 @@ namespace ToolProgramCore.Controllers
 
         // GET: MeasureController/AddMeasure
         // Populates the dropdown lists for the page
+        [HttpGet]
         public ActionResult AddMeasure()
         {
             ToolMeasure measure = new ToolMeasure();
             measure.WCdropDownList     = getFieldsList("WC");
-            measure.EmplDropDownList   = getFieldsList("EMP");
-            measure.ToolNoDropDownList = getFieldsList("TOOL");
+            //measure.EmplDropDownList   = getFieldsList("EMP");
+            //measure.ToolNoDropDownList = getFieldsList("TOOL");
+
+            measure.T_Date = DateTime.Now.Date;
 
 
-
-            measure.T_Date = DateTime.Now;
-
-
-
-            return View();
+            return View(measure);
         }
 
         // POST: MeasureController/Create
@@ -93,21 +92,46 @@ namespace ToolProgramCore.Controllers
 
                 try
                 {
-                    CreateMeasure(collection);
+                    // TODO : if new tool insert into gauge, with new WC
+                    // TODO : extra credit remove make consistent case system
+                    //        ex: tool2 == TOOL2
+                    // TODO : (should I do this?) if tool exist, insert new WC if it exist
+                    
+                    CreateMeasureHelper(collection);
                     return RedirectToAction(nameof(Index));
                 }
                 catch
                 {
-                    return View();
+                    return RedirectToAction("Error");
+                    
                 }
             }
-            // TODO: compare to original tool Program
-            return View();
+
+            // Set tool Defaults
+            ToolMeasure toolMeasure = new ToolMeasure();
+            toolMeasure.WCdropDownList = getFieldsList("WC");
+
+            //toolMeasure.T_Date = DateTime.Now.Date;
+            
+
+
+            return View(toolMeasure);
         }
 
-        private void CreateMeasure(IFormCollection collection)
+        private void CreateMeasureHelper(IFormCollection collection)
         {
-            throw new NotImplementedException();
+            string T_Date = collection["T_Date"];
+            string ToolNo = collection["ToolNo"];
+            string S_Size = collection["S_Size"];
+            string WC = collection["WC"];
+            string EmpNo = collection["EmpNo"];
+            string Condition = collection["Condition"];
+
+
+            Console.WriteLine("123456789");
+
+            CreateMeasure(T_Date, ToolNo, S_Size, WC, EmpNo, Condition);
+
         }
 
         // GET: MeasureController/Edit/5

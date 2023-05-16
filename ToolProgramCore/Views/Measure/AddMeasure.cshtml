@@ -19,14 +19,34 @@
             </div>
             <div class="form-group visually-hidden">
                 <label asp-for="T_Date" class="control-label"></label>
-                <input asp-for="T_Date" class="form-control" />
+                <input asp-for="T_Date" class="form-control" data-format="dd/MM/yyyy HH:mm:ss PP"
+                />
                 <span asp-validation-for="T_Date" class="text-danger"></span>
             </div>
+        
+       
+            <button id="toggle-button">Custom Time</button>
             <div class="form-group">
+                <label asp-for="WC">Work Center</label>
+                <input asp-for="WC" class="form-control" list="Work_Center" placeholder="Type to search...">
+                <datalist id="Work_Center">
+                        @if (!(Model is null))
+                        {
+                            foreach (var wc in Model.WCdropDownList)
+                            {
+                            <option value="@wc.Trim()"></option>
+                            }
+                        }
+                </datalist>
+                </input asp-for>
+                
+                <span asp-validation-for="WC" class="text-danger"></span>
+            </div>
+            <div@* class="form-group">
                 <label asp-for="WC" class="control-label"></label>
                 <input asp-for="WC" class="form-control" />
                 <span asp-validation-for="WC" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="ToolNo" class="control-label"></label>
                 <input asp-for="ToolNo" class="form-control" />
@@ -57,6 +77,32 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<script>
+  // Get the button element by its id
+  var button = document.getElementById("toggle-button");
+
+  // Add a click event listener to the button
+  button.addEventListener("click", function() {
+    // Get all the div elements with the class form-group
+    var formGroups = document.querySelectorAll(".form-group");
+
+    // Loop through each div element
+    for (var i = 1; i < 2; i++) {
+      // Get the current div element
+      var formGroup = formGroups[i];
+
+      // Toggle the class visually-hidden on the div element
+      formGroup.classList.toggle("visually-hidden");
+    }
+    if(button.textContent === "Hide"){
+        button.textContent = "Custom Time"
+    }
+    else {
+        button.textContent = "Hide"
+    }
+    
+  });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

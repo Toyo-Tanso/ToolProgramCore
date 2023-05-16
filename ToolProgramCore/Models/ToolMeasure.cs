@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Drawing.Printing;
 using System.Xml.Linq;
 
 namespace ToolProgramCore.Models
@@ -10,8 +11,9 @@ namespace ToolProgramCore.Models
 
         // Added in DataLibrary
         [Display(Name = "Measured Date")]
-        [DisplayFormat(DataFormatString = " {0:MM/dd/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
-        [DataType(DataType.DateTime)]
+        [Required]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
         public DateTime? T_Date { get; set; }
 
         [Display(Name = "Work Center(s)")]
