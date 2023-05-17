@@ -8,7 +8,7 @@ namespace ToolProgramCore.Controllers
 {
     public class MeasureController : Controller
     {
-
+        // holds current list
         private List<ToolMeasure>? MeasureList;
 
         // Updates the Measure so that it gets most recent data from DB
@@ -38,7 +38,7 @@ namespace ToolProgramCore.Controllers
             MeasureList = toolMeasures;
         }
 
-        // Is used to populate the ID Dropdown list in a tool object
+        // Is used to populate the ID Dropdown lists in a tool object
         public List<string> getFieldsList(string type)
         {
             var data = LoadFields(type);
@@ -52,11 +52,10 @@ namespace ToolProgramCore.Controllers
         }
 
         // GET: MeasureController
+        // Gets list from the last 7 days and displays them
         public ActionResult Index()
         {
-
             GetMeasureList();
-
             return View(MeasureList);
         }
 
@@ -73,16 +72,17 @@ namespace ToolProgramCore.Controllers
         {
             ToolMeasure measure = new ToolMeasure();
             measure.WCdropDownList     = getFieldsList("WC");
+            // TODO : add the following lists
             //measure.EmplDropDownList   = getFieldsList("EMP");
             //measure.ToolNoDropDownList = getFieldsList("TOOL");
 
             measure.T_Date = DateTime.Now.Date;
 
-
             return View(measure);
         }
 
-        // POST: MeasureController/Create
+        // POST: MeasureController/AddMeasure
+        // Verifies inputs and submits tool
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddMeasure(IFormCollection collection)
@@ -96,7 +96,7 @@ namespace ToolProgramCore.Controllers
                     // TODO : extra credit remove make consistent case system
                     //        ex: tool2 == TOOL2
                     // TODO : (should I do this?) if tool exist, insert new WC if it exist
-                    
+                    // If valid user helper function
                     CreateMeasureHelper(collection);
                     return RedirectToAction(nameof(Index));
                 }
@@ -107,17 +107,15 @@ namespace ToolProgramCore.Controllers
                 }
             }
 
+            // If reached error catching not working
             // Set tool Defaults
             ToolMeasure toolMeasure = new ToolMeasure();
             toolMeasure.WCdropDownList = getFieldsList("WC");
-
-            //toolMeasure.T_Date = DateTime.Now.Date;
-            
-
-
             return View(toolMeasure);
         }
 
+        // Takes out values and uses the MeasuerLogic Controller to
+        // add tool check in
         private void CreateMeasureHelper(IFormCollection collection)
         {
             string T_Date = collection["T_Date"];
@@ -126,10 +124,6 @@ namespace ToolProgramCore.Controllers
             string WC = collection["WC"];
             string EmpNo = collection["EmpNo"];
             string Condition = collection["Condition"];
-
-
-            Console.WriteLine("123456789");
-
             CreateMeasure(T_Date, ToolNo, S_Size, WC, EmpNo, Condition);
 
         }

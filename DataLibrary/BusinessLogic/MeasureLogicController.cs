@@ -12,15 +12,10 @@ namespace DataLibrary.BusinessLogic
     // Uses the Daily_check to see what is in there and to add
     public class MeasureLogicController
     {
+        // Inserts tool check into create Daily check
         public static int CreateMeasure(string T_Date, string ToolNo, string S_Size, string WC, string EmpNo, string Condition)
         {
-
-            // TODO : implement ID
-            string ID = "0";
-
-            //TODO : Format T_Date
-            string FormatedT_Date = "05-24-2022 14:22";
-
+            // Turns data into local toolMeasure class
             ToolMeasureModel data = new ToolMeasureModel
             {
                 T_Date = T_Date,
@@ -29,7 +24,6 @@ namespace DataLibrary.BusinessLogic
                 S_Size = S_Size,
                 EmpNo = EmpNo,
                 Condition = Condition,
-                ID = ID
             };
 
             string sql = @"INSERT into dbo.Daily_Check (T_Date, WC, ToolNo, S_Size, EmpNo, Condition) 
