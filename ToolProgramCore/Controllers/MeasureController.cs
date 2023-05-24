@@ -24,15 +24,18 @@ namespace ToolProgramCore.Controllers
                     break;
                 }
                 DateTime ConvertedDate = DateTime.Parse(row.T_Date);
+                double S_Size_converted = double.Parse(row.S_Size);
+                double Condition_converted = double.Parse(row.Condition);
+
                 toolMeasures.Add(new ToolMeasure
                 {
                     ID = row.ID,
                     T_Date = ConvertedDate,
                     WC = row.WC,
                     ToolNo = row.ToolNo,
-                    S_Size = row.S_Size,
+                    S_Size = S_Size_converted,
                     EmpNo = row.EmpNo,
-                    Condition = row.Condition
+                    Condition = Condition_converted
 
                 });
             }
@@ -168,10 +171,10 @@ namespace ToolProgramCore.Controllers
         {
             string T_Date = collection["T_Date"];
             string ToolNo = collection["ToolNo"].ToString().ToUpper();
-            string S_Size = collection["S_Size"];
+            string S_Size = collection["S_Size"].ToString();
             string WC = collection["WC"];
             string EmpNo = collection["EmpNo"];
-            string Condition = collection["Condition"];
+            string Condition = collection["Condition"].ToString();
             CreateMeasure(T_Date, ToolNo, S_Size, WC, EmpNo, Condition);
 
         }

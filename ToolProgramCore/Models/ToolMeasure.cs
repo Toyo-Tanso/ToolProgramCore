@@ -27,7 +27,6 @@ namespace ToolProgramCore.Models
         public String? WC { get; set; }
 
         [Required]
-      
         [Display(Name = "Tool Number")]
         public string? ToolNo { get; set; }
 
@@ -36,14 +35,17 @@ namespace ToolProgramCore.Models
         [Remote(action: "VerifyEmpNo", controller: "Measure")]
         public String? EmpNo { get; set; }
 
+        [Range(0.5, 25)]
         [Display(Name = "Standard Size")]
         [Required]
-        public String? S_Size { get; set; }
+        
+        public double? S_Size { get; set; }
 
 
         [Display(Name = "Deviation")]
         [Required]
-        public String? Condition { get; set; }
+        [Range(-15, 15)]
+        public double? Condition { get; set; }
 
         // TODO: replace index view with this after changing it
         public string ? EmpName { get; set; }
