@@ -23,9 +23,16 @@
                 />
                 <span asp-validation-for="T_Date" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="T_Date" class="control-label"></label>
+                <input asp-for="T_Date" disabled="true" class="form-control" data-format="dd/MM/yyyy HH:mm:ss PP"
+                />
+                <span asp-validation-for="T_Date" class="text-danger"></span>
+            </div>
         
        
-            <button id="toggle-button">Custom Time</button>
+            @*<button id="toggle-button">Custom Time</button>*@
             <div class="form-group">
                 <label asp-for="WC">Work Center</label>
                 <input asp-for="WC" class="form-control" list="Work_Center" placeholder="Type to search...">
@@ -54,7 +61,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="EmpNo" class="control-label"></label>
-                <input asp-for="EmpNo" class="form-control" />
+                <input asp-for="EmpNo" class="form-control" list="Emp_Data" >
+                <datalist id="Emp_Data">
+                        @if (!(Model is null))
+                        {
+                            foreach (var emp_lst in Model.EmplDropDownList)
+                            {
+                            <option value="@emp_lst[1].Trim()">@(emp_lst[0].Split(',')[1].Trim() + " " + emp_lst[0].Split(',')[0])</option>
+                            }
+                        }
+                </datalist>
+                </dropdown asp-for>
                 <span asp-validation-for="EmpNo" class="text-danger"></span>
             </div>
             <div class="form-group">

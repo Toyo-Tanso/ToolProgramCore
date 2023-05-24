@@ -116,35 +116,49 @@ namespace DataLibrary.BusinessLogic
         public static List<string> LoadFields(string type)
         {
             string sql = "";
-            
+
             if (type.Equals("WC")) {
-                 sql = @"SELECT Name
+                sql = @"SELECT Name
                             FROM dbo.WorkCenter
                             WHERE Active = 1;";
+                return SqlDataAccess.LoadData<string>(sql);
             }
-            else if (type.Equals("EMP"))
+            else if (type.Equals("TOOL"))
             {
-
+                throw new NotImplementedException();
             }
             else
             {
-
+                throw new Exception("Invalid WC entered");
             }
-            
 
-            return SqlDataAccess.LoadData<string>(sql);
         }
+        public static List<List<string>> LoadFields_dbl_lst(string type)
+        {
+            string sql = "";
+            if (type.Equals("EMP"))
+            {
+                sql = @"SELECT Name, Clock_Code
+                            FROM dbo.Employee1
+                            WHERE Active = 1;";
+               
+                return SqlDataAccess.LoadDictData<List<string>>(sql);
+            }
+            else { throw new Exception("Incorrect type entered"); }
 
-        // Not needed right now
+        }
+    
 
-        //// Return true if the toolNo is in the database is in there
-        //public static bool InDB(string toolNo)
-        //{
+            // Not needed right now
 
-        //    string sql = @"SELECT COUNT(ToolNo) FROM dbo.Tool_Move WHERE ToolNo = '" + toolNo + "';";
+            //// Return true if the toolNo is in the database is in there
+            //public static bool InDB(string toolNo)
+            //{
 
-        //    return SqlDataAccess.LoadData<string>(sql)[0] == "0";
+            //    string sql = @"SELECT COUNT(ToolNo) FROM dbo.Tool_Move WHERE ToolNo = '" + toolNo + "';";
 
-        //}
-    }
+            //    return SqlDataAccess.LoadData<string>(sql)[0] == "0";
+
+            //}
+        }
 }

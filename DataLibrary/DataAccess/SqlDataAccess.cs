@@ -21,6 +21,25 @@ namespace DataLibrary.DataAccess
             using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
             {
                 return cnn.Query<T>(sql).ToList();
+
+            }
+        }
+
+        public static List<List<string>> LoadDictData<T>(string sql) where T : class
+        {
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                // Use Query<T> to get an IEnumerable<T> of each row as an object
+                var result = cnn.Query<dynamic>(sql).ToList();
+
+                List<List<string>> EmplList = new List<List<string>>();
+
+                // Get each row and but into a list
+                foreach (var row in result)
+                {
+                    EmplList.Add(new List<string> { row.Name, row.Clock_Code });
+                }
+                return EmplList;
             }
         }
 

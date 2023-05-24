@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 using System.Globalization;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.MeasureLogicController;
@@ -51,6 +52,24 @@ namespace ToolProgramCore.Controllers
             return fieldList;
         }
 
+        // Is used to populate the ID Dropdown lists in a tool object
+        public List<List<string>> getFields_dbl_lst(string type)
+        {
+            // TODO add to List
+            List<List<string>> fieldList = new List<List<string>>();
+
+
+            //foreach (var row in data)
+            //{
+            //    fieldList.Add(row);
+            //}
+            //return fieldList;
+
+            fieldList = LoadFields_dbl_lst(type);
+
+            return fieldList; 
+        }
+
         // GET: MeasureController
         // Gets list from the last 7 days and displays them
         public ActionResult Index()
@@ -65,15 +84,43 @@ namespace ToolProgramCore.Controllers
             return View();
         }
 
+        // This verifies input in the form (Helper) [called in the model class]
+        // Returns error if the employee does not exist in the Database
+        public IActionResult VerifyEmpNo(string empNo)
+        {
+            List<List<string>> cur_empl = getFields_dbl_lst("EMP");
+
+            bool EmplExists = false;
+
+            foreach (var row in cur_empl)
+            {
+                if (row[1].Trim() == empNo)
+                {
+                    EmplExists = true;
+                }
+            }
+
+
+            if (EmplExists)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Employee does not exist. Notify Leo");
+            }
+        }
+
         // GET: MeasureController/AddMeasure
         // Populates the dropdown lists for the page
         [HttpGet]
         public ActionResult AddMeasure()
         {
+            // TODO hide button in the view that let's you change submit date
             ToolMeasure measure = new ToolMeasure();
             measure.WCdropDownList     = getFieldsList("WC");
             // TODO : add the following lists
-            //measure.EmplDropDownList   = getFieldsList("EMP");
+            measure.EmplDropDownList = getFields_dbl_lst("EMP");
             //measure.ToolNoDropDownList = getFieldsList("TOOL");
 
             measure.T_Date = DateTime.Now.Date;
@@ -97,13 +144,14 @@ namespace ToolProgramCore.Controllers
                     //        ex: tool2 == TOOL2
                     // TODO : (should I do this?) if tool exist, insert new WC if it exist
                     // If valid user helper function
+                    // TODO if new employee maybe send an email?
+                    // if collection has an string instead of in send email
                     CreateMeasureHelper(collection);
                     return RedirectToAction(nameof(Index));
                 }
                 catch
                 {
-                    return RedirectToAction("Error");
-                    
+                    return RedirectToAction("Error");                  
                 }
             }
 
@@ -119,7 +167,7 @@ namespace ToolProgramCore.Controllers
         private void CreateMeasureHelper(IFormCollection collection)
         {
             string T_Date = collection["T_Date"];
-            string ToolNo = collection["ToolNo"];
+            string ToolNo = collection["ToolNo"].ToString().ToUpper();
             string S_Size = collection["S_Size"];
             string WC = collection["WC"];
             string EmpNo = collection["EmpNo"];

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing.Printing;
 using System.Xml.Linq;
 
@@ -6,6 +8,9 @@ namespace ToolProgramCore.Models
 {
     public class ToolMeasure
     {
+
+        // TODO: check value length to ensure it aligns with the Database  
+
         [Key]
         public string ? ID { get; set; }
 
@@ -16,16 +21,19 @@ namespace ToolProgramCore.Models
         [DataType(DataType.Date)]
         public DateTime? T_Date { get; set; }
 
+        // TODO add verification that the tool number is in the WC group
         [Display(Name = "Work Center(s)")]
         [Required]
         public String? WC { get; set; }
 
         [Required]
+      
         [Display(Name = "Tool Number")]
         public string? ToolNo { get; set; }
 
         [Display(Name = "Employee Number")]
         [Required]
+        [Remote(action: "VerifyEmpNo", controller: "Measure")]
         public String? EmpNo { get; set; }
 
         [Display(Name = "Standard Size")]
@@ -33,12 +41,17 @@ namespace ToolProgramCore.Models
         public String? S_Size { get; set; }
 
 
-        [Display(Name = "Standard Deviation")]
+        [Display(Name = "Deviation")]
         [Required]
         public String? Condition { get; set; }
 
+        // TODO: replace index view with this after changing it
+        public string ? EmpName { get; set; }
+
         public List<string>? WCdropDownList { get; set; }
-        public List<string>? EmplDropDownList { get; set; }
+
+        public List<List<string>> ? EmplDropDownList { get; set; }
+
         public List<string>? ToolNoDropDownList { get; set; }
     }
 }
