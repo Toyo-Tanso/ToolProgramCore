@@ -1,12 +1,36 @@
 ﻿@model ToolProgramCore.Models.ToolMeasure
 
 @{
-    ViewData["Title"] = "AddMeasure";
+    ViewData["Title"] = "Add Measure";
 }
 
-<h1>AddMeasure</h1>
+@{
+    // Declare a list of double values
+    List<double> values_S_Size = new List<double>();
+    // Loop from 0 to 20 with a step of 0.5
+    values_S_Size.Add(0.5);
+    for (double i = 0; i <= 20; i += 1)
+    {
+        // Add the value to the list
+        values_S_Size.Add(i);
+    }
+}
 
-<h4>ToolMeasure</h4>
+@{
+    // Declare a list of double values
+    List<double> values_Condition = new List<double>();
+    // Loop from 0 to 20 with a step of 0.5
+    
+    for (double i = -5; i <= 5; i += 0.5)
+    {
+        // Add the value to the list
+        values_Condition.Add(i);
+    }
+}
+
+<h1>Add a Measure</h1>
+
+<h4>Tool Measure</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -76,22 +100,45 @@
             </div>
             <div class="form-group">
                 <label asp-for="S_Size" class="control-label"></label>
-                <input asp-for="S_Size" class="form-control" type="number" step="0.1" />
+                <input asp-for="S_Size" class="form-control" type="number" step="0.1"
+                list="S_Size_lst">
+
+                <datalist id="S_Size_lst">                
+            
+                        @foreach (double value in values_S_Size)
+                        {
+                            // Create an option element with the value and text
+                            <option value="@value">@value</option>
+                        }
+                </dataList>
+                </input>
+                   
                 <span asp-validation-for="S_Size" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="Condition" class="control-label"></label>
-                <input asp-for="Condition" class="form-control" type="number" step="0.1"/>
+                <input asp-for="Condition" class="form-control" type="number" step="0.1" list="Condition_lst">
+                
+                <datalist id="Condition_lst">                
+            
+                        @foreach (double value in values_Condition)
+                        {
+                            // Create an option element with the value and text
+                            <option value="@value">@value</option>
+                        }
+                </dataList>
+                
+                </input>
                 <span asp-validation-for="Condition" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Add Measure" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
+<div class="mt-2">
     <a asp-action="Index">Back to List</a>
 </div>
 <script>

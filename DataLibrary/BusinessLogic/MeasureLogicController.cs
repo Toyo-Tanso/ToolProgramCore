@@ -61,7 +61,8 @@ namespace DataLibrary.BusinessLogic
         {
             string sql = @"SELECT ID, T_Date, WC, ToolNo, S_Size, EmpNo, Condition
                             FROM dbo.Daily_Check
-                            WHERE T_Date > TRY_CONVERT(DATETIME, '" + DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd hh:mm") + "'); ";
+                            ORDER BY ID DESC
+                            --WHERE T_Date > TRY_CONVERT(DATETIME, '" + DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd hh:mm") + "'); ";
 
 
             return SqlDataAccess.LoadData<ToolMeasureModel>(sql);

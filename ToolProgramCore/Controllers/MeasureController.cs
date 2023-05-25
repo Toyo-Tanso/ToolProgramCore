@@ -27,6 +27,9 @@ namespace ToolProgramCore.Controllers
                 double S_Size_converted = double.Parse(row.S_Size);
                 double Condition_converted = double.Parse(row.Condition);
 
+                // Get Employee Names once
+                List<List<string>> EmplDropDownList = getFields_dbl_lst("EMP");
+
                 toolMeasures.Add(new ToolMeasure
                 {
                     ID = row.ID,
@@ -35,11 +38,26 @@ namespace ToolProgramCore.Controllers
                     ToolNo = row.ToolNo,
                     S_Size = S_Size_converted,
                     EmpNo = row.EmpNo,
-                    Condition = Condition_converted
+                    Condition = Condition_converted,
+                    EmplDropDownList = EmplDropDownList,
+                    EmpName = getEmployeeName(row.EmpNo,EmplDropDownList)
 
                 });
             }
             MeasureList = toolMeasures;
+        }
+
+        private string getEmployeeName(string? empNo, List<List<string>> emplDropDownList)
+        {
+            foreach (List<string> tuple in emplDropDownList)
+            {
+                if (tuple[1].Equals(empNo))
+                {
+                    return tuple[0];
+                }
+            }
+            return "*Unknown*";
+            throw new NotImplementedException();
         }
 
         // Is used to populate the ID Dropdown lists in a tool object
@@ -84,7 +102,22 @@ namespace ToolProgramCore.Controllers
         // GET: MeasureController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            GetMeasureList();
+            ToolMeasure ToolID = new ToolMeasure();
+
+            Console.WriteLine(id);
+            foreach (ToolMeasure tool in MeasureList)
+            {
+                if (tool.ID.Equals(id.ToString()))
+                {
+                    ToolID = tool;
+                }
+            }
+            if (ToolID.ID is null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(ToolID);
         }
 
         // This verifies input in the form (Helper) [called in the model class]
