@@ -43,6 +43,42 @@ namespace DataLibrary.DataAccess
             }
         }
 
+        public static List<List<string>> LoadWCData<T>(string sql) where T : class
+        {
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                // Use Query<T> to get an IEnumerable<T> of each row as an object
+                var result = cnn.Query<dynamic>(sql).ToList();
+
+                List<List<string>> EmplList = new List<List<string>>();
+
+                // Get each row and but into a list
+                foreach (var row in result)
+                {
+                    EmplList.Add(new List<string> { row.Name, row.Description, row.WCUnder });
+                }
+                return EmplList;
+            }
+        }
+
+        public static List<List<string>> LoadToolData<T>(string sql) where T : class
+        {
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                // Use Query<T> to get an IEnumerable<T> of each row as an object
+                var result = cnn.Query<dynamic>(sql).ToList();
+
+                List<List<string>> EmplList = new List<List<string>>();
+
+                // Get each row and but into a list
+                foreach (var row in result)
+                {
+                    EmplList.Add(new List<string> { row.ID.ToString(), row.Tool_ID, row.Description }) ;
+                }
+                return EmplList;
+            }
+        }
+
         public static int SaveData<T>(String sql, T data)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectionString()))

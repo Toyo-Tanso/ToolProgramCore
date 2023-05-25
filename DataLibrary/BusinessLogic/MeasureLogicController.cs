@@ -145,6 +145,24 @@ namespace DataLibrary.BusinessLogic
                
                 return SqlDataAccess.LoadDictData<List<string>>(sql);
             }
+            else if (type.Equals("WC"))
+            {
+                sql = @"SELECT Name, Description, WCUnder
+                            FROM dbo.WorkCenter3
+                            WHERE Active = 1
+                            ORDER BY Name ASC;";
+
+                return SqlDataAccess.LoadWCData<List<string>>(sql);
+            }
+            else if (type.Equals("TOOL"))
+            {
+                sql = @"SELECT ID, Tool_ID, Description
+                            FROM dbo.Gage_List_Main
+                            WHERE Active = 1
+                            ORDER BY Tool_ID ASC;";
+
+                return SqlDataAccess.LoadToolData<List<string>>(sql);
+            }
             else { throw new Exception("Incorrect type entered"); }
 
         }

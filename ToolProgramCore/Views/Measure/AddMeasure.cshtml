@@ -65,7 +65,9 @@
                         {
                             foreach (var wc in Model.WCdropDownList)
                             {
-                            <option value="@wc.Trim()"></option>
+                            <option value="@wc[0].Trim()">
+                                @(wc[2] != null && !wc[2].Trim().Equals("") ? wc[2] : (wc[1] == null ? "" : wc[1]))
+                            </option>
                             }
                         }
                 </datalist>
@@ -73,14 +75,25 @@
                 
                 <span asp-validation-for="WC" class="text-danger"></span>
             </div>
-            <div@* class="form-group">
+            @*<div class="form-group">
                 <label asp-for="WC" class="control-label"></label>
                 <input asp-for="WC" class="form-control" />
                 <span asp-validation-for="WC" class="text-danger"></span>
             </div>*@
             <div class="form-group">
                 <label asp-for="ToolNo" class="control-label"></label>
-                <input asp-for="ToolNo" class="form-control" />
+                <input asp-for="ToolNo" class="form-control" value="TTU "  list="Tool_Data">
+                    <datalist id="Tool_Data">
+                            @if (!(Model is null))
+                            {
+                                foreach (var tool_lst in Model.ToolNoDropDownList)
+                                { 
+
+                                <option value="@tool_lst[1]">@(tool_lst[2])</option>
+                                }
+                            }
+                    </datalist>
+                </input>
                 <span asp-validation-for="ToolNo" class="text-danger"></span>
             </div>
             <div class="form-group">

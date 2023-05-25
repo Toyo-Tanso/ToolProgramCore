@@ -50,10 +50,10 @@ namespace ToolProgramCore.Models
         // TODO: replace index view with this after changing it
         public string ? EmpName { get; set; }
 
-        public List<string>? WCdropDownList { get; set; }
+        public List<List<string>>? WCdropDownList { get; set; }
 
         public List<List<string>> ? EmplDropDownList { get; set; }
 
-        public List<string>? ToolNoDropDownList { get; set; }
+        public List<List<string>>? ToolNoDropDownList { get; set; }
     }
 }

@@ -57,7 +57,6 @@ namespace ToolProgramCore.Controllers
                 }
             }
             return "*Unknown*";
-            throw new NotImplementedException();
         }
 
         // Is used to populate the ID Dropdown lists in a tool object
@@ -78,13 +77,6 @@ namespace ToolProgramCore.Controllers
         {
             // TODO add to List
             List<List<string>> fieldList = new List<List<string>>();
-
-
-            //foreach (var row in data)
-            //{
-            //    fieldList.Add(row);
-            //}
-            //return fieldList;
 
             fieldList = LoadFields_dbl_lst(type);
 
@@ -154,10 +146,10 @@ namespace ToolProgramCore.Controllers
         {
             // TODO hide button in the view that let's you change submit date
             ToolMeasure measure = new ToolMeasure();
-            measure.WCdropDownList     = getFieldsList("WC");
+            measure.WCdropDownList     = getFields_dbl_lst("WC");
             // TODO : add the following lists
             measure.EmplDropDownList = getFields_dbl_lst("EMP");
-            //measure.ToolNoDropDownList = getFieldsList("TOOL");
+            measure.ToolNoDropDownList = getFields_dbl_lst("TOOL");
 
             measure.T_Date = DateTime.Now.Date;
 
@@ -194,7 +186,7 @@ namespace ToolProgramCore.Controllers
             // If reached error catching not working
             // Set tool Defaults
             ToolMeasure toolMeasure = new ToolMeasure();
-            toolMeasure.WCdropDownList = getFieldsList("WC");
+            toolMeasure.WCdropDownList = getFields_dbl_lst("WC");
             return View(toolMeasure);
         }
 
