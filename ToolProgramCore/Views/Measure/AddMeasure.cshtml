@@ -9,7 +9,7 @@
     List<double> values_S_Size = new List<double>();
     // Loop from 0 to 20 with a step of 0.5
     values_S_Size.Add(0.5);
-    for (double i = 0; i <= 20; i += 1)
+    for (double i = 1; i <= 20; i += 1)
     {
         // Add the value to the list
         values_S_Size.Add(i);
@@ -55,6 +55,22 @@
                 <span asp-validation-for="T_Date" class="text-danger"></span>
             </div>
         
+            <div class="form-group">
+                <label asp-for="ToolNo" class="control-label"></label>
+                <input asp-for="ToolNo" id="tool" class="form-control" onfocus="toolFocus()" onblur="getWC()" value="TTU "  list="Tool_Data">
+                    <datalist id="Tool_Data">
+                            @if (!(Model is null))
+                            {
+                                foreach (var tool_lst in Model.ToolNoDropDownList)
+                                { 
+
+                                <option value="@tool_lst[1]">@(tool_lst[2])</option>
+                                }
+                            }
+                    </datalist>
+                </input>
+                <span asp-validation-for="ToolNo" class="text-danger"></span>
+            </div>
        
             @*<button id="toggle-button">Custom Time</button>*@
             <div class="form-group">
@@ -80,22 +96,7 @@
                 <input asp-for="WC" class="form-control" />
                 <span asp-validation-for="WC" class="text-danger"></span>
             </div>*@
-            <div class="form-group">
-                <label asp-for="ToolNo" class="control-label"></label>
-                <input asp-for="ToolNo" id="tool" class="form-control" onblur="getWC()" value="TTU "  list="Tool_Data">
-                    <datalist id="Tool_Data">
-                            @if (!(Model is null))
-                            {
-                                foreach (var tool_lst in Model.ToolNoDropDownList)
-                                { 
-
-                                <option value="@tool_lst[1]">@(tool_lst[2])</option>
-                                }
-                            }
-                    </datalist>
-                </input>
-                <span asp-validation-for="ToolNo" class="text-danger"></span>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="EmpNo" class="control-label"></label>
                 <input asp-for="EmpNo" class="form-control" list="Emp_Data" >
@@ -150,61 +151,44 @@
         </form>
     </div>
 </div>
+@*<div id="toolListRaw">
+    @Html.Raw(Json.Serialize(Model.ToolLocationsList));
+</div>*@
 
 <div class="mt-2">
     <a asp-action="Index">Back to List</a>
 </div>
 <script >
-  //// Get the button element by its id
-  //var button = document.getElementById("toggle-button");
 
-  //// Add a click event listener to the button
-  //button.addEventListener("click", function() {
-  //  // Get all the div elements with the class form-group
-  //  var formGroups = document.querySelectorAll(".form-group");
+    function toolFocus() {
+        $("#wc").prop("disabled",true);
+    }
 
-  //  // Loop through each div element
-  //  for (var i = 1; i < 2; i++) {
-  //    // Get the current div element
-  //    var formGroup = formGroups[i];
+    function getWC() {
+      // Get the Model.ToolLocationsList as a JSON string
 
-  //    // Toggle the class visually-hidden on the div element
-  //    formGroup.classList.toggle("visually-hidden");
-  //  }
-  //  if(button.textContent === "Hide"){
-  //      button.textContent = "Custom Time"
-  //  }
-  //  else {
-  //      button.textContent = "Hide"
-  //  }
-    
-  //});
+      // Get the tool value from the input
+      var toolValue = $("#tool").val();
+       //TODO: can maybe used to pass in lists //var LocationsList = $("#toolListRaw").value
 
-function getWC() {
-  // Get the Model.ToolLocationsList as a JSON string
-
-  // Get the tool value from the input
-  var toolValue = $("#tool").val();
-
-  // Check if the toolSubList is null or undefined
-  if (toolValue.length > 5) {
-    // Get the tool ID from the sub-list
-    $.ajax({
-      type: "POST",
-      data: { Tool: toolValue },
-      url: '/Measure/GetWC',
-    }).done(function (result) {
-      $("#wc").val(result);
-    });
-  }
-  else {
-    // Do something else if the tool is not found
-    alert("Tool too short");
-  }
-}
-
-
-
+      // Check if the toolSubList is null or undefined
+      if (toolValue.length > 5) {
+        // Get the tool ID from the sub-list
+        $.ajax({
+            type: "POST",
+            data: { Tool: toolValue},
+            url: '/Measure/GetWC',
+        }).done(function (result) {
+            $("#wc").val(result);
+        });
+      }
+      else {
+        // Do something else if the tool is not found
+        //alert("Tool too short");
+        Console.log("No tool found")
+      }
+      $("#wc").prop("disabled",false);
+    }
 </script>
 
 @section Scripts {

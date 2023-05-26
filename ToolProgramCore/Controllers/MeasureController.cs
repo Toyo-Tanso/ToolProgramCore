@@ -60,13 +60,17 @@ namespace ToolProgramCore.Controllers
             return "*Unknown*";
         }
 
-        public string GetWC(string Tool)
+        //public string GetWC(string Tool, List<List<string>> Locations,
+        //                List<List<string>> WC, List<List<string>> Tools)
+        public string GetWC(string Tool, string Locations1)
         {
-            // TODO : pass in the lists
+            // TODO : pass in the lists to make runtime better
 
             List<List<string>> Locations = getFields_dbl_lst("LOCATE");
             List<List<string>> WC = getFields_dbl_lst("WC");
             List<List<string>> Tools = getFields_dbl_lst("TOOL");
+            Console.WriteLine(Locations1);
+
 
             string ToolID = "";
 
@@ -77,7 +81,7 @@ namespace ToolProgramCore.Controllers
                 if ( toolRow[1].Equals(Tool) )
                 {
                     ToolID = toolRow[0];
-                    //Break
+                    break;
                 }
             }
 
@@ -98,10 +102,10 @@ namespace ToolProgramCore.Controllers
                     {
                         if (tuple2[3].Equals(tuple[1]))
                         {
-                            return tuple2[0]; // TODO: trim String
+                            return tuple2[0].Trim(); // TODO: trim String
                         }
                     }
-                    //break
+                    break;
                 }
             }
 
