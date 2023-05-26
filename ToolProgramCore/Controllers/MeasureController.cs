@@ -150,7 +150,7 @@ namespace ToolProgramCore.Controllers
             // TODO : add the following lists
             measure.EmplDropDownList = getFields_dbl_lst("EMP");
             measure.ToolNoDropDownList = getFields_dbl_lst("TOOL");
-
+            measure.ToolLocationsList = getFields_dbl_lst("LOCATE");
             measure.T_Date = DateTime.Now.Date;
 
             return View(measure);

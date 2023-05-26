@@ -55,5 +55,7 @@ namespace ToolProgramCore.Models
         public List<List<string>> ? EmplDropDownList { get; set; }
 
         public List<List<string>>? ToolNoDropDownList { get; set; }
+
+        public List<List<string>>? ToolLocationsList { get; set; }
     }
 }

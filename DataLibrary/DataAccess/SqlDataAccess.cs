@@ -78,6 +78,47 @@ namespace DataLibrary.DataAccess
                 return EmplList;
             }
         }
+        public static List<List<string>> LoadLocationData<T>(string sql) where T : class
+        {
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                // Use Query<T> to get an IEnumerable<T> of each row as an object
+                var result = cnn.Query<dynamic>(sql).ToList();
+
+                List<List<string>> EmplList = new List<List<string>>();
+
+                // Get each row and but into a list
+                foreach (var row in result)
+                {
+                    EmplList.Add(new List<string> { row.Tool_ID.ToString(), row.WC_ID.ToString() });
+                }
+                return EmplList;
+            }
+        }
+
+        // Generic method that takes sql, and 1 or more parameters of the attributes it is looking for
+        public static List<List<string>> LoadListData<T>(string sql, params string[] fields) where T : class
+        {
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                // Use Query<T> to get an IEnumerable<T> of each row as an object
+                var result = cnn.Query<dynamic>(sql).ToList();
+                List<List<string>> EmplList = new List<List<string>>();
+                // Get each row and but into a list
+                foreach (var row in result)
+                {
+                    List<string> values = new List<string>();
+                    foreach (var field in fields)
+                    {
+                        values.Add(row[field].ToString());
+                    }
+                    EmplList.Add(values);
+                }
+                return EmplList;
+            }
+        }
+
+
 
         public static int SaveData<T>(String sql, T data)
         {

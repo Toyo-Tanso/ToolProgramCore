@@ -160,8 +160,18 @@ namespace DataLibrary.BusinessLogic
                             FROM dbo.Gage_List_Main
                             WHERE Active = 1
                             ORDER BY Tool_ID ASC;";
+                return SqlDataAccess.LoadLocationData<List<string>>(sql);
 
-                return SqlDataAccess.LoadToolData<List<string>>(sql);
+            }
+
+            else if (type.Equals("LOCATE"))
+            {
+                sql = @"SELECT Tool_ID, WC_ID
+                            FROM dbo.Tool_Locations
+                            WHERE Status = 1
+                            ;";
+                return SqlDataAccess.LoadListData<List<string>>(sql, "Tool_ID", "WC_ID");
+                
             }
             else { throw new Exception("Incorrect type entered"); }
 
