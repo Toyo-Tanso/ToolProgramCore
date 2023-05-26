@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.MeasureLogicController;
@@ -57,6 +58,55 @@ namespace ToolProgramCore.Controllers
                 }
             }
             return "*Unknown*";
+        }
+
+        public string GetWC(string Tool)
+        {
+            // TODO : pass in the lists
+
+            List<List<string>> Locations = getFields_dbl_lst("LOCATE");
+            List<List<string>> WC = getFields_dbl_lst("WC");
+            List<List<string>> Tools = getFields_dbl_lst("TOOL");
+
+            string ToolID = "";
+
+            // Find ID of the tool
+            // toolRow = [*ID*, *Tool_ID*, Description]
+            foreach (List<string> toolRow in Tools )
+            {
+                if ( toolRow[1].Equals(Tool) )
+                {
+                    ToolID = toolRow[0];
+                    //Break
+                }
+            }
+
+            if (ToolID.Equals(""))
+            {
+                return "";
+            }
+
+            // Look through locations to see if its in there
+            // tuple = [*Tool_ID*, *WC_ID*]
+            foreach (List<string> tuple in Locations)
+            {
+                if (tuple[0].Equals(ToolID))
+                {
+                    // Look through the WC to find that the name is given the ID
+                    // tuple2 = [*Name*, Description, WCUnder, *ID*]
+                    foreach(List<string> tuple2 in WC)
+                    {
+                        if (tuple2[3].Equals(tuple[1]))
+                        {
+                            return tuple2[0]; // TODO: trim String
+                        }
+                    }
+                    //break
+                }
+            }
+
+
+            return "";
         }
 
         // Is used to populate the ID Dropdown lists in a tool object

@@ -59,7 +59,7 @@
             @*<button id="toggle-button">Custom Time</button>*@
             <div class="form-group">
                 <label asp-for="WC">Work Center</label>
-                <input asp-for="WC" class="form-control" list="Work_Center" placeholder="Type to search...">
+                <input asp-for="WC" id="wc" class="form-control" list="Work_Center" placeholder="Type to search...">
                 <datalist id="Work_Center">
                         @if (!(Model is null))
                         {
@@ -82,7 +82,7 @@
             </div>*@
             <div class="form-group">
                 <label asp-for="ToolNo" class="control-label"></label>
-                <input asp-for="ToolNo" class="form-control" value="TTU "  list="Tool_Data">
+                <input asp-for="ToolNo" id="tool" class="form-control" onblur="getWC()" value="TTU "  list="Tool_Data">
                     <datalist id="Tool_Data">
                             @if (!(Model is null))
                             {
@@ -154,31 +154,57 @@
 <div class="mt-2">
     <a asp-action="Index">Back to List</a>
 </div>
-<script>
-  // Get the button element by its id
-  var button = document.getElementById("toggle-button");
+<script >
+  //// Get the button element by its id
+  //var button = document.getElementById("toggle-button");
 
-  // Add a click event listener to the button
-  button.addEventListener("click", function() {
-    // Get all the div elements with the class form-group
-    var formGroups = document.querySelectorAll(".form-group");
+  //// Add a click event listener to the button
+  //button.addEventListener("click", function() {
+  //  // Get all the div elements with the class form-group
+  //  var formGroups = document.querySelectorAll(".form-group");
 
-    // Loop through each div element
-    for (var i = 1; i < 2; i++) {
-      // Get the current div element
-      var formGroup = formGroups[i];
+  //  // Loop through each div element
+  //  for (var i = 1; i < 2; i++) {
+  //    // Get the current div element
+  //    var formGroup = formGroups[i];
 
-      // Toggle the class visually-hidden on the div element
-      formGroup.classList.toggle("visually-hidden");
-    }
-    if(button.textContent === "Hide"){
-        button.textContent = "Custom Time"
-    }
-    else {
-        button.textContent = "Hide"
-    }
+  //    // Toggle the class visually-hidden on the div element
+  //    formGroup.classList.toggle("visually-hidden");
+  //  }
+  //  if(button.textContent === "Hide"){
+  //      button.textContent = "Custom Time"
+  //  }
+  //  else {
+  //      button.textContent = "Hide"
+  //  }
     
-  });
+  //});
+
+function getWC() {
+  // Get the Model.ToolLocationsList as a JSON string
+
+  // Get the tool value from the input
+  var toolValue = $("#tool").val();
+
+  // Check if the toolSubList is null or undefined
+  if (toolValue.length > 5) {
+    // Get the tool ID from the sub-list
+    $.ajax({
+      type: "POST",
+      data: { Tool: toolValue },
+      url: '/Measure/GetWC',
+    }).done(function (result) {
+      $("#wc").val(result);
+    });
+  }
+  else {
+    // Do something else if the tool is not found
+    alert("Tool too short");
+  }
+}
+
+
+
 </script>
 
 @section Scripts {

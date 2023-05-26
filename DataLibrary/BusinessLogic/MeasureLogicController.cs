@@ -147,12 +147,13 @@ namespace DataLibrary.BusinessLogic
             }
             else if (type.Equals("WC"))
             {
-                sql = @"SELECT Name, Description, WCUnder
+                sql = @"SELECT Name, Description, WCUnder, ID
                             FROM dbo.WorkCenter3
                             WHERE Active = 1
                             ORDER BY Name ASC;";
 
-                return SqlDataAccess.LoadWCData<List<string>>(sql);
+                return SqlDataAccess.LoadListData<List<string>>(sql, 
+                                                "Name", "Description", "WCUnder", "ID");
             }
             else if (type.Equals("TOOL"))
             {
@@ -160,14 +161,14 @@ namespace DataLibrary.BusinessLogic
                             FROM dbo.Gage_List_Main
                             WHERE Active = 1
                             ORDER BY Tool_ID ASC;";
-                return SqlDataAccess.LoadLocationData<List<string>>(sql);
+                return SqlDataAccess.LoadToolData<List<string>>(sql);
 
             }
 
             else if (type.Equals("LOCATE"))
             {
                 sql = @"SELECT Tool_ID, WC_ID
-                            FROM dbo.Tool_Locations
+                            FROM dbo.Tool_Locations1
                             WHERE Status = 1
                             ;";
                 return SqlDataAccess.LoadListData<List<string>>(sql, "Tool_ID", "WC_ID");

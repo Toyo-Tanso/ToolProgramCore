@@ -108,15 +108,35 @@ namespace DataLibrary.DataAccess
                 foreach (var row in result)
                 {
                     List<string> values = new List<string>();
+                    // Cast the row to a dictionary type
+                    var rowDict = (IDictionary<string, object>)row;
                     foreach (var field in fields)
                     {
-                        values.Add(row[field].ToString());
+                        if (rowDict.ContainsKey(field))
+                        {
+                            if (rowDict[field] == null)
+                            {
+                                values.Add("");
+                            }
+                            else
+                            {
+                                values.Add(rowDict[field].ToString());
+                            }
+                            // Access the rowDict with an index
+                            
+                        }
+                        else
+                        {
+                            // Use a default value if the field key is not found
+                            values.Add("N/A");
+                        }
                     }
                     EmplList.Add(values);
                 }
                 return EmplList;
             }
         }
+
 
 
 
