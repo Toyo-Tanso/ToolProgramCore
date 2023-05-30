@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -60,18 +61,15 @@ namespace ToolProgramCore.Controllers
             return "*Unknown*";
         }
 
-        //public string GetWC(string Tool, List<List<string>> Locations,
-        //                List<List<string>> WC, List<List<string>> Tools)
-        public string GetWC(string Tool, string Locations1)
+        public string GetWC(string Tool, List<List<string>> Locations
+                        , List<List<string>> WC, List<List<string>> Tools)
         {
-            // TODO : pass in the lists to make runtime better
+            // TODO : pass in the lists to make runtime better (specifically
+            //      from form page
 
-            List<List<string>> Locations = getFields_dbl_lst("LOCATE");
-            List<List<string>> WC = getFields_dbl_lst("WC");
-            List<List<string>> Tools = getFields_dbl_lst("TOOL");
-            Console.WriteLine(Locations1);
-
-
+            if(Locations == null || Locations.Count == 0) Locations = getFields_dbl_lst("LOCATE");
+            if (WC == null || WC.Count == 0) WC = getFields_dbl_lst("WC");
+            if (Tools == null || Tools.Count == 0) Tools = getFields_dbl_lst("TOOL");
             string ToolID = "";
 
             // Find ID of the tool
@@ -189,7 +187,45 @@ namespace ToolProgramCore.Controllers
             }
             else
             {
-                return Json($"Employee does not exist. Notify Leo");
+                return Json($"Employee does not exist. Notify QA ENG.");
+            }
+        }
+
+        public IActionResult VerifyCorrectWC(string WC, 
+                        string ToolNo, List<List<string>> WCdropDownList,
+                        List<List<string>> ToolNoDropDownList,
+                        List<List<string>> ToolLocationsList)
+        {
+            WC = WC.ToUpper();
+            List<List<string>> WCList = getFields_dbl_lst("WC");
+
+            // TODO: serialize and deserialize to pass in the lists
+            // Remote does not support types
+            string verifiedWC = GetWC(ToolNo, null,
+                WCList, null);
+
+
+            // Check if it exists in WC list
+            // tuple2 = [*Name*, Description, WCUnder, *ID*]
+            bool WCExists = false;
+            foreach (List<string> WC_Combo in WCList)
+            {
+                if (WC_Combo[0].Trim().Equals(WC))
+                {
+                    WCExists = true;
+                }
+            }
+
+            if (verifiedWC.Equals(WC) || verifiedWC.Equals(""))
+            {
+                return WCExists ? Json(true) 
+                    : Json("Not a valid WC, If this is a correct WC please" +
+                    " contact QA ENG");
+            }
+            else
+            {
+                return Json("Expected: "+ verifiedWC +
+                    ", please contact QA ENG to change this");
             }
         }
 
@@ -228,6 +264,8 @@ namespace ToolProgramCore.Controllers
                     // If valid user helper function
                     // TODO if new employee maybe send an email?
                     // if collection has an string instead of in send email
+
+                    
                     CreateMeasureHelper(collection);
                     return RedirectToAction(nameof(Index));
                 }
@@ -251,7 +289,7 @@ namespace ToolProgramCore.Controllers
             string T_Date = collection["T_Date"];
             string ToolNo = collection["ToolNo"].ToString().ToUpper();
             string S_Size = collection["S_Size"].ToString();
-            string WC = collection["WC"];
+            string WC = collection["WC"].ToString().ToUpper();
             string EmpNo = collection["EmpNo"];
             string Condition = collection["Condition"].ToString();
             CreateMeasure(T_Date, ToolNo, S_Size, WC, EmpNo, Condition);

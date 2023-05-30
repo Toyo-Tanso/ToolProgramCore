@@ -176,7 +176,8 @@
         // Get the tool ID from the sub-list
         $.ajax({
             type: "POST",
-            data: { Tool: toolValue},
+            data: { Tool: toolValue
+                    },
             url: '/Measure/GetWC',
         }).done(function (result) {
             $("#wc").val(result);
@@ -185,7 +186,7 @@
       else {
         // Do something else if the tool is not found
         //alert("Tool too short");
-        Console.log("No tool found")
+        //Console.log("No tool found")
       }
       $("#wc").prop("disabled",false);
     }

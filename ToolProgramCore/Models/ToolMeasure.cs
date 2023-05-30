@@ -23,6 +23,9 @@ namespace ToolProgramCore.Models
 
         // TODO add verification that the tool number is in the WC group
         [Display(Name = "Work Center(s)")]
+        [Remote(action: "VerifyCorrectWC", controller: "Measure",
+            AdditionalFields = "ToolNo,WCdropDownList,ToolNoDropDownList," +
+            "ToolLocationsList")]
         [Required]
         public String? WC { get; set; }
 
