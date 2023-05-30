@@ -73,3 +73,61 @@
 }
     </tbody>
 </table>
+<p>@Context.Request.Query["page"] Pages</p>
+
+<ul class="pagination">
+
+    @if (string.IsNullOrEmpty(Context.Request.Query["page"]) || @Context.Request.Query["page"] == "1")
+    {
+        <li class="page-item disabled">
+            <a class="page-link disabled" href="@Url.Action("Index", new { page = 0 })">Previous</a>
+        </li>
+    }
+
+    else
+    {
+        <li class="page-item">
+            <a class="page-link" href="@Url.Action("Index", new { page =  int.Parse(Context.Request.Query["page"])-1 })">Previous</a>
+        </li>
+    }
+
+    
+
+    
+    @for (int i = 1; i <= Model.ToList()[0].TotalPages; i++)
+    {
+        <li class="page-item">
+            
+            <!-- add the current page index and size to the query string -->
+            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+        </li>
+    }
+
+
+    @*If the string is empty and there is only one page, or if this is the last page*@
+    @if ((string.IsNullOrEmpty(Context.Request.Query["page"]) 
+    && Model.ToList()[0].TotalPages < 2) ||
+    (
+        !(string.IsNullOrEmpty(Context.Request.Query["page"]))
+        && int.Parse(Context.Request.Query["page"]) == Model.ToList()[0].TotalPages))
+
+    {
+        <li class="page-item disabled">
+            <a class="page-link disabled"
+            href="@Url.Action("Index", new { page = 0 })">Next</a>
+        </li>
+    }
+
+    else
+    {
+        @*Case that it is not only 1 page, and it is not the last page*@
+        @*Note if it is null that means we put 2 since the default is page 1*@
+        <li class="page-item">
+            <a class="page-link" 
+            href="@Url.Action("Index", new {
+           page = string.IsNullOrEmpty(Context.Request.Query["page"]) ? 
+           2 : int.Parse(Context.Request.Query["page"])+1
+           })">Next</a>
+        </li>
+    }
+</ul>

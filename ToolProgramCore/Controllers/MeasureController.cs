@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using System.Globalization;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.MeasureLogicController;
+using static DataLibrary.BusinessLogic.Fields_Change;
+using System.Text.RegularExpressions;
 
 namespace ToolProgramCore.Controllers
 {
     public class MeasureController : Controller
     {
         // holds current list
-        private List<ToolMeasure>? MeasureList;
+        public List<ToolMeasure>? MeasureList;
 
         // Updates the Measure so that it gets most recent data from DB
         public void GetMeasureList()
@@ -42,8 +44,7 @@ namespace ToolProgramCore.Controllers
                     EmpNo = row.EmpNo,
                     Condition = Condition_converted,
                     EmplDropDownList = EmplDropDownList,
-                    EmpName = getEmployeeName(row.EmpNo,EmplDropDownList)
-
+                    EmpName = getEmployeeName(row.EmpNo,EmplDropDownList),
                 });
             }
             MeasureList = toolMeasures;
@@ -137,10 +138,30 @@ namespace ToolProgramCore.Controllers
 
         // GET: MeasureController
         // Gets list from the last 7 days and displays them
-        public ActionResult Index()
+        public ActionResult Index(string page = "1")
         {
             GetMeasureList();
-            return View(MeasureList);
+            string SetPageSize = "10";
+            // get the page index and size from query string or default values
+            int pageIndex = int.Parse(page ?? "1");
+            int pageSize = int.Parse(SetPageSize ?? "10");
+
+            // get the total number of records
+            int totalCount = MeasureList.Count();
+            // calculate the total number of pages
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            
+            // get the current page of records
+            var shortMeasureList = MeasureList
+                .Skip((pageIndex - 1) * pageSize) // skip the previous pages
+                .Take(pageSize) // take only the current page
+                .ToList();
+
+            shortMeasureList[0].TotalPages = totalPages;
+
+
+            return View(shortMeasureList);
         }
 
         // GET: MeasureController/Details/5
@@ -237,9 +258,29 @@ namespace ToolProgramCore.Controllers
             // TODO hide button in the view that let's you change submit date
             ToolMeasure measure = new ToolMeasure();
             measure.WCdropDownList     = getFields_dbl_lst("WC");
-            // TODO : add the following lists
+
             measure.EmplDropDownList = getFields_dbl_lst("EMP");
-            measure.ToolNoDropDownList = getFields_dbl_lst("TOOL");
+            
+            List<List<string>> unsorted_tools = getFields_dbl_lst("TOOL");
+            measure.ToolNoDropDownList = unsorted_tools.OrderBy( x =>
+                {
+                // get the first group of digits in the string
+                var match = Regex.Match(x[1], @"\d+");
+                // if there is a match, parse it as an int
+                if (match.Success)
+                {
+                    return int.Parse(match.Value);
+                }
+                // otherwise, return a default value
+                else
+                {
+                    return 0;
+                }
+
+            }).ToList();
+
+
+
             measure.ToolLocationsList = getFields_dbl_lst("LOCATE");
             measure.T_Date = DateTime.Now.Date;
 
@@ -257,15 +298,12 @@ namespace ToolProgramCore.Controllers
 
                 try
                 {
-                    // TODO : if new tool insert into gauge, with new WC
-                    // TODO : extra credit remove make consistent case system
-                    //        ex: tool2 == TOOL2
+                    // TODO : if new tool insert into Locations, and tool
                     // TODO : (should I do this?) if tool exist, insert new WC if it exist
-                    // If valid user helper function
-                    // TODO if new employee maybe send an email?
-                    // if collection has an string instead of in send email
 
-                    
+                    // TODO : must contain "TTU"
+
+                    // Note: no new WC allowed
                     CreateMeasureHelper(collection);
                     return RedirectToAction(nameof(Index));
                 }
@@ -286,12 +324,44 @@ namespace ToolProgramCore.Controllers
         // add tool check in
         private void CreateMeasureHelper(IFormCollection collection)
         {
+            List<List<string>> toolList = getFields_dbl_lst("TOOL");
+
+            
             string T_Date = collection["T_Date"];
             string ToolNo = collection["ToolNo"].ToString().ToUpper();
             string S_Size = collection["S_Size"].ToString();
             string WC = collection["WC"].ToString().ToUpper();
             string EmpNo = collection["EmpNo"];
             string Condition = collection["Condition"].ToString();
+            // TODO : xtra credit, create a boolean in model class
+            //      That reflects whether the tool is recognized
+
+            bool toolExists = false;
+            // Check if the tool is in the tool List
+            // [*ID *, *Tool_ID *, Description]
+
+
+            foreach (List<string> toolTuple in toolList)
+            {
+                if (toolTuple[1].Equals(ToolNo))
+                {
+                    toolExists = true;
+                }
+            }
+
+            if (! toolExists)
+            {   // error catching 1 if success
+                // Put this into Tool DB
+                int status = CreateTool(ToolNo);
+
+                int toolID = FindToolID(ToolNo);
+                int WCID = FindWCID(WC);
+
+                AddLocation(toolID, WCID);
+
+                // TODO send email saying a new tool is added
+            }
+
             CreateMeasure(T_Date, ToolNo, S_Size, WC, EmpNo, Condition);
 
         }
