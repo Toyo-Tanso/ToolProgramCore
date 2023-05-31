@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToolProgramCore.Models;
+using static DataLibrary.BusinessLogic.TrackerLogicController;
 
 namespace ToolProgramCore.Controllers
 {
@@ -10,7 +11,7 @@ namespace ToolProgramCore.Controllers
     // 2. ** Data Loaders **
     // 4. ** Data Verify **
     // 3. ** HTML Helpers **
-    public class ToolTracker : Controller
+    public class ToolTrackerController : Controller
     {
         // ** Page Loaders **
 
@@ -123,7 +124,48 @@ namespace ToolProgramCore.Controllers
         // ** Data Loaders **
 
         // holds current list
-        public List<ToolMeasure>? MeasureList;
+        public List<ToolTracker>? CheckedInList;
+
+        public void GetCheckedInList()
+        {
+
+
+            throw new NotImplementedException();
+
+            //// Get list of ToolMeasureModel from data libary
+            //var data = LoadMeasures();
+            //List<ToolMeasure> toolMeasures = new();
+
+            //// Get Employee Names once, to get name
+            //List<List<string>> EmplDropDownList = getFields_dbl_lst("EMP");
+
+            //foreach (var row in data)
+            //{
+            //    if (row.T_Date == null)
+            //    {
+            //        break;
+            //    }
+            //    // Convert string to required data type
+            //    DateTime ConvertedDate = DateTime.Parse(row.T_Date);
+            //    double S_Size_converted = double.Parse(row.S_Size ?? "");
+            //    double Condition_converted = double.Parse(row.Condition ?? "");
+
+            //    // Enter values into this model: ToolMeasure. Then add to list
+            //    toolMeasures.Add(new ToolMeasure
+            //    {
+            //        ID = row.ID,
+            //        T_Date = ConvertedDate,
+            //        WC = row.WC,
+            //        ToolNo = row.ToolNo,
+            //        S_Size = S_Size_converted,
+            //        EmpNo = row.EmpNo,
+            //        Condition = Condition_converted,
+            //        EmplDropDownList = EmplDropDownList,
+            //        EmpName = getEmployeeName(row.EmpNo, EmplDropDownList),
+            //    });
+            //}
+            //MeasureList = toolMeasures;
+        }
 
     }
 }
