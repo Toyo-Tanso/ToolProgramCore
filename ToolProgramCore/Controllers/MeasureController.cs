@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using System.Text.RegularExpressions;
 using ToolProgramCore.Models;
@@ -14,12 +15,13 @@ namespace ToolProgramCore.Controllers
     // 3. ** HTML Helpers **
     public class MeasureController : Controller
     {
-       
+
         // ** Page Loaders **
 
         // GET: MeasureController
         // Gets all the measure that have been made and displays only 10 on each page
         // defaults to page 1
+        [AllowAnonymous]
         public ActionResult Index(string page = "1")
         {
             // TODO: make run time better (make it so query for count) then make query for only the top 10 and so on
@@ -50,6 +52,7 @@ namespace ToolProgramCore.Controllers
         }
 
         // GET: MeasureController/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
             GetMeasureList();
@@ -73,6 +76,7 @@ namespace ToolProgramCore.Controllers
         // GET: MeasureController/AddMeasure
         // Populates the dropdown lists for the page
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult AddMeasure()
         {
             ToolMeasure measure = new ToolMeasure();
@@ -111,6 +115,7 @@ namespace ToolProgramCore.Controllers
         // Verifies inputs and submits tool
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult AddMeasure(IFormCollection collection)
         {
             if (ModelState.IsValid)

@@ -2,7 +2,7 @@
 
 namespace ToolProgramCore.Models
 {
-    public class ToolReturn
+    public class ToolTracker
     {
         [Key]
         [Display(Name = "Tool Number")]

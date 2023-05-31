@@ -3,8 +3,11 @@ using DataLibrary.Models;
 
 namespace DataLibrary.BusinessLogic
 {
+    // Intended to be the class to manipulate some of the fields
     public class Fields_Change
     {
+        // Creates a new tool with it being active,
+        // does not verify format nor does it add a locations
         public static int CreateTool(string ToolNo)
         {
             ToolDB data = new ToolDB
@@ -17,9 +20,9 @@ namespace DataLibrary.BusinessLogic
                             Values (@Tool_ID, @Active);";
 
             return SqlDataAccess.SaveData(sql, data);
-
         }
 
+        // Finds the ID of the tool, if it exists
         public static int FindToolID(string ToolNo)
         {
 
@@ -30,7 +33,7 @@ namespace DataLibrary.BusinessLogic
         }
 
 
-
+        // Adds Location given a toolID, and a WCID
         public static int AddLocation(int ToolID, int WCID)
         {
 
@@ -49,13 +52,13 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
-
+        // TODO implement: sets tool as inactive in the DB
         public static int DeleteTool(string ToolNo)
         {
             throw new NotImplementedException();
         }
 
-
+        // Find the wc ID given a WC
         public static int FindWCID(string WC)
         {
 
