@@ -5,25 +5,22 @@
 }
 
 @{
-    // Declare a list of double values
+    // Declare a list of double values for S_Size dropdown
     List<double> values_S_Size = new List<double>();
-    // Loop from 0 to 20 with a step of 0.5
     values_S_Size.Add(0.5);
+
     for (double i = 1; i <= 20; i += 1)
     {
-        // Add the value to the list
         values_S_Size.Add(i);
     }
 }
 
 @{
-    // Declare a list of double values
+    // Declare a list of double values for condition dropdown
     List<double> values_Condition = new List<double>();
-    // Loop from 0 to 20 with a step of 0.5
     
     for (double i = -5; i <= 5; i += 0.5)
     {
-        // Add the value to the list
         values_Condition.Add(i);
     }
 }
@@ -72,7 +69,6 @@
                 <span asp-validation-for="ToolNo" class="text-danger"></span>
             </div>
        
-            @*<button id="toggle-button">Custom Time</button>*@
             <div class="form-group">
                 <label asp-for="WC">Work Center</label>
                 <input asp-for="WC" id="wc" class="form-control" list="Work_Center" placeholder="Type to search...">
@@ -91,11 +87,6 @@
                 
                 <span asp-validation-for="WC" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="WC" class="control-label"></label>
-                <input asp-for="WC" class="form-control" />
-                <span asp-validation-for="WC" class="text-danger"></span>
-            </div>*@
             
             <div class="form-group">
                 <label asp-for="EmpNo" class="control-label"></label>
@@ -151,7 +142,7 @@
         </form>
     </div>
 </div>
-@*<div id="toolListRaw">
+@*Maybe for passing in list <div id="toolListRaw">
     @Html.Raw(Json.Serialize(Model.ToolLocationsList));
 </div>*@
 
@@ -165,15 +156,16 @@
     }
 
     function getWC() {
-      // Get the Model.ToolLocationsList as a JSON string
-
       // Get the tool value from the input
-      var toolValue = $("#tool").val();
-       //TODO: can maybe used to pass in lists //var LocationsList = $("#toolListRaw").value
 
-      // Check if the toolSubList is null or undefined
+      var toolValue = $("#tool").val();
+
+      // TODO: can maybe used to pass in lists //var LocationsList = $("#toolListRaw").value
+
+      // Check if the tool value len is greater than "TTU "
       if (toolValue.length > 5) {
-        // Get the tool ID from the sub-list
+
+        // run helper function in contoller to auto enter WC based on tool
         $.ajax({
             type: "POST",
             data: { Tool: toolValue
@@ -184,12 +176,11 @@
         });
       }
       else {
-        // Do something else if the tool is not found
         //alert("Tool too short");
-        //Console.log("No tool found")
       }
       $("#wc").prop("disabled",false);
     }
+
 </script>
 
 @section Scripts {

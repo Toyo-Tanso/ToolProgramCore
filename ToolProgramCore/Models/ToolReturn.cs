@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace ToolProgramCore.Models
 {
@@ -19,7 +18,7 @@ namespace ToolProgramCore.Models
         [Display(Name = "Promise Return Date")]
         [Required]
         [DisplayFormat(DataFormatString = " {0:MM/dd/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
-        [DataType (DataType.DateTime)]
+        [DataType(DataType.DateTime)]
         public DateTime? P_Return { get; set; }
 
         [Display(Name = "Work Center")]
@@ -31,7 +30,7 @@ namespace ToolProgramCore.Models
         public String? EmpNo { get; set; }
 
 
-        public List<string> ? WCdropDownList { get; set; }
+        public List<string>? WCdropDownList { get; set; }
         public List<string>? EmplDropDownList { get; set; }
         public List<string>? ToolNoDropDownList { get; set; }
     }

@@ -1,10 +1,5 @@
 ﻿using DataLibrary.DataAccess;
 using DataLibrary.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLibrary.BusinessLogic
 {
@@ -27,7 +22,7 @@ namespace DataLibrary.BusinessLogic
 
         public static int FindToolID(string ToolNo)
         {
-         
+
             string sql = @"SELECT ID FROM dbo.Gage_List_Main  
                             WHERE Tool_ID='" + ToolNo + "';";
 
@@ -36,7 +31,7 @@ namespace DataLibrary.BusinessLogic
 
 
 
-        public static int AddLocation(int ToolID, int WCID )
+        public static int AddLocation(int ToolID, int WCID)
         {
 
             Locations_DB data = new Locations_DB
