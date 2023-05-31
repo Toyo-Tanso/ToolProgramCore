@@ -4,6 +4,31 @@
     ViewData["Title"] = "Recent Checks";
 }
 
+@functions 
+{
+    public static string isActive(string Page, int j)
+    {
+        if (string.IsNullOrEmpty(Page))
+        {
+            if(j == 1)
+            {
+                return "active";
+            }
+        }
+
+        else
+        {
+            if(int.Parse(Page) == j)
+            {
+                return "active";
+            }
+        }
+
+
+        return "";
+    }
+}
+
 
 <h1 class="mt-5">Recent Tool Checks</h1>
 
@@ -73,7 +98,6 @@
 }
     </tbody>
 </table>
-<p>@Context.Request.Query["page"] Pages</p>
 
 <ul class="pagination">
 
@@ -96,15 +120,23 @@
     
     @for (int i = 1; i <= Model.ToList()[0].TotalPages; i++)
     {
-        <li class="page-item">
+        <li class="page-item @isActive(@Context.Request.Query["page"], @i)">
             
             <!-- add the current page index and size to the query string -->
-            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+            <a class="page-link"
+            
+               href="@Url.Action("Index", new { page = i })">@i</a>
         </li>
     }
 
+    
+
+
+
+
 
     @*If the string is empty and there is only one page, or if this is the last page*@
+    @*TODO: make this logic simpler easier to read, it looks complicated when its not*@
     @if ((string.IsNullOrEmpty(Context.Request.Query["page"]) 
     && Model.ToList()[0].TotalPages < 2) ||
     (
