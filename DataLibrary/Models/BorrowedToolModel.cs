@@ -11,19 +11,23 @@ namespace DataLibrary.Models
     {
         [Key]
 
-        public String? toolNumber { get; set; }
+        public String? ID { get; set; }
 
-        public string? D_Remove { get; set; }
+        public String? ToolNo { get; set; }
 
-        public String? P_Return { get; set; }
+        public string? Date_Removed { get; set; }
 
-        public String? WC { get; set; }
+        public String? Promise_Return_Date { get; set; }
+
+        public String? WC_From { get; set; }
+
+        public String? WC_To { get; set; }
 
         public String? EmpNo { get; set; }
 
-        public String? DateReturned { get; set; }
+        public String? Returned_Date { get; set; }
 
-        public String? ID { get; set; }
+        public String? Return_EmpNo { get; set; }
 
     }
 }

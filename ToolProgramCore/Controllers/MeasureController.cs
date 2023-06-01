@@ -144,7 +144,6 @@ namespace ToolProgramCore.Controllers
         {
             List<List<string>> toolList = getFields_dbl_lst("TOOL");
 
-
             string T_Date = collection["T_Date"];
             string ToolNo = collection["ToolNo"].ToString().ToUpper();
             string S_Size = collection["S_Size"].ToString();
@@ -159,8 +158,6 @@ namespace ToolProgramCore.Controllers
             bool toolExists = false;
             // Check if the tool is in the tool List
             // [*ID *, *Tool_ID *, Description]
-
-
             foreach (List<string> toolTuple in toolList)
             {
                 if (toolTuple[1].Equals(ToolNo))
@@ -188,7 +185,7 @@ namespace ToolProgramCore.Controllers
                     throw new Exception("Error on inserting creating new tool");
 
                 }
-                // TODO send email saying a new tool is added
+                // TODO: send email saying a new tool is added
             }
 
             // User DataLibrary to insert

@@ -5,29 +5,41 @@ namespace ToolProgramCore.Models
     public class ToolTracker
     {
         [Key]
+        // TODO: Set max Lengths
+
+        public string? ID { get; set; }
+
+        [Required]
         [Display(Name = "Tool Number")]
-        //[StringLength(10, MinimumLength = 6, ErrorMessage = "The tool number must be between 6 and 8 Characters")]
         public string? ToolNo { get; set; }
 
         [Display(Name = "Date Borrowed ")]
         [Required]
-        [RegularExpression("[0-9]{2}/[0-9]{2}/[0-9]{4}",
-            ErrorMessage = "Must be in correct format: mm/dd/yyyy")]
-        public string? D_Remove { get; set; }
+        [DataType(DataType.Date)]
+        public string? Date_Removed { get; set; }
 
         [Display(Name = "Promise Return Date")]
         [Required]
-        [DisplayFormat(DataFormatString = " {0:MM/dd/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         [DataType(DataType.DateTime)]
-        public DateTime? P_Return { get; set; }
+        public DateTime? Promise_Return_Date { get; set; }
 
-        [Display(Name = "Work Center")]
+        [Display(Name = "Borrowed From")]
         [Required]
-        public String? WC { get; set; }
+        public String? WC_From { get; set; }
+
+        [Display(Name = "Taken To")]
+        [Required]
+        public String? WC_To { get; set; }
 
         [Display(Name = "Employee Number")]
         [Required]
         public String? EmpNo { get; set; }
+
+        [DataType(DataType.Date)]
+        public String? Returned_Date { get; set; }
+
+        [Display(Name = "Returned by")]
+        public String? Return_EmpNo {get; set;}
 
 
         public List<string>? WCdropDownList { get; set; }
