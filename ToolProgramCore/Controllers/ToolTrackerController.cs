@@ -85,18 +85,18 @@ namespace ToolProgramCore.Controllers
             return View();
         }
 
-        // GET: ToolTracker/Create
+        // GET: ToolTracker/CheckOut
         [AllowAnonymous]
-        public ActionResult Create()
+        public ActionResult CheckOut()
         {
             return View();
         }
 
-        // POST: ToolTracker/Create
+        // POST: ToolTracker/CheckOut
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult CheckOut(IFormCollection collection)
         {
             try
             {

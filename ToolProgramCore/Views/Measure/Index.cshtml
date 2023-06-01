@@ -135,7 +135,7 @@ else
             <a class="page-link" href="@Url.Action("Index", new { page =  int.Parse(Context.Request.Query["page"])-1 })">Previous</a>
         </li>
     }
-    
+    @*TODO : fix the page numbers some variables are not up to date, remove isActive function*@
     @*Page numbers*@
     @for (int i = 1; i <= Model.ToList()[0].TotalPages; i++)
     {
