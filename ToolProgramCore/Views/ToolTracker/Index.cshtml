@@ -10,32 +10,6 @@
             bool.Parse(Context.Request.Query["viewAll"]);
 }
 
-
-@functions 
-{
-    public static string isActive(string Page, int j)
-    {
-        if (string.IsNullOrEmpty(Page))
-        {
-            if(j == 1)
-            {
-                return "active";
-            }
-        }
-
-        else
-        {
-            if(int.Parse(Page) == j)
-            {
-                return "active";
-            }
-        }
-
-
-        return "";
-    }
-}
-
 <h1>Index</h1>
 
 <p>
@@ -57,7 +31,6 @@
 {
     <table class="table">
         <thead>
-            <p>@Model @Model.Count()</p>
             <tr>
 
                 @*TODO make it so the return information is hidden based on state*@
@@ -138,7 +111,7 @@
 
         @{
             int pageNum = string.IsNullOrEmpty(Context.Request.Query["page"]) ? 1 :
-            int.Parse(Context.Request.Query["page"]);
+                int.Parse(Context.Request.Query["page"]);
             int prevPage = pageNum - 1;
             int nextPage = pageNum + 1;
             int totalPages = Model.ToList()[0].TotalPages ?? 1;
@@ -165,7 +138,7 @@
 
                 <!-- add the current page index and size to the query string -->
                 <a class="page-link"
-                   href="@Url.Action("Index", new { page = i, viewAll = viewAll})">@i</a>
+                   href="@Url.Action("Index", new { page = i, viewAll = viewAll} )">@i</a>
             </li>
         }
 
@@ -175,9 +148,7 @@
             {
                 <li class="page-item">
                     <a class="page-link"
-                       href="@Url.Action("Index", new {
-                   page = nextPage, viewAll = viewAll
-                   })">Next</a>
+                       href="@Url.Action("Index", new { page = nextPage, viewAll = viewAll})">Next</a>
                 </li>
             }
             else
@@ -215,7 +186,5 @@ else
       // Submit the form to the controller
           document.getElementById("viewAllForm").submit();
     });
-
-
 
 </script>

@@ -60,7 +60,7 @@ namespace ToolProgramCore.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult ChangeIndexView(string viewAll )
+        public ActionResult ChangeIndexView(string viewAll)
         {
 
             Console.WriteLine(viewAll);
@@ -75,7 +75,7 @@ namespace ToolProgramCore.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            
+
         }
 
         // GET: ToolTracker/Details/5
@@ -214,8 +214,8 @@ namespace ToolProgramCore.Controllers
                     WC_To = row.WC_To,
                     Date_Removed = cvt_Removed,
                     Promise_Return_Date = cvt_Promise,
-                    Returned_Date = includeAll ? DateTime.Parse(row.Returned_Date ?? "") : null,
-                    Return_EmpNo = includeAll ? row.Return_EmpNo : null,
+                    Returned_Date = includeAll && (row.Returned_Date) != null ? DateTime.Parse(row.Returned_Date) : null,
+                    Return_EmpNo = includeAll && (row.Returned_Date) != null ? row.Return_EmpNo : null,
                     EmpName = getEmployeeName(row.EmpNo, EmplDropDownList),
                 });
             }
