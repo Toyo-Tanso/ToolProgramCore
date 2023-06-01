@@ -35,69 +35,81 @@
 @*<p >*@
     <a asp-action="AddMeasure"><button>Add New Measure</button></a>
 @*</p>*@
-<table class="table">
-    <thead>
-        <tr>
-            <th class="visually-hidden">
-                @Html.DisplayNameFor(model => model.ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.T_Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WC)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ToolNo)
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.EmpNo)*@
-                @Html.DisplayNameFor(model => model.EmpName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.S_Size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Condition)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td class="visually-hidden" >
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.T_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WC)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ToolNo)
-            </td>
-            <td>
-                @*@Html.DisplayFor(modelItem => item.EmpNo)*@
-                @Html.DisplayFor(modelItem => item.EmpName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.S_Size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Condition)
-            </td>
-            <td>
-                @(//Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |)
-                @Html.ActionLink("Details", "Details", new { id=item.ID })
-                //Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                )
-            </td>
-        </tr>
+
+@if(Model != null)
+{
+    <table class="table">
+        
+        <thead>
+            <tr>
+                <th class="visually-hidden">
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.T_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WC)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ToolNo)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.EmpNo)*@
+                    @Html.DisplayNameFor(model => model.EmpName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.S_Size)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Condition)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="visually-hidden">
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.T_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WC)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ToolNo)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.EmpNo)*@
+                        @Html.DisplayFor(modelItem => item.EmpName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.S_Size)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Condition)
+                    </td>
+                    <td>
+                        @(//Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |)
+                            @Html.ActionLink("Details", "Details", new { id = item.ID })
+                            //Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            )
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+
+else
+{
+    <div><p class="is-invalid">No Results Found...</p></div>
+}
+
 
 
 <ul class="pagination">

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.TrackerLogicController;
+using static DataLibrary.BusinessLogic.Fields_Change;
+
 
 namespace ToolProgramCore.Controllers
 {
@@ -19,9 +21,61 @@ namespace ToolProgramCore.Controllers
         // Gets all the measure that have been made and displays only 10 on each page
         // defaults to page 1
         [AllowAnonymous]
-        public ActionResult Index(string page = "1")
+        public ActionResult Index(string page = "1", bool viewAll = false)
         {
-            return View();
+            // TODO: make run time better (make it so query for count) then make query for only the top 10 and so on
+
+            // Get the correct list
+            GetCheckedInList(viewAll);
+
+            // intialize if null
+            CheckedInList ??= new List<ToolTracker> { };
+
+            // get the page index and size from query string or default values
+            string SetPageSize = "10";
+            int pageIndex = int.Parse(page ?? "1");
+            int pageSize = int.Parse(SetPageSize ?? "10");
+
+            // get the total number of records
+            int totalCount =  CheckedInList.Count();
+
+            // calculate the total number of pages needed
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            // get the current page of records
+            var shortMeasureList = CheckedInList
+                .Skip((pageIndex - 1) * pageSize) // skip the previous pages
+                .Take(pageSize) // take only the current page
+                .ToList();
+
+            if (shortMeasureList.Count > 0)
+            {
+                shortMeasureList[0].TotalPages = totalPages;
+            }
+            
+
+            
+            return View(shortMeasureList);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ChangeIndexView(string viewAll )
+        {
+
+            Console.WriteLine(viewAll);
+
+            bool viewAllBool = bool.Parse(viewAll);
+
+            if (viewAllBool)
+            {
+                return RedirectToAction(nameof(Index), new { viewAll = true });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         // GET: ToolTracker/Details/5
@@ -126,45 +180,72 @@ namespace ToolProgramCore.Controllers
         // holds current list
         public List<ToolTracker>? CheckedInList;
 
-        public void GetCheckedInList()
+        public void GetCheckedInList(bool includeAll = false)
         {
 
+            // Get list of ToolMeasureModel from data libary
+            
+            var data = includeAll ? LoadAllBorrowedTools() : LoadBorrowedTools();
+            List<ToolTracker> toolTrackers = new();
 
-            throw new NotImplementedException();
+            // Get Employee Names once, to get name
+            List<List<string>> EmplDropDownList = getFields_dbl_lst("EMP");
 
-            //// Get list of ToolMeasureModel from data libary
-            //var data = LoadMeasures();
-            //List<ToolMeasure> toolMeasures = new();
+            foreach (var row in data)
+            {
+                // Check if they are null
+                if (row.Date_Removed == null ||
+                    row.Promise_Return_Date == null)
+                {
+                    throw new Exception("Error with Data retrieval");
+                }
 
-            //// Get Employee Names once, to get name
-            //List<List<string>> EmplDropDownList = getFields_dbl_lst("EMP");
+                // Convert string to required data type
+                DateTime cvt_Removed  = DateTime.Parse(row.Date_Removed);
+                DateTime cvt_Promise  = DateTime.Parse(row.Promise_Return_Date);
+                
 
-            //foreach (var row in data)
-            //{
-            //    if (row.T_Date == null)
-            //    {
-            //        break;
-            //    }
-            //    // Convert string to required data type
-            //    DateTime ConvertedDate = DateTime.Parse(row.T_Date);
-            //    double S_Size_converted = double.Parse(row.S_Size ?? "");
-            //    double Condition_converted = double.Parse(row.Condition ?? "");
+                // Enter values into this model: ToolMeasure. Then add to list
+                toolTrackers.Add(new ToolTracker
+                {
+                    ID = row.ID,
+                    ToolNo = row.ToolNo,
+                    WC_From = row.WC_From,
+                    WC_To = row.WC_To,
+                    Date_Removed = cvt_Removed,
+                    Promise_Return_Date = cvt_Promise,
+                    Returned_Date = includeAll ? DateTime.Parse(row.Returned_Date ?? "") : null,
+                    Return_EmpNo = includeAll ? row.Return_EmpNo : null,
+                    EmpName = getEmployeeName(row.EmpNo, EmplDropDownList),
+                });
+            }
+            CheckedInList = toolTrackers;
+        }
 
-            //    // Enter values into this model: ToolMeasure. Then add to list
-            //    toolMeasures.Add(new ToolMeasure
-            //    {
-            //        ID = row.ID,
-            //        T_Date = ConvertedDate,
-            //        WC = row.WC,
-            //        ToolNo = row.ToolNo,
-            //        S_Size = S_Size_converted,
-            //        EmpNo = row.EmpNo,
-            //        Condition = Condition_converted,
-            //        EmplDropDownList = EmplDropDownList,
-            //        EmpName = getEmployeeName(row.EmpNo, EmplDropDownList),
-            //    });
-            //}
-            //MeasureList = toolMeasures;
+        // Helper function: give an empNo and empList, if finds the corresponding name
+        private string getEmployeeName(string? empNo, List<List<string>> emplDropDownList)
+        {
+            // tuple = [*Name*, *Clock_Code*]
+            foreach (List<string> tuple in emplDropDownList)
+            {
+                if (tuple[1].Equals(empNo))
+                {
+                    return tuple[0];
+                }
+            }
+            return "*Unknown*";
+        }
+
+        // Is used to populate Dropdown lists
+        // Uses MeasureLogicController
+        public List<List<string>> getFields_dbl_lst(string type)
+        {
+            // TODO add to List
+            List<List<string>> fieldList = new List<List<string>>();
+
+            fieldList = LoadFields_dbl_lst(type);
+
+            return fieldList;
         }
 
     }

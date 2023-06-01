@@ -4,56 +4,218 @@
     ViewData["Title"] = "Index";
 }
 
+@{
+    // Intializing bool
+    bool viewAll = string.IsNullOrEmpty(Context.Request.Query["viewAll"]) ? false :
+            bool.Parse(Context.Request.Query["viewAll"]);
+}
+
+
+@functions 
+{
+    public static string isActive(string Page, int j)
+    {
+        if (string.IsNullOrEmpty(Page))
+        {
+            if(j == 1)
+            {
+                return "active";
+            }
+        }
+
+        else
+        {
+            if(int.Parse(Page) == j)
+            {
+                return "active";
+            }
+        }
+
+
+        return "";
+    }
+}
+
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ToolNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.D_Remove)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.P_Return)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WC)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmpNo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ToolNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.D_Remove)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.P_Return)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WC)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmpNo)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+
+<div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="mySwitch" name="emp" @(viewAll ? "Checked" : "")>
+    <label class="form-check-label" for="mySwitch">View All</label>
+</div>
+
+<form id="viewAllForm" action="/ToolTracker/ChangeIndexView" method="post">
+    <input type="hidden" id="viewAll" name="viewAll" value="false" />
+</form>
+
+
+
+@if (@Model.Count() != 0)
+{
+    <table class="table">
+        <thead>
+            <p>@Model @Model.Count()</p>
+            <tr>
+
+                @*TODO make it so the return information is hidden based on state*@
+                <th class="visually-hidden">
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ToolNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date_Removed)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Promise_Return_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WC_From)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WC_To)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.EmpNo)*@
+                    @Html.DisplayNameFor(model => model.EmpName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Returned_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Return_EmpNo)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="visually-hidden">
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ToolNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_Removed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Promise_Return_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WC_From)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WC_To)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.EmpNo)*@
+                        @Html.DisplayFor(modelItem => item.EmpName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Returned_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Return_EmpNo)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <ul class="pagination">
+
+        @{
+            int pageNum = string.IsNullOrEmpty(Context.Request.Query["page"]) ? 1 :
+            int.Parse(Context.Request.Query["page"]);
+            int prevPage = pageNum - 1;
+            int nextPage = pageNum + 1;
+            int totalPages = Model.ToList()[0].TotalPages ?? 1;
+        }
+
+        @*Prev btn*@
+        @if (prevPage == 0)
+        {
+            <li class="page-item disabled">
+                <a class="page-link disabled">Previous</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { page =  prevPage, viewAll = viewAll })">Previous</a>
+            </li>
+        }
+
+        @*Page numbers*@
+        @for (int i = 1; i <= Model.ToList()[0].TotalPages; i++)
+        {
+            <li class="page-item @(pageNum == i ? "active" : "")">
+
+                <!-- add the current page index and size to the query string -->
+                <a class="page-link"
+                   href="@Url.Action("Index", new { page = i, viewAll = viewAll})">@i</a>
+            </li>
+        }
+
+        @{
+            // If the page Num is less than total pages make the button enabled
+            if (pageNum < totalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       href="@Url.Action("Index", new {
+                   page = nextPage, viewAll = viewAll
+                   })">Next</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a class="page-link disabled">Next</a>
+                </li>
+            }
+        }
+
+    </ul>
+
 }
-    </tbody>
-</table>
+
+else
+{
+    <div><p class="is-invalid">No Results Found...</p></div>
+}
+
+<script>
+    // Get the switch and the hidden input elements
+    const switch1 = document.getElementById("mySwitch");
+    const viewAll = document.getElementById("viewAll");
+
+    // Listen for the change event on the switch
+    switch1.addEventListener("change", function () {
+        // Check if the switch is checked or not
+        if (switch1.checked) {
+        // Change the value of the hidden input to true
+        viewAll.value = "true";
+    } else {
+        // Change the value of the hidden input to false
+        viewAll.value = "false";
+    }
+      // Submit the form to the controller
+          document.getElementById("viewAllForm").submit();
+    });
+
+
+
+</script>

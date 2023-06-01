@@ -39,54 +39,5 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<ToolMeasureModel>(sql);
         }
 
-
-        // Recieves type of list needed and executes sql code to return a list
-        //      for dropdown lists
-        public static List<List<string>> LoadFields_dbl_lst(string type)
-        {
-            string sql = "";
-
-            if (type.Equals("EMP"))
-            {
-                sql = @"SELECT Name, Clock_Code
-                            FROM dbo.Employee1
-                            WHERE Active = 1;";
-
-                return SqlDataAccess.LoadListData<List<string>>(sql, "Name", "Clock_Code");
-            }
-            else if (type.Equals("WC"))
-            {
-                sql = @"SELECT Name, Description, WCUnder, ID
-                            FROM dbo.WorkCenter3
-                            WHERE Active = 1
-                            ORDER BY Name ASC;";
-
-                return SqlDataAccess.LoadListData<List<string>>(sql,
-                                                "Name", "Description", "WCUnder", "ID");
-            }
-            else if (type.Equals("TOOL"))
-            {
-                sql = @"SELECT ID, Tool_ID, Description
-                            FROM dbo.Gage_List_Main
-                            WHERE Active = 1
-                            ORDER BY Tool_ID ASC;";
-                return SqlDataAccess.LoadListData<List<string>>(sql, "ID",
-                                                "Tool_ID", "Description");
-
-            }
-
-            else if (type.Equals("LOCATE"))
-            {
-                sql = @"SELECT Tool_ID, WC_ID
-                            FROM dbo.Tool_Locations1
-                            WHERE Status = 1
-                            ;";
-                return SqlDataAccess.LoadListData<List<string>>(sql, "Tool_ID", "WC_ID");
-
-            }
-            else { throw new Exception("Incorrect type entered"); }
-
-        }
-
     }
 }

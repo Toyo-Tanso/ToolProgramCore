@@ -16,7 +16,7 @@ namespace ToolProgramCore.Models
         [Display(Name = "Date Borrowed ")]
         [Required]
         [DataType(DataType.Date)]
-        public string? Date_Removed { get; set; }
+        public DateTime? Date_Removed { get; set; }
 
         [Display(Name = "Promise Return Date")]
         [Required]
@@ -36,7 +36,7 @@ namespace ToolProgramCore.Models
         public String? EmpNo { get; set; }
 
         [DataType(DataType.Date)]
-        public String? Returned_Date { get; set; }
+        public DateTime? Returned_Date { get; set; }
 
         [Display(Name = "Returned by")]
         public String? Return_EmpNo {get; set;}
@@ -45,5 +45,10 @@ namespace ToolProgramCore.Models
         public List<string>? WCdropDownList { get; set; }
         public List<string>? EmplDropDownList { get; set; }
         public List<string>? ToolNoDropDownList { get; set; }
+
+        public string? EmpName { get; set; }
+
+        public int? TotalPages { get; set; }
+
     }
 }
