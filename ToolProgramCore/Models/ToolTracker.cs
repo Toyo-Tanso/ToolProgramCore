@@ -31,6 +31,7 @@ namespace ToolProgramCore.Models
 
         [Display(Name = "Taken To")]
         [Required]
+        [Remote(action: "isValidWC", controller: "ToolTracker", AdditionalFields = "WC_From")]
         public String? WC_To { get; set; }
 
         [Display(Name = "Employee Number")]

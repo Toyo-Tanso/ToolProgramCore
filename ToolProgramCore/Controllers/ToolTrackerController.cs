@@ -99,10 +99,13 @@ namespace ToolProgramCore.Controllers
 
             // Get lists
 
-            //measure.WCdropDownList = getFields_dbl_lst("WC"); //TODO: WC dropdown
+            checkOutTicket.WCdropDownList = getFields_dbl_lst("WC"); 
             //measure.EmplDropDownList = getFields_dbl_lst("EMP"); //TODO: Empl dropdown
-            //measure.ToolLocationsList = getFields_dbl_lst("LOCATE"); //TODO: locations dropdown
+
             List<List<string>> unsorted_tools = getFields_dbl_lst("TOOL");
+
+            // NOT Needed until data serialization
+            //measure.ToolLocationsList = getFields_dbl_lst("LOCATE"); 
 
             // Sort Tool List
             checkOutTicket.ToolNoDropDownList = unsorted_tools.OrderBy(x =>
@@ -137,6 +140,8 @@ namespace ToolProgramCore.Controllers
         {
             // TODO, verify that it is the correct WC
             //      If not make it so it returns an error
+
+            // TODO: ensure WC_to and WC_From does not equal each other
             Console.WriteLine(collection.ToList());
             try
             {
@@ -313,6 +318,51 @@ namespace ToolProgramCore.Controllers
             {
                 return Json(true);
             }
+
+        }
+
+        public IActionResult isValidWC(string WC_To, string WC_From)
+        {
+           // Ensure WC are not null
+            if (WC_To ==  null)
+            {
+                return Json("Must include where it is going.");
+            }
+            else if ( WC_From == null)
+            {
+                return Json("No WC associated with tool.");
+            }
+
+            // Ensure WC do not equal each other
+            if ( WC_To.Equals(WC_From))
+            {
+                return Json("Can not move to the same location.");
+            }
+
+            Console.WriteLine(WC_To+ "|" + WC_From);
+            // Check if WC given is in the DB
+            List<List<string>> WC_List = getFields_dbl_lst("WC");
+
+            bool validWC = false;
+            foreach (List<string> tuple in WC_List)
+            {
+                // tuple2 = [*Name*, Description, WCUnder, *ID*]
+                if (tuple[0].Trim().Equals(WC_To))
+                {
+                    validWC = true;
+                }
+            }
+
+            if (validWC)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json("The provided is not in the WC List, please contact QA ENG.");
+            }
+
+         
 
         }
 

@@ -84,6 +84,8 @@ namespace ToolProgramCore.Controllers
             // Get lists
             measure.WCdropDownList = getFields_dbl_lst("WC");
             measure.EmplDropDownList = getFields_dbl_lst("EMP");
+             
+            // TODO: Is this every used?
             measure.ToolLocationsList = getFields_dbl_lst("LOCATE");
             List<List<string>> unsorted_tools = getFields_dbl_lst("TOOL");
 

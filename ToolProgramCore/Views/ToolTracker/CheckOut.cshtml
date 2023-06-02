@@ -20,7 +20,7 @@
                 @*TODO add validation for if it has a valid WC*@
                 <input asp-for="ToolNo" id="tool" class="form-control" onfocus="toolFocus()" onblur="getWC()" value="TTU " list="Tool_Data">
                 <datalist id="Tool_Data">
-                    @if (!(Model is null))
+                    @if (!(Model is null) && Model.ToolNoDropDownList is not null)
                     {
                         foreach (var tool_lst in Model.ToolNoDropDownList)
                         {
@@ -44,7 +44,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="WC_To" class="control-label"></label>
-                <input asp-for="WC_To" class="form-control" />
+                <input asp-for="WC_To" class="form-control" id="wc" list="Work_Center" placeholder="Type to search..." />
+                <datalist id="Work_Center">
+                    @if (!(Model is null) && Model.WCdropDownList != null)
+                    {
+                        foreach (var wc in Model.WCdropDownList)
+                        {
+                            <option value="@wc[0].Trim()">
+                                @(wc[2] != null && !wc[2].Trim().Equals("") ? wc[2] : (wc[1] == null ? "" : wc[1]))
+                            </option>
+                        }
+                    }
+                </datalist>
                 <span asp-validation-for="WC_To" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
