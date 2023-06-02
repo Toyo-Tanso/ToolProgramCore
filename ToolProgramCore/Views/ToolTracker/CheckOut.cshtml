@@ -60,7 +60,16 @@
             </div>
             <div class="form-group mb-2">
                 <label asp-for="EmpNo" class="control-label"></label>
-                <input asp-for="EmpNo" class="form-control" />
+                <input asp-for="EmpNo" class="form-control" list="Emp_Data" />
+                <datalist id="Emp_Data">
+                    @if (!(Model is null) && Model.EmplDropDownList != null)
+                    {
+                        foreach (var emp_lst in Model.EmplDropDownList)
+                        {
+                            <option value="@emp_lst[1].Trim()">@(emp_lst[0].Split(',')[1].Trim() + " " + emp_lst[0].Split(',')[0])</option>
+                        }
+                    }
+                </datalist>
                 <span asp-validation-for="EmpNo" class="text-danger"></span>
             </div>
 

@@ -36,6 +36,7 @@ namespace ToolProgramCore.Models
 
         [Display(Name = "Employee Number")]
         [Required]
+        [Remote(action: "VerifyEmpNo", controller: "ToolTracker")]
         public String? EmpNo { get; set; }
 
         [DataType(DataType.Date)]

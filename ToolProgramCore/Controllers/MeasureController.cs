@@ -356,6 +356,7 @@ namespace ToolProgramCore.Controllers
 
         // This verifies input in the form (Helper) [called in the model class]
         // Returns error if the employee does not exist in the Database
+        // TODO: make sure that this is not repeating with tracker and measure
         public IActionResult VerifyEmpNo(string empNo)
         {
             List<List<string>> cur_empl = getFields_dbl_lst("EMP");

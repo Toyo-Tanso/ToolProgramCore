@@ -100,7 +100,7 @@ namespace ToolProgramCore.Controllers
             // Get lists
 
             checkOutTicket.WCdropDownList = getFields_dbl_lst("WC"); 
-            //measure.EmplDropDownList = getFields_dbl_lst("EMP"); //TODO: Empl dropdown
+            checkOutTicket.EmplDropDownList = getFields_dbl_lst("EMP"); //TODO: Empl dropdown
 
             List<List<string>> unsorted_tools = getFields_dbl_lst("TOOL");
 
@@ -142,6 +142,9 @@ namespace ToolProgramCore.Controllers
             //      If not make it so it returns an error
 
             // TODO: ensure WC_to and WC_From does not equal each other
+
+            // TODO change locations DB
+
             Console.WriteLine(collection.ToList());
             try
             {
@@ -361,11 +364,35 @@ namespace ToolProgramCore.Controllers
             {
                 return Json("The provided is not in the WC List, please contact QA ENG.");
             }
-
-         
-
         }
 
+        // This verifies input in the form (Helper) [called in the model class]
+        // Returns error if the employee does not exist in the Database
+        // TDOD: remove duplicate
+        public IActionResult VerifyEmpNo(string empNo)
+        {
+            List<List<string>> cur_empl = getFields_dbl_lst("EMP");
+
+            bool EmplExists = false;
+
+            // if it's in the list
+            foreach (var row in cur_empl)
+            {
+                if (row[1].Trim() == empNo)
+                {
+                    EmplExists = true;
+                }
+            }
+
+            if (EmplExists)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Employee does not exist. Notify QA ENG.");
+            }
+        }
 
         // ** HTML Helper **
 
