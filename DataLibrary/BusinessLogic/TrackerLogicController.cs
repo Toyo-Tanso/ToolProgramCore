@@ -38,5 +38,23 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<BorrowedToolModel>(sql);
         }
 
+        public static int saveCheckOut(string ToolNo, string Promise_Return_Date, string WC_From, string WC_To, string EmpNo)
+        {
+            // Turns data into local toolMeasure class
+            BorrowedToolModel data = new BorrowedToolModel
+            {
+                Promise_Return_Date = Promise_Return_Date,
+                WC_From = WC_From,
+                ToolNo = ToolNo,
+                WC_To = WC_To,
+                EmpNo = EmpNo,
+            };
+
+            string sql = @"INSERT into dbo.Tool_Moves1 (ToolNo, WC_From, WC_To, EmpNo) 
+                            Values (ToolNo, WC_From, WC_To, EmpNo);";
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
     }
 }

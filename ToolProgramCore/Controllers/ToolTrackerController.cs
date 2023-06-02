@@ -5,6 +5,7 @@ using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.TrackerLogicController;
 using static DataLibrary.BusinessLogic.Fields_Change;
 using System.Text.RegularExpressions;
+using System.Diagnostics.Eventing.Reader;
 
 namespace ToolProgramCore.Controllers
 {
@@ -154,6 +155,73 @@ namespace ToolProgramCore.Controllers
             {
                 return View();
             }
+        }
+
+        // TODO: change description
+        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
+        // add tool check in
+        private void CheckOutHelper(IFormCollection collection)
+        {
+
+            List<List<string>> toolList = getFields_dbl_lst("TOOL");
+            List<List<string>> WCList = getFields_dbl_lst("WC");
+
+            string ToolNo = collection["ToolNo"].ToString().ToUpper();
+            string Promise_Return_Date = collection["Promise_Return_Date"].ToString();
+            string WC_From = collection["WC_From"].ToString().ToUpper();
+            string WC_To = collection["WC_To"].ToString().ToUpper();
+            string EmpNo = collection["EmpNo"];
+
+            // User DataLibrary to insert
+            saveCheckOut(ToolNo, Promise_Return_Date, WC_From, WC_To, EmpNo);
+
+
+            // Update locations data
+
+            // Get WC ID
+            // tuple = [*Name*, Description, WCUnder, *ID*]
+            // tuple = [  0   ,       1    ,    2   ,  3  ]
+            string str_WCID = findInList(WCList, WC_From, 0, 3);
+            int WCID = str_WCID == "" ? -1 : int.Parse(str_WCID);
+
+
+            // Get Tool ID
+            // toolRow = [*ID*, *Tool_ID*, Description]
+            string str_toolID = findInList(WCList, WC_From, 1, 0);
+            int toolID = str_toolID == "" ? -1 : int.Parse(str_toolID);
+
+            // Get NewWC ID
+            // tuple = [*Name*, Description, WCUnder, *ID*]
+            // tuple = [  0   ,       1    ,    2   ,  3  ]
+            string str_NewWCID = findInList(WCList, WC_From, 0, 3);
+            int NewWCID = str_NewWCID == "" ? -1 : int.Parse(str_NewWCID);
+
+            // Catch error that they dont exist
+            if (WCID < 0 || toolID < 0 || NewWCID < 0)
+            {
+                throw new Exception("Could not find ID of WC");
+            }
+
+            // Find location, set as inactive
+            // TODO: note for return -- delete active location, and re-activate
+
+
+            // Enter in new Location
+
+        }
+
+        // Helper function that looks for a searchterm at index searchIndex and returns the result index
+        public string findInList(List<List<string>> listToSearch, string searchFor, 
+            int searchIndex, int resultIndex)
+        {
+            foreach(List<string> tuple in listToSearch)
+            {
+                if (tuple[searchIndex].Trim().Equals(searchFor, StringComparison.OrdinalIgnoreCase))
+                {
+                    return tuple[resultIndex];
+                }
+            }
+            return "";
         }
 
         // TODO : complete return
