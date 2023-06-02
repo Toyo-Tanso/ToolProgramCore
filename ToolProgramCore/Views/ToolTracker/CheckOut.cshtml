@@ -16,7 +16,19 @@
 
             <div class="form-group">
                 <label asp-for="ToolNo" class="control-label"></label>
-                <input asp-for="ToolNo" class="form-control" />
+                @*TODO ADD validation for tool*@
+                @*TODO add validation for if it has a valid WC*@
+                <input asp-for="ToolNo" id="tool" class="form-control" onfocus="toolFocus()" onblur="getWC()" value="TTU " list="Tool_Data">
+                <datalist id="Tool_Data">
+                    @if (!(Model is null))
+                    {
+                        foreach (var tool_lst in Model.ToolNoDropDownList)
+                        {
+
+                            <option value="@tool_lst[1]">@(tool_lst[2])</option>
+                        }
+                    }
+                </datalist>
                 <span asp-validation-for="ToolNo" class="text-danger"></span>
             </div>
 
@@ -27,7 +39,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="WC_From" class="control-label"></label>
-                <input asp-for="WC_From" class="form-control" disabled/>
+                <input asp-for="WC_From" id="wc" class="form-control" disabled />
                 <span asp-validation-for="WC_From" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -48,9 +60,44 @@
     </div>
 </div>
 
-<div>
+<div class="mt-2">
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<script>
+
+    function toolFocus() {
+        $("#wc").prop("disabled", true);
+    }
+
+    function getWC() {
+        // Get the tool value from the input
+
+        var toolValue = $("#tool").val();
+
+        // TODO: can maybe used to pass in lists //var LocationsList = $("#toolListRaw").value
+
+        // Check if the tool value len is greater than "TTU "
+        if (toolValue.length > 5) {
+
+            // run helper function in contoller to auto enter WC based on tool
+            $.ajax({
+                type: "POST",
+                data: {
+                    Tool: toolValue
+                },
+                url: '/Measure/GetWC',
+            }).done(function (result) {
+                $("#wc").val(result);
+            });
+        }
+        else {
+            //alert("Tool too short");
+        }
+    }
+
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

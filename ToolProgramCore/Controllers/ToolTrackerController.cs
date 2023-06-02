@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.TrackerLogicController;
 using static DataLibrary.BusinessLogic.Fields_Change;
-
+using System.Text.RegularExpressions;
 
 namespace ToolProgramCore.Controllers
 {
@@ -78,6 +78,7 @@ namespace ToolProgramCore.Controllers
 
         }
 
+        // TODO : complete details
         // GET: ToolTracker/Details/5
         [AllowAnonymous]
         public ActionResult Details(int id)
@@ -92,9 +93,42 @@ namespace ToolProgramCore.Controllers
             // TODO: Add date borrowed
             // TODO: Add WC borrowed
 
-            return View();
+            ToolTracker checkOutTicket = new ToolTracker();
+            // TODO : add getFields in a different class because : repeating code
+            // TODO same thing with getWC
+
+            // Get lists
+
+            //measure.WCdropDownList = getFields_dbl_lst("WC"); //TODO: WC dropdown
+            //measure.EmplDropDownList = getFields_dbl_lst("EMP"); //TODO: Empl dropdown
+            //measure.ToolLocationsList = getFields_dbl_lst("LOCATE"); //TODO: locations dropdown
+            List<List<string>> unsorted_tools = getFields_dbl_lst("TOOL");
+
+            // Sort Tool List
+            checkOutTicket.ToolNoDropDownList = unsorted_tools.OrderBy(x =>
+            {
+                // get the first group of digits in the string
+                var match = Regex.Match(x[1], @"\d+");
+                // if there is a match, parse it as an int
+                if (match.Success)
+                {
+                    return int.Parse(match.Value);
+                }
+                // otherwise, return a default value
+                else
+                {
+                    return 0;
+                }
+
+            }).ToList();
+
+            // Add today's date as default
+            checkOutTicket.Date_Removed = DateTime.Now.Date;
+
+            return View(checkOutTicket);
         }
 
+        // TODO : complete checkout post
         // POST: ToolTracker/CheckOut
         [AllowAnonymous]
         [HttpPost]
@@ -111,14 +145,16 @@ namespace ToolProgramCore.Controllers
             }
         }
 
-
+        // TODO : complete return
         // GET: ToolTracker/Return/5
         public ActionResult Return(int id)
         {
+            // Maybe Use a different model
             return View();
         }
 
         // POST: ToolTracker/Return/5
+        // TODO : return Post
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Return(int id, IFormCollection collection)
@@ -250,6 +286,60 @@ namespace ToolProgramCore.Controllers
 
             return fieldList;
         }
+
+
+        // ** HTML Helper **
+
+        public string GetWC(string Tool, List<List<string>> Locations
+                        , List<List<string>> WC, List<List<string>> Tools)
+        {
+            // TODO : pass in the lists to make runtime better (specifically
+            //      from form page
+
+            // Get lists, if they are null
+            if (Locations == null || Locations.Count == 0) Locations = getFields_dbl_lst("LOCATE");
+            if (WC == null || WC.Count == 0) WC = getFields_dbl_lst("WC");
+            if (Tools == null || Tools.Count == 0) Tools = getFields_dbl_lst("TOOL");
+            string ToolID = "";
+
+            // Find ID of the tool
+            // toolRow = [*ID*, *Tool_ID*, Description]
+            foreach (List<string> toolRow in Tools)
+            {
+                if (toolRow[1].Equals(Tool))
+                {
+                    ToolID = toolRow[0];
+                    break;
+                }
+            }
+
+            if (ToolID.Equals(""))
+            {
+                return "";
+            }
+
+            // Look through locations to see if its in there
+            // tuple = [*Tool_ID*, *WC_ID*]
+            foreach (List<string> tuple in Locations)
+            {
+                if (tuple[0].Equals(ToolID))
+                {
+                    // Look through the WC to find that the name is given the ID
+                    // tuple2 = [*Name*, Description, WCUnder, *ID*]
+                    foreach (List<string> tuple2 in WC)
+                    {
+                        if (tuple2[3].Equals(tuple[1]))
+                        {
+                            return tuple2[0].Trim(); 
+                        }
+                    }
+                    break;
+                }
+            }
+            return "";
+        }
+
+
 
     }
 }
