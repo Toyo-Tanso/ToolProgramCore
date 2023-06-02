@@ -4,29 +4,22 @@
     ViewData["Title"] = "CheckOut";
 }
 
-<h1>CheckOut</h1>
+<h1 class="mt-5" >Check Out Tool</h1>
+@*TODO ADD CHECKOUT ICON*@
 
-<h4>ToolTracker</h4>
+<h4>Tool Tracker</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CheckOut">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ID" class="control-label"></label>
-                <input asp-for="ID" class="form-control" />
-                <span asp-validation-for="ID" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="ToolNo" class="control-label"></label>
                 <input asp-for="ToolNo" class="form-control" />
                 <span asp-validation-for="ToolNo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Date_Removed" class="control-label"></label>
-                <input asp-for="Date_Removed" class="form-control" />
-                <span asp-validation-for="Date_Removed" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Promise_Return_Date" class="control-label"></label>
                 <input asp-for="Promise_Return_Date" class="form-control" />
@@ -34,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="WC_From" class="control-label"></label>
-                <input asp-for="WC_From" class="form-control" />
+                <input asp-for="WC_From" class="form-control" disabled/>
                 <span asp-validation-for="WC_From" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -42,33 +35,14 @@
                 <input asp-for="WC_To" class="form-control" />
                 <span asp-validation-for="WC_To" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="EmpNo" class="control-label"></label>
                 <input asp-for="EmpNo" class="form-control" />
                 <span asp-validation-for="EmpNo" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Returned_Date" class="control-label"></label>
-                <input asp-for="Returned_Date" class="form-control" />
-                <span asp-validation-for="Returned_Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Return_EmpNo" class="control-label"></label>
-                <input asp-for="Return_EmpNo" class="form-control" />
-                <span asp-validation-for="Return_EmpNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmpName" class="control-label"></label>
-                <input asp-for="EmpName" class="form-control" />
-                <span asp-validation-for="EmpName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TotalPages" class="control-label"></label>
-                <input asp-for="TotalPages" class="form-control" />
-                <span asp-validation-for="TotalPages" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="CheckOut" class="btn btn-primary" />
             </div>
         </form>
     </div>

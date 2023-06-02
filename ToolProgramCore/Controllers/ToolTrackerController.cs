@@ -89,6 +89,9 @@ namespace ToolProgramCore.Controllers
         [AllowAnonymous]
         public ActionResult CheckOut()
         {
+            // TODO: Add date borrowed
+            // TODO: Add WC borrowed
+
             return View();
         }
 

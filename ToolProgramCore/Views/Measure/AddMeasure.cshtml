@@ -25,7 +25,8 @@
     }
 }
 
-<h1>Add a Measure</h1>
+<h1 class="mt-5" >Add a Measure</h1>
+@*TODO ADD MEASURE ICON*@
 
 <h4>Tool Measure</h4>
 <hr />
@@ -65,7 +66,6 @@
                                 }
                             }
                     </datalist>
-                </input>
                 <span asp-validation-for="ToolNo" class="text-danger"></span>
             </div>
        
@@ -83,7 +83,7 @@
                             }
                         }
                 </datalist>
-                </input asp-for>
+
                 
                 <span asp-validation-for="WC" class="text-danger"></span>
             </div>
@@ -100,7 +100,6 @@
                             }
                         }
                 </datalist>
-                </dropdown asp-for>
                 <span asp-validation-for="EmpNo" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -116,7 +115,6 @@
                             <option value="@value">@value</option>
                         }
                 </dataList>
-                </input>
                    
                 <span asp-validation-for="S_Size" class="text-danger"></span>
             </div>
@@ -133,7 +131,6 @@
                         }
                 </dataList>
                 
-                </input>
                 <span asp-validation-for="Condition" class="text-danger"></span>
             </div>
             <div class="form-group">
