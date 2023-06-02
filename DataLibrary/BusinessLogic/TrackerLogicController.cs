@@ -38,6 +38,22 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<BorrowedToolModel>(sql);
         }
 
+        // Loads the all the tools currently checked Out
+        public static bool isBorrowed(string ToolNo)
+        {
+            // get all instance of tool number, true if its in there, and it has not been returned
+            string sql = @"SELECT ID
+                            FROM dbo.Tool_Moves1
+                            WHERE ToolNo='" + ToolNo + 
+                            "AND Date_Removed = NULL" +
+                            "';";
+
+            return SqlDataAccess.LoadData<int>(sql).Count == 0;
+
+        }
+
+
+
         public static int saveCheckOut(string ToolNo, string Promise_Return_Date, string WC_From, string WC_To, string EmpNo)
         {
             // Turns data into local toolMeasure class

@@ -387,7 +387,17 @@ namespace ToolProgramCore.Controllers
             }
             else
             {
-                return Json(true);
+                // Check if tool is checked out
+                if (isBorrowed(ToolNo))
+                {
+                    return Json("This Tool is checked out. Please return it first.");
+                }
+
+                else
+                {
+                    return Json(true);
+                }
+                
             }
 
         }
