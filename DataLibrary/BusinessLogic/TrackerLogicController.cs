@@ -19,7 +19,7 @@ namespace DataLibrary.BusinessLogic
                             WC_From, WC_To, EmpNo
                             FROM dbo.Tool_Moves1
                             WHERE Returned_Date is NULL
-                            ORDER BY Date_Removed
+                            ORDER BY Date_Removed ASC
                             ; ";
 
             return SqlDataAccess.LoadData<BorrowedToolModel>(sql);
@@ -32,7 +32,7 @@ namespace DataLibrary.BusinessLogic
             string sql = @"SELECT ID, ToolNo, Date_Removed, Promise_Return_Date,
                             WC_From, WC_To, EmpNo, Returned_Date, Return_EmpNo
                             FROM dbo.Tool_Moves1
-                            ORDER BY Date_Removed
+                            ORDER BY Date_Removed DESC
                             ; ";
 
             return SqlDataAccess.LoadData<BorrowedToolModel>(sql);

@@ -135,6 +135,9 @@ namespace ToolProgramCore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CheckOut(IFormCollection collection)
         {
+            // TODO, verify that it is the correct WC
+            //      If not make it so it returns an error
+            Console.WriteLine(collection.ToList());
             try
             {
                 return RedirectToAction(nameof(Index));
@@ -285,6 +288,32 @@ namespace ToolProgramCore.Controllers
             fieldList = LoadFields_dbl_lst(type);
 
             return fieldList;
+        }
+
+        // ** Data Verify **
+
+        public IActionResult VerifyCorrectTool(
+                        string ToolNo, List<List<string>> WCdropDownList,
+                        List<List<string>> ToolNoDropDownList,
+                        List<List<string>> ToolLocationsList)
+        {
+            // TODO: serialize and deserialize to pass in the lists
+            // Remote does not support complex types
+            // If no WC From
+            List<List<string>> WCList = getFields_dbl_lst("WC");
+
+            string verifiedWC = GetWC(ToolNo, null,
+                WCList, null);
+
+            if (verifiedWC.Equals(null) || (verifiedWC).Equals("") )
+            {
+                return Json("No Work center found for this tool. Please contact QA ENG to move this tool");
+            }
+            else
+            {
+                return Json(true);
+            }
+
         }
 
 

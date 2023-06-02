@@ -39,7 +39,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="WC_From" class="control-label"></label>
-                <input asp-for="WC_From" id="wc" class="form-control" disabled />
+                <input asp-for="WC_From" id="wc" class="form-control" readonly="readonly" />
                 <span asp-validation-for="WC_From" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -54,7 +54,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="CheckOut" class="btn btn-primary" />
+                <input onclick="getWC" type="submit" value="CheckOut" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -66,10 +66,22 @@
 
 
 <script>
+    var ToolInput = $("#tool");
 
-    function toolFocus() {
-        $("#wc").prop("disabled", true);
-    }
+    // Execute a function when the user presses a key on the keyboard
+    ToolInput.addEventListener("keypress", function (event) {
+        // If the user presses the "Enter" key on the keyboard
+        if (event.key === "Enter") {
+            // Cancel the default action, if needed
+            event.preventDefault();
+
+            getWC();
+        }
+    });
+
+</script>
+
+<script>
 
     function getWC() {
         // Get the tool value from the input
@@ -87,7 +99,7 @@
                 data: {
                     Tool: toolValue
                 },
-                url: '/Measure/GetWC',
+                url: '/ToolTracker/GetWC',
             }).done(function (result) {
                 $("#wc").val(result);
             });
@@ -96,6 +108,10 @@
             //alert("Tool too short");
         }
     }
+
+    
+
+    
 
 </script>
 

@@ -11,6 +11,7 @@ namespace ToolProgramCore.Models
         public string? ID { get; set; }
 
         [Required]
+        [Remote(action: "VerifyCorrectTool", controller: "ToolTracker")]
         [Display(Name = "Tool Number")]
         public string? ToolNo { get; set; }
 

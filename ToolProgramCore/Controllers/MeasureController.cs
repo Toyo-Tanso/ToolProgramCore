@@ -325,6 +325,8 @@ namespace ToolProgramCore.Controllers
             string verifiedWC = GetWC(ToolNo, null,
                 WCList, null);
 
+            // TODO: DO I need this? if it picks it up in GETWC
+            //      shouldnt it be updated already
             // Check if it exists in WC list
             // tuple2 = [*Name*, Description, WCUnder, *ID*]
             bool WCExists = false;
