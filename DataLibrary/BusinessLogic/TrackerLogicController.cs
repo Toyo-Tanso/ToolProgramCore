@@ -3,6 +3,7 @@ using DataLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,16 +46,71 @@ namespace DataLibrary.BusinessLogic
             string sql = @"SELECT ID
                             FROM dbo.Tool_Moves1
                             WHERE ToolNo='" + ToolNo + 
-                            "AND Date_Removed = NULL" +
-                            "';";
+                            "' AND Date_Removed = NULL" +
+                            ";";
 
             return SqlDataAccess.LoadData<int>(sql).Count == 0;
+        }
+
+        // Class to help unify data into one usable datatype
+        public class LocationData
+        {
+            public int WC_ID { get; set; }
+            public int Tool_ID { get; set; }
+        }
+
+        public static int setOldLocation(int WCID, int toolID)
+        {
+            
+            // all instances of location ID that have WC and tool ID
+            string sql = @"SELECT Status
+                            FROM dbo.Locations1
+                            WHERE WC_ID='" + WCID +
+                            "' AND Tool_ID='" + toolID +
+                            "';";
+
+            // If location is not found
+            if (SqlDataAccess.LoadData<int>(sql).Count == 0)
+            {
+                throw new Exception("Location data not found");
+            }
+            // If more than one something is wrong, all duplicates should be deleted when returned
+            LocationData data = new LocationData();
+            data.WC_ID = WCID;
+            data.Tool_ID = toolID;
+
+
+            sql = @"UPDATE 
+                            dbo.Locations1
+                            SET Status = 0 
+                            WHERE WC_ID = @WC_ID "+
+                            "AND Tool_ID = @Tool_ID "+
+                            ";";
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        public static int setNewLocation(int WCID, int toolID)
+        {
+            LocationData data = new LocationData();
+            data.WC_ID = WCID;
+            data.Tool_ID = toolID;
+
+            // Add new location and make it active
+            string sql = @"INSERT INTO 
+                            dbo.Locations1
+                            (Tool_ID, WC_ID, Status)
+                            VALUES (@Tool_ID, WC_ID, 1) " +
+                            ";";
+
+            // Return status of query
+            return SqlDataAccess.SaveData(sql, data);
+
 
         }
 
 
-
-        public static int saveCheckOut(string ToolNo, string Promise_Return_Date, string WC_From, string WC_To, string EmpNo)
+            public static int saveCheckOut(string ToolNo, string Promise_Return_Date, string WC_From, string WC_To, string EmpNo)
         {
             // Turns data into local toolMeasure class
             BorrowedToolModel data = new BorrowedToolModel

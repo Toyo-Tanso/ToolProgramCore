@@ -204,9 +204,11 @@ namespace ToolProgramCore.Controllers
 
             // Find location, set as inactive
             // TODO: note for return -- delete active location, and re-activate
-
+            setOldLocation(WCID, toolID);
 
             // Enter in new Location
+            setNewLocation(WCID, toolID);
+
 
         }
 
