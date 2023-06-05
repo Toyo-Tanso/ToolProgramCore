@@ -327,6 +327,7 @@ namespace ToolProgramCore.Controllers
                 DateTime cvt_Removed  = DateTime.Parse(row.Date_Removed);
                 DateTime cvt_Promise  = DateTime.Parse(row.Promise_Return_Date);
                 
+                // TODO: make returned person have a name instead of ID
 
                 // Enter values into this model: ToolMeasure. Then add to list
                 toolTrackers.Add(new ToolTracker

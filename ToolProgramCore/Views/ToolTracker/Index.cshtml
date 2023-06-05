@@ -10,11 +10,19 @@
             bool.Parse(Context.Request.Query["viewAll"]);
 }
 
-<h1>Index</h1>
+@if (!viewAll)
+{
+    <h1 class="mt-5">Checked Out Tools</h1>
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+else
+{
+    <h1 class="mt-5">Checked Out/Returned Tools</h1>
+}
+
+
+<a class="button-primary " asp-action="CheckOut"><button class="mb-2" >Check Out</button></a>
+
 
 <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" id="mySwitch" name="emp" @(viewAll ? "Checked" : "")>
@@ -56,12 +64,16 @@
                     @*@Html.DisplayNameFor(model => model.EmpNo)*@
                     @Html.DisplayNameFor(model => model.EmpName)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Returned_Date)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Return_EmpNo)
-                </th>
+                @if (viewAll)
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.Returned_Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Return_EmpNo)
+                    </th>
+                }
+                
                 <th></th>
             </tr>
         </thead>
@@ -91,20 +103,23 @@
                         @*@Html.DisplayFor(modelItem => item.EmpNo)*@
                         @Html.DisplayFor(modelItem => item.EmpName)
                     </td>
-                    @*TODO remove based on all*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Returned_Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Return_EmpNo)
-                    </td>
+                    @if (viewAll)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Returned_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Return_EmpNo)
+                        </td>
+                    }
+                    
                     <td>
                        @* // TODO : complete extra
                         
                         @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-                        [PLACEHOLDER]
+                        [Return]
                     </td>
                 </tr>
             }

@@ -41,9 +41,9 @@
         </li>
         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("CheckOut")?? false ? "active" : "")"
-                               data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Check Out</a>
+                               data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tool Tracking</a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="/Measure/AddMeasure">Check out</a>
+            <a class="dropdown-item" href="/ToolTracker/CheckOut">Check out</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/ToolTracker/index">Return (List)</a>
           </div>
