@@ -45,11 +45,11 @@ namespace DataLibrary.BusinessLogic
             // get all instance of tool number, true if its in there, and it has not been returned
             string sql = @"SELECT ID
                             FROM dbo.Tool_Moves1
-                            WHERE ToolNo='" + ToolNo + 
-                            "' AND Date_Removed = NULL" +
+                            WHERE ToolNo='" + ToolNo +
+                            "' AND Returned_Date is NULL" +
                             ";";
 
-            return SqlDataAccess.LoadData<int>(sql).Count == 0;
+            return SqlDataAccess.LoadData<int>(sql).Count != 0;
         }
 
         // Class to help unify data into one usable datatype
@@ -64,7 +64,7 @@ namespace DataLibrary.BusinessLogic
             
             // all instances of location ID that have WC and tool ID
             string sql = @"SELECT Status
-                            FROM dbo.Locations1
+                            FROM dbo.Tool_Locations1
                             WHERE WC_ID='" + WCID +
                             "' AND Tool_ID='" + toolID +
                             "';";
@@ -81,9 +81,10 @@ namespace DataLibrary.BusinessLogic
 
 
             sql = @"UPDATE 
-                            dbo.Locations1
+                            dbo.Tool_Locations1
+
                             SET Status = 0 
-                            WHERE WC_ID = @WC_ID "+
+                            WHERE WC_ID = @WC_ID " +
                             "AND Tool_ID = @Tool_ID "+
                             ";";
 
@@ -98,9 +99,9 @@ namespace DataLibrary.BusinessLogic
 
             // Add new location and make it active
             string sql = @"INSERT INTO 
-                            dbo.Locations1
+                            dbo.Tool_Locations1
                             (Tool_ID, WC_ID, Status)
-                            VALUES (@Tool_ID, WC_ID, 1) " +
+                            VALUES (@Tool_ID, @WC_ID, 1) " +
                             ";";
 
             // Return status of query
@@ -110,7 +111,8 @@ namespace DataLibrary.BusinessLogic
         }
 
 
-            public static int saveCheckOut(string ToolNo, string Promise_Return_Date, string WC_From, string WC_To, string EmpNo)
+            public static int saveCheckOut(string ToolNo, string Promise_Return_Date, 
+                string WC_From, string WC_To, string EmpNo, string Date_Removed)
         {
             // Turns data into local toolMeasure class
             BorrowedToolModel data = new BorrowedToolModel
@@ -120,10 +122,11 @@ namespace DataLibrary.BusinessLogic
                 ToolNo = ToolNo,
                 WC_To = WC_To,
                 EmpNo = EmpNo,
+                Date_Removed = Date_Removed,
             };
 
-            string sql = @"INSERT into dbo.Tool_Moves1 (ToolNo, WC_From, WC_To, EmpNo) 
-                            Values (ToolNo, WC_From, WC_To, EmpNo);";
+            string sql = @"INSERT into dbo.Tool_Moves1 (ToolNo, WC_From, WC_To, EmpNo, Date_Removed, Promise_Return_Date) 
+                            Values (@ToolNo, @WC_From, @WC_To, @EmpNo, @Date_Removed, @Promise_Return_Date);";
 
             return SqlDataAccess.SaveData(sql, data);
         }

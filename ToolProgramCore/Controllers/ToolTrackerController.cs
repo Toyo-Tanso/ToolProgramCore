@@ -146,14 +146,14 @@ namespace ToolProgramCore.Controllers
 
             // TODO change locations DB
 
-            Console.WriteLine(collection.ToList());
             try
             {
+                CheckOutHelper(collection);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction("Error");
             }
         }
 
@@ -171,9 +171,12 @@ namespace ToolProgramCore.Controllers
             string WC_From = collection["WC_From"].ToString().ToUpper();
             string WC_To = collection["WC_To"].ToString().ToUpper();
             string EmpNo = collection["EmpNo"];
+            string Date_Removed = DateTime.Now.Date.ToString();
+
+
 
             // User DataLibrary to insert
-            saveCheckOut(ToolNo, Promise_Return_Date, WC_From, WC_To, EmpNo);
+            saveCheckOut(ToolNo, Promise_Return_Date, WC_From, WC_To, EmpNo, Date_Removed);
 
 
             // Update locations data
@@ -187,13 +190,13 @@ namespace ToolProgramCore.Controllers
 
             // Get Tool ID
             // toolRow = [*ID*, *Tool_ID*, Description]
-            string str_toolID = findInList(WCList, WC_From, 1, 0);
+            string str_toolID = findInList(toolList, ToolNo, 1, 0);
             int toolID = str_toolID == "" ? -1 : int.Parse(str_toolID);
 
             // Get NewWC ID
             // tuple = [*Name*, Description, WCUnder, *ID*]
             // tuple = [  0   ,       1    ,    2   ,  3  ]
-            string str_NewWCID = findInList(WCList, WC_From, 0, 3);
+            string str_NewWCID = findInList(WCList, WC_To, 0, 3);
             int NewWCID = str_NewWCID == "" ? -1 : int.Parse(str_NewWCID);
 
             // Catch error that they dont exist

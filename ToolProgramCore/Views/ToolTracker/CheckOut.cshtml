@@ -18,7 +18,7 @@
                 <label asp-for="ToolNo" class="control-label"></label>
                 @*TODO ADD validation for tool*@
                 @*TODO add validation for if it has a valid WC*@
-                <input asp-for="ToolNo" id="tool" class="form-control" onfocus="toolFocus()" onblur="getWC()" value="TTU " list="Tool_Data">
+                <input asp-for="ToolNo" id="tool" class="form-control" onblur="getWC()" value="TTU " list="Tool_Data">
                 <datalist id="Tool_Data">
                     @if (!(Model is null) && Model.ToolNoDropDownList is not null)
                     {
@@ -73,6 +73,7 @@
                 <span asp-validation-for="EmpNo" class="text-danger"></span>
             </div>
 
+
             <div class="form-group">
                 <input onclick="getWC" type="submit" value="CheckOut" class="btn btn-primary" />
             </div>
@@ -85,8 +86,9 @@
 </div>
 
 
+
 <script>
-    var ToolInput = $("#tool");
+    var ToolInput = document.getElementById("tool");
 
     // Execute a function when the user presses a key on the keyboard
     ToolInput.addEventListener("keypress", function (event) {
@@ -98,10 +100,6 @@
             getWC();
         }
     });
-
-</script>
-
-<script>
 
     function getWC() {
         // Get the tool value from the input
