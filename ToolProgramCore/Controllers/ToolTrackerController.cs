@@ -26,8 +26,8 @@ namespace ToolProgramCore.Controllers
         {
             // TODO: make run time better (make it so query for count) then make query for only the top 10 and so on
 
-            // Get the correct list
-            GetCheckedInList(viewAll);
+            // Get the correct list with not all info
+            GetCheckedInList(viewAll, false);
 
             // intialize if null
             CheckedInList ??= new List<ToolTracker> { };
@@ -84,10 +84,29 @@ namespace ToolProgramCore.Controllers
         [AllowAnonymous]
         public ActionResult Details(int id)
         {
-            return View();
+            // TODO: make runtime better by making a query that requests only ID
+            GetCheckedInList(true, true);
+
+            ToolTracker toolTrackerID = new ToolTracker();
+
+            Console.WriteLine(id);
+            foreach (ToolTracker tool in CheckedInList)
+            {
+                if (tool.ID is not null && tool.ID.Equals(id.ToString()))
+                {
+                    toolTrackerID = tool;
+                    break;
+                }
+            }
+            if (toolTrackerID.ID is null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(toolTrackerID);
         }
 
         // GET: ToolTracker/CheckOut
+        [HttpGet]
         [AllowAnonymous]
         public ActionResult CheckOut()
         {
@@ -134,9 +153,9 @@ namespace ToolProgramCore.Controllers
 
         // TODO : complete checkout post
         // POST: ToolTracker/CheckOut
-        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult CheckOut(IFormCollection collection)
         {
             // TODO, verify that it is the correct WC
@@ -303,7 +322,8 @@ namespace ToolProgramCore.Controllers
         // holds current list
         public List<ToolTracker>? CheckedInList;
 
-        public void GetCheckedInList(bool includeAll = false)
+        [AllowAnonymous]
+        public void GetCheckedInList(bool includeAll = false, bool fullInfo = false)
         {
 
             // Get list of ToolMeasureModel from data libary
@@ -341,10 +361,13 @@ namespace ToolProgramCore.Controllers
                     Returned_Date = includeAll && (row.Returned_Date) != null ? DateTime.Parse(row.Returned_Date) : null,
                     Return_EmpNo = includeAll && (row.Returned_Date) != null ? row.Return_EmpNo : null,
                     EmpName = getEmployeeName(row.EmpNo, EmplDropDownList),
+                    EmpNo = row.EmpNo,
+
                 });
             }
             CheckedInList = toolTrackers;
         }
+
 
         // Helper function: give an empNo and empList, if finds the corresponding name
         private string getEmployeeName(string? empNo, List<List<string>> emplDropDownList)
@@ -374,6 +397,7 @@ namespace ToolProgramCore.Controllers
 
         // ** Data Verify **
 
+        [AllowAnonymous]
         public IActionResult VerifyCorrectTool(
                         string ToolNo, List<List<string>> WCdropDownList,
                         List<List<string>> ToolNoDropDownList,
@@ -408,6 +432,7 @@ namespace ToolProgramCore.Controllers
 
         }
 
+        [AllowAnonymous]
         public IActionResult isValidWC(string WC_To, string WC_From)
         {
            // Ensure WC are not null
@@ -453,6 +478,7 @@ namespace ToolProgramCore.Controllers
         // This verifies input in the form (Helper) [called in the model class]
         // Returns error if the employee does not exist in the Database
         // TDOD: remove duplicate
+        [AllowAnonymous]
         public IActionResult VerifyEmpNo(string empNo)
         {
             List<List<string>> cur_empl = getFields_dbl_lst("EMP");
@@ -479,7 +505,7 @@ namespace ToolProgramCore.Controllers
         }
 
         // ** HTML Helper **
-
+        [AllowAnonymous]
         public string GetWC(string Tool, List<List<string>> Locations
                         , List<List<string>> WC, List<List<string>> Tools)
         {

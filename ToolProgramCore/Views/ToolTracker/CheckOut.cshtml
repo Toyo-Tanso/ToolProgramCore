@@ -1,7 +1,7 @@
 ﻿@model ToolProgramCore.Models.ToolTracker
 
 @{
-    ViewData["Title"] = "CheckOut";
+    ViewData["Title"] = "Check Out";
 }
 
 <h1 class="mt-5" >Check Out Tool</h1>
@@ -75,8 +75,9 @@
 
 
             <div class="form-group">
-                <input onclick="getWC" type="submit" value="Check Out" class="btn btn-primary" />
+                <input type="submit" value="Check Out" class="btn btn-primary" />
             </div>
+            @Html.AntiForgeryToken()
         </form>
     </div>
 </div>

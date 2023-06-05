@@ -23,6 +23,7 @@ namespace ToolProgramCore.Models
         [Display(Name = "Promise Return Date")]
         [Required]
         [DataType(DataType.Date)]
+        // TODO : make it so it has to be today or later
         public DateTime? Promise_Return_Date { get; set; }
 
         [Display(Name = "Borrowed From")]
@@ -51,6 +52,7 @@ namespace ToolProgramCore.Models
         public List<List<string>>? EmplDropDownList { get; set; }
         public List<List<string>>? ToolNoDropDownList { get; set; }
 
+        [Display(Name = "Employee")]
         public string? EmpName { get; set; }
 
         public int? TotalPages { get; set; }

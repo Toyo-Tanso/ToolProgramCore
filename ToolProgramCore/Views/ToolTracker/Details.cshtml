@@ -1,0 +1,102 @@
+﻿@model ToolProgramCore.Models.ToolTracker
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+@{
+    bool returned = Model.Returned_Date != null;
+
+    bool isLate;
+    if (returned)
+    {
+        isLate = Model.Promise_Return_Date < Model.Returned_Date;
+    }
+    else
+    {
+        isLate = Model.Promise_Return_Date < DateTime.Today;
+    }
+
+
+
+   
+}
+
+<h1 class="mt-5">Details</h1>
+
+<div>
+    <h4>ToolTracker</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            [@Html.DisplayNameFor(model => model.ID)]
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ToolNo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ToolNo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Date_Removed)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Date_Removed)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Promise_Return_Date)
+            
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Promise_Return_Date)
+            <span class="@(isLate ? "bg-danger" : "bg-success") text-white">
+            @(isLate ? "[Late]" : returned ? "On-Time" : "")</span>
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.WC_From)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.WC_From)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.WC_To)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.WC_To)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EmpNo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmpNo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Returned_Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Returned_Date)
+            <span class="text-danger">@(Model.Return_EmpNo == null ? "[Not Returned]" : "")</span>
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Return_EmpNo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Return_EmpNo)
+            <span class="text-danger">@(Model.Return_EmpNo == null ? "[Not Returned]" : "")</span>
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EmpName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmpName)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
