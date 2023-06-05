@@ -97,11 +97,11 @@ namespace DataLibrary.BusinessLogic
             data.WC_ID = WCID;
             data.Tool_ID = toolID;
 
-            // Add new location and make it active
+            // Add new location and make it active, and set it as borrowed
             string sql = @"INSERT INTO 
                             dbo.Tool_Locations1
-                            (Tool_ID, WC_ID, Status)
-                            VALUES (@Tool_ID, @WC_ID, 1) " +
+                            (Tool_ID, WC_ID, Status, Borrowed)
+                            VALUES (@Tool_ID, @WC_ID, 1, 1) " +
                             ";";
 
             // Return status of query

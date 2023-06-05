@@ -210,7 +210,7 @@ namespace ToolProgramCore.Controllers
             setOldLocation(WCID, toolID);
 
             // Enter in new Location
-            setNewLocation(WCID, toolID);
+            setNewLocation(NewWCID, toolID);
 
 
         }

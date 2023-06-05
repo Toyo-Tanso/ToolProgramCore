@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ToolProgramCore.Models.ToolTracker>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tool Tracking";
 }
 
 @{
@@ -87,10 +87,14 @@ else
                     <td>
                         @Html.DisplayFor(modelItem => item.ToolNo)
                     </td>
-                    <td>
+                    <td >
                         @Html.DisplayFor(modelItem => item.Date_Removed)
+
                     </td>
-                    <td>
+                    <td class="
+                        @((item.Promise_Return_Date < DateTime.Today) ? "bg-danger text-white"
+                        : (item.Promise_Return_Date == DateTime.Today) ? "bg-warning text-white"
+                        : "bg-success text-white")">
                         @Html.DisplayFor(modelItem => item.Promise_Return_Date)
                     </td>
                     <td>
@@ -107,9 +111,11 @@ else
                     {
                         <td>
                             @Html.DisplayFor(modelItem => item.Returned_Date)
+                            @(string.IsNullOrEmpty(item.Return_EmpNo) ? "-" : "")
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Return_EmpNo)
+                            @(string.IsNullOrEmpty(item.Return_EmpNo) ? "-" : "")
                         </td>
                     }
                     

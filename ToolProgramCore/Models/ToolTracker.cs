@@ -40,6 +40,7 @@ namespace ToolProgramCore.Models
         public String? EmpNo { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "Returned On")]
         public DateTime? Returned_Date { get; set; }
 
         [Display(Name = "Returned by")]
