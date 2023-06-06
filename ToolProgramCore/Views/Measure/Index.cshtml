@@ -29,12 +29,20 @@
     }
 }
 
+<div class="d-flex mt-4 mb-3">
 
-<h1 class="mt-5">Recent Tool Checks</h1>
+    <div class="w-auto me-5">
+        <h1 class="mt-5">Recent Tool Measure</h1>
 
-@*<p >*@
-    <a asp-action="AddMeasure"><button>Add New Measure</button></a>
-@*</p>*@
+        <a asp-action="AddMeasure" class="btn btn-secondary buttonPurple btn-md " role="button">
+            Add New Measure</a>
+    </div>
+
+    <div class="w-auto ms-5">
+        <img alt="Icon" class="bi" width="124" height="125" src="/Images/MeasureList.png" />
+    </div>
+
+</div>
 
 @if(Model != null)
 {

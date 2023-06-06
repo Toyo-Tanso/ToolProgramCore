@@ -4,11 +4,25 @@
     ViewData["Title"] = "Check Out";
 }
 
-<h1 class="mt-5" >Check Out Tool</h1>
-@*TODO ADD CHECKOUT ICON*@
+<div class="d-flex mt-4 mb-3 ">
 
-<h4>Tool Tracker</h4>
+    <div class="w-auto me-5">
+        <h1 class="mt-2">Check Out Tool</h1>
+
+        <h4>Tool Tracker</h4>
+
+    </div>
+
+    <div class="w-auto ms-5">
+        <div class="d-flex align-items-center ms-1">
+            <img alt="Icon" class="img-fluid" width="100" @*max-height="170"*@ src="/Images/checkOut.png" />
+        </div>
+    </div>
+
+
+</div>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CheckOut">
@@ -75,7 +89,7 @@
 
 
             <div class="form-group">
-                <input type="submit" value="Check Out" class="btn btn-primary" />
+                <input type="submit" value="Check Out" class="btn btn-primary buttonOrange" />
             </div>
             @Html.AntiForgeryToken()
         </form>

@@ -9,31 +9,44 @@
     bool viewAll = string.IsNullOrEmpty(Context.Request.Query["viewAll"]) ? false :
             bool.Parse(Context.Request.Query["viewAll"]);
 }
+<div class="d-flex mt-4 mb-3">
 
-@if (!viewAll)
-{
-    <h1 class="mt-5">Checked Out Tools</h1>
-}
+    <div class="w-auto me-5">
+        @if (!viewAll)
+        {
+            <h1 class="mt-2">Checked Out Tools</h1>
+        }
 
-else
-{
-    <h1 class="mt-5">Checked Out/Returned Tools</h1>
-}
+        else
+        {
+            <h1 class="mt-2">Checked Out/Returned Tools</h1>
+        }
 
 
 
-<div class="w-100 d-flex mb-2 ">
-    <a class="btn btn-primary btn-md me-2" role="button" asp-action="CheckOut">Check Out</a>
-    <a class="btn btn-secondary btn-md " role="button" asp-action="Export">Export All</a>
+        <div class="w-100 d-flex mb-2 mt-3">
+            <a class="btn btn-primary buttonOrange btn-md me-2" role="button" asp-action="CheckOut">Check Out</a>
+            <a class="btn btn-secondary btn-md " role="button" asp-action="Export">Export All</a>
+
+        </div>
+
+        
+
+    </div>
+
+    <div class="w-auto ms-5">
+        <img alt="Icon" class="bi" width="124" height="125" src="/Images/checkedOutList.png" />
+    </div>
 
 </div>
-
-
 
 <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" id="mySwitch" name="emp" @(viewAll ? "Checked" : "")>
     <label class="form-check-label" for="mySwitch">View All</label>
 </div>
+
+
+
 
 <form id="viewAllForm" action="/ToolTracker/ChangeIndexView" method="post">
     <input type="hidden" id="viewAll" name="viewAll" value="false" />
@@ -43,7 +56,7 @@ else
 
 @if (@Model.Count() != 0)
 {
-    <table class="table table-striped">
+    <table class="table table-striped text-lg-start">
         <thead>
             <tr>
 
