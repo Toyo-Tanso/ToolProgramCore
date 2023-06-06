@@ -93,7 +93,7 @@ else
                     </td>
                     <td class="
                         @((item.Promise_Return_Date < DateTime.Today) ? "bg-danger text-white"
-                        : (item.Promise_Return_Date == DateTime.Today) ? "bg-warning text-white"
+                        : (item.Promise_Return_Date == DateTime.Today) ? "bg-warning"
                         : "bg-success text-white")">
                         @Html.DisplayFor(modelItem => item.Promise_Return_Date)
                     </td>
@@ -124,8 +124,7 @@ else
                         
                         @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                        [Return]
+                        @Html.ActionLink("Return", "Return", new { id=item.ID })
                     </td>
                 </tr>
             }

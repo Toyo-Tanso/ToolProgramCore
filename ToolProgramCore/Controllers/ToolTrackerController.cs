@@ -252,15 +252,38 @@ namespace ToolProgramCore.Controllers
         // GET: ToolTracker/Return/5
         public ActionResult Return(int id)
         {
-            // Maybe Use a different model
-            return View();
+            // TODO: make runtime better by making a query that requests only ID
+            GetCheckedInList(true, true);
+
+            ToolTracker toolTrackerID = new ToolTracker();
+
+            Console.WriteLine(id);
+            foreach (ToolTracker tool in CheckedInList)
+            {
+                if (tool.ID is not null && tool.ID.Equals(id.ToString()))
+                {
+                    toolTrackerID = tool;
+                    break;
+                }
+            }
+            if (toolTrackerID.ID is null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            toolTrackerID.EmplDropDownList = getFields_dbl_lst("EMP");
+            toolTrackerID.Returned_Date = DateTime.Today;
+            
+
+
+            return View(toolTrackerID);
         }
 
         // POST: ToolTracker/Return/5
         // TODO : return Post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Return(int id, IFormCollection collection)
+        public ActionResult Return( IFormCollection collection)
         {
             try
             {

@@ -1,0 +1,118 @@
+﻿@model ToolProgramCore.Models.ToolTracker
+
+@{
+    ViewData["Title"] = "Return";
+}
+
+@{
+    bool returned = Model.Returned_Date != null;
+
+    bool isLate;
+    if (returned)
+    {
+        isLate = Model.Promise_Return_Date < Model.Returned_Date;
+    }
+    else
+    {
+        isLate = Model.Promise_Return_Date < DateTime.Today;
+    }
+
+
+
+
+}
+<h1 class="mt-5">Return Tool: <span class="text-decoration-underline">@Html.DisplayFor(model => model.ToolNo)</span></h1>
+
+<h4>ToolTracker</h4>
+<hr />
+<div>
+
+</div>
+
+<dl class="row">
+
+    <dt class="col-sm-3">
+        Borrowed
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Date_Removed)
+    </dd>
+    <dt class="col-sm-3">
+        Promised
+
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Promise_Return_Date)
+        <span class="@(isLate ? "bg-danger" : "bg-success") text-white">
+            @(isLate ? "[Late]" : returned ? "On-Time" : "")
+        </span>
+    </dd>
+    <dt class="col-sm-3">
+        From -> To
+    </dt>
+    <dd class="col-sm-9">
+        [@Html.DisplayFor(model => model.WC_From)] -> [@Html.DisplayFor(model => model.WC_To)]
+    </dd>
+
+    <dt class="col-sm-3">
+        Employee #
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.EmpNo)
+    </dd>
+
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.EmpName)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.EmpName)
+    </dd>
+</dl>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Return">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group visually-hidden">
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" />
+                <span asp-validation-for="ID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group ">
+                <label asp-for="Returned_Date" class="control-label"></label>
+                <input asp-for="Returned_Date" class="form-control" disabled/>
+                <span asp-validation-for="Returned_Date" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Return_EmpNo" class="control-label"></label>
+                <input asp-for="Return_EmpNo" class="form-control" list="Emp_Data" />
+                <span asp-validation-for="Return_EmpNo" class="text-danger"></span>
+
+                <datalist id="Emp_Data">
+                    @if (!(Model is null) && Model.EmplDropDownList != null)
+                    {
+                        foreach (var emp_lst in Model.EmplDropDownList)
+                        {
+                            <option value="@emp_lst[1].Trim()">@(emp_lst[0].Split(',')[1].Trim() + " " + emp_lst[0].Split(',')[0])</option>
+                        }
+                    }
+                </datalist>
+
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Return" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-2">
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
