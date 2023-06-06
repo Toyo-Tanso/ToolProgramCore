@@ -245,6 +245,7 @@ namespace ToolProgramCore.Controllers
         public List<ToolMeasure>? MeasureList;
 
         // Updates the MeasureList so that it gets most recent data from DB
+        [AllowAnonymous]
         public void GetMeasureList()
         {
             // Get list of ToolMeasureModel from data libary
@@ -311,6 +312,7 @@ namespace ToolProgramCore.Controllers
 
         // This verifies input in the form WC is for the right tool (Helper) [called in the model class] 
         // the right Work center
+        [AllowAnonymous]
         public IActionResult VerifyCorrectWC(string WC,
                         string ToolNo, List<List<string>> WCdropDownList,
                         List<List<string>> ToolNoDropDownList,
@@ -357,6 +359,7 @@ namespace ToolProgramCore.Controllers
         // This verifies input in the form (Helper) [called in the model class]
         // Returns error if the employee does not exist in the Database
         // TODO: make sure that this is not repeating with tracker and measure
+        [AllowAnonymous]
         public IActionResult VerifyEmpNo(string empNo)
         {
             List<List<string>> cur_empl = getFields_dbl_lst("EMP");
@@ -386,6 +389,7 @@ namespace ToolProgramCore.Controllers
 
         // This function is called in razor AddMeasure page to get the workcenter
         //      For a given tool, (Quality of a life thing)
+        [AllowAnonymous]
         public string GetWC(string Tool, List<List<string>> Locations
                         , List<List<string>> WC, List<List<string>> Tools)
         {
