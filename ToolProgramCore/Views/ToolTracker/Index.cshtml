@@ -21,7 +21,13 @@ else
 }
 
 
-<a class="button-primary " asp-action="CheckOut"><button class="mb-2" >Check Out</button></a>
+
+<div class="w-100 d-flex mb-2 ">
+    <a class="btn btn-primary btn-md me-2" role="button" asp-action="CheckOut">Check Out</a>
+    <a class="btn btn-secondary btn-md " role="button" asp-action="Export">Export All</a>
+
+</div>
+
 
 
 <div class="form-check form-switch">
@@ -37,7 +43,7 @@ else
 
 @if (@Model.Count() != 0)
 {
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
 
@@ -92,9 +98,9 @@ else
 
                     </td>
                     <td class="
-                        @((item.Promise_Return_Date < DateTime.Today) ? "bg-danger text-white"
-                        : (item.Promise_Return_Date == DateTime.Today) ? "bg-warning"
-                        : "bg-success text-white")">
+                        @((item.Promise_Return_Date < DateTime.Today) ? "table-danger"
+                        : (item.Promise_Return_Date == DateTime.Today) ? "table-warning"
+                        : "table-success")">
                         @Html.DisplayFor(modelItem => item.Promise_Return_Date)
                     </td>
                     <td>
@@ -105,7 +111,10 @@ else
                     </td>
                     <td>
                         @*@Html.DisplayFor(modelItem => item.EmpNo)*@
-                        @Html.DisplayFor(modelItem => item.EmpName)
+                        @*@Html.DisplayFor(modelItem => item.EmpName)*@                        
+                        @(item.EmpName == null ? "" :
+                            item.EmpName.Split(',')[0] + ", " + item.EmpName.Split(',')[1][1])
+
                     </td>
                     @if (viewAll)
                     {
@@ -114,15 +123,14 @@ else
                             @(string.IsNullOrEmpty(item.Return_EmpNo) ? "-" : "")
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Return_EmpNo)
+                            @*@Html.DisplayFor(modelItem => item.Return_EmpNo)*@
                             @(string.IsNullOrEmpty(item.Return_EmpNo) ? "-" : "")
+                            @(string.IsNullOrEmpty(item.Return_EmpNo) ? "" :
+                                item.Return_EmpNo.Split(',')[0] + ", " + item.Return_EmpNo.Split(',')[1][1])
                         </td>
                     }
                     
                     <td>
-                       @* // TODO : complete extra *@
-                        
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Details", "Details", new { id=item.ID }) |
                         @Html.ActionLink("Return", "Return", new { id=item.ID })
                     </td>

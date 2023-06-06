@@ -15,12 +15,12 @@ namespace ToolProgramCore.Models
         [Display(Name = "Tool Number")]
         public string? ToolNo { get; set; }
 
-        [Display(Name = "Date Borrowed ")]
+        [Display(Name = "Borrowed On")]
         [Required]
         [DataType(DataType.Date)]
         public DateTime? Date_Removed { get; set; }
 
-        [Display(Name = "Promise Return Date")]
+        [Display(Name = "Promise Return")]
         [Required]
         [DataType(DataType.Date)]
         // TODO : make it so it has to be today or later

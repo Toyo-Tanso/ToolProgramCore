@@ -6,6 +6,9 @@ using static DataLibrary.BusinessLogic.TrackerLogicController;
 using static DataLibrary.BusinessLogic.Fields_Change;
 using System.Text.RegularExpressions;
 using System.Diagnostics.Eventing.Reader;
+using System.Data;
+using System.Drawing;
+using ClosedXML.Excel;
 
 namespace ToolProgramCore.Controllers
 {
@@ -357,6 +360,89 @@ namespace ToolProgramCore.Controllers
 
         }
 
+        public IActionResult Export()
+        {
+            // Create a DataTable with some sample data
+            DataTable dt = new DataTable("Checked Out tools");
+            dt.Columns.AddRange(new DataColumn[9] { 
+                
+                new DataColumn("ID", typeof(int)),
+                new DataColumn("Borrowed Date", typeof(DateOnly)),
+                new DataColumn("Promise Date", typeof(DateOnly)),
+                new DataColumn("Taken From",typeof(string)),
+                new DataColumn("Taken To",typeof(string)),
+                new DataColumn("EmpNo",typeof(string)),
+                new DataColumn("Name",typeof(string)),
+
+                new DataColumn("Returned Date", typeof(DateOnly)),
+                new DataColumn("ReturnName",typeof(string))
+
+            });
+
+            GetCheckedInList(true, true);
+            if(CheckedInList == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            foreach (ToolTracker toolInfo in CheckedInList)
+            {
+                DateOnly? promiseDate = null;
+                DateOnly? Date_Removed = null;
+                DateOnly? Returned_Date = null;
+                if (toolInfo.Promise_Return_Date != null)
+                {
+                    promiseDate = DateOnly.FromDateTime((DateTime)toolInfo.Promise_Return_Date);
+                }
+                if (toolInfo.Date_Removed != null)
+                {
+                    Date_Removed = DateOnly.FromDateTime((DateTime)toolInfo.Date_Removed);
+                }
+                if (toolInfo.Returned_Date != null)
+                {
+                    Returned_Date = DateOnly.FromDateTime((DateTime)toolInfo.Returned_Date);
+                }
+
+                dt.Rows.Add(toolInfo.ID, Date_Removed, 
+                    
+                    promiseDate,
+                    toolInfo.WC_From, toolInfo.WC_To, toolInfo.EmpNo, toolInfo.EmpName,
+                    Returned_Date, toolInfo.Return_EmpNo);
+            }
+            
+            
+
+            // Create a workbook with a worksheet
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var ws = wb.Worksheets.Add(dt);
+
+                // Set some properties of the workbook
+                wb.Properties.Title = "Checked Out Tools Report";
+                wb.Properties.Author = "Tool Program";
+                wb.Properties.Company = "Toyo Tanso IT";
+
+                // Set some properties of the worksheet
+                ws.Name = "Checked out tools Data";
+                ws.TabColor = XLColor.Red;
+                ws.RangeUsed().Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                foreach (var item in ws.ColumnsUsed())
+                {
+                    item.AdjustToContents();
+                }
+
+                // Save the workbook as a stream
+                using (var stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    stream.Position = 0;
+
+                    // Write the stream to the response
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "CheckedOutData.xlsx");
+                }
+            }
+        }
+
         // The following pages not in use:
         // TODO: allow admins to edit. Or delete
         //// GET: ToolTracker/Edit/5
@@ -365,46 +451,46 @@ namespace ToolProgramCore.Controllers
         //    return View();
         //}
 
-        //// POST: ToolTracker/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+            //// POST: ToolTracker/Edit/5
+            //[HttpPost]
+            //[ValidateAntiForgeryToken]
+            //public ActionResult Edit(int id, IFormCollection collection)
+            //{
+            //    try
+            //    {
+            //        return RedirectToAction(nameof(Index));
+            //    }
+            //    catch
+            //    {
+            //        return View();
+            //    }
+            //}
 
-        //// GET: ToolTracker/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
+            //// GET: ToolTracker/Delete/5
+            //public ActionResult Delete(int id)
+            //{
+            //    return View();
+            //}
 
-        //// POST: ToolTracker/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+            //// POST: ToolTracker/Delete/5
+            //[HttpPost]
+            //[ValidateAntiForgeryToken]
+            //public ActionResult Delete(int id, IFormCollection collection)
+            //{
+            //    try
+            //    {
+            //        return RedirectToAction(nameof(Index));
+            //    }
+            //    catch
+            //    {
+            //        return View();
+            //    }
+            //}
 
 
-        // ** Data Loaders **
+            // ** Data Loaders **
 
-        // holds current list
+            // holds current list
         public List<ToolTracker>? CheckedInList;
 
         [AllowAnonymous]
@@ -444,7 +530,7 @@ namespace ToolProgramCore.Controllers
                     Date_Removed = cvt_Removed,
                     Promise_Return_Date = cvt_Promise,
                     Returned_Date = includeAll && (row.Returned_Date) != null ? DateTime.Parse(row.Returned_Date) : null,
-                    Return_EmpNo = includeAll && (row.Returned_Date) != null ? row.Return_EmpNo : null,
+                    Return_EmpNo = includeAll && (row.Returned_Date) != null ? getEmployeeName(row.Return_EmpNo, EmplDropDownList) : null,
                     EmpName = getEmployeeName(row.EmpNo, EmplDropDownList),
                     EmpNo = row.EmpNo,
 
