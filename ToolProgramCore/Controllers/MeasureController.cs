@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.VariantTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using System.Data;
 using System.Text.RegularExpressions;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.Fields_Change;
@@ -193,6 +196,79 @@ namespace ToolProgramCore.Controllers
             // User DataLibrary to insert
             CreateMeasure(T_Date, ToolNo, S_Size, WC, EmpNo, Condition);
 
+        }
+
+        public IActionResult Export()
+        {
+            // Create a DataTable with some sample data
+            DataTable dt = new DataTable("Tool Measure");
+            dt.Columns.AddRange(new DataColumn[7] {
+
+                //new DataColumn("ID", typeof(int)),
+                new DataColumn("Measure Date", typeof(DateOnly)),
+                new DataColumn("WC",typeof(string)),
+                new DataColumn("ToolNo",typeof(string)),
+                new DataColumn("EmpNo",typeof(string)),
+                new DataColumn("Name",typeof(string)),
+
+                new DataColumn("Standard Size",typeof(double)),
+                new DataColumn("Condition",typeof(double)),
+
+            });
+
+            GetMeasureList();
+            if (MeasureList == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            foreach (ToolMeasure toolInfo in MeasureList)
+            {
+                DateOnly? measuredDate = null;
+                if (toolInfo.T_Date != null)
+                {
+                    measuredDate = DateOnly.FromDateTime((DateTime)toolInfo.T_Date);
+                }
+
+
+                dt.Rows.Add(measuredDate,
+
+                    toolInfo.WC,
+                    toolInfo.ToolNo, toolInfo.EmpNo, toolInfo.EmpName,
+                    toolInfo.S_Size, toolInfo.Condition);
+            }
+
+
+
+            // Create a workbook with a worksheet
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var ws = wb.Worksheets.Add(dt);
+
+                // Set some properties of the workbook
+                wb.Properties.Title = "Tool Measure Report";
+                wb.Properties.Author = "Tool Program";
+                wb.Properties.Company = "Toyo Tanso IT";
+
+                // Set some properties of the worksheet
+                ws.Name = "Checked out tools Data";
+                ws.TabColor = XLColor.Red;
+                ws.RangeUsed().Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                foreach (var item in ws.ColumnsUsed())
+                {
+                    item.AdjustToContents();
+                }
+
+                // Save the workbook as a stream
+                using (var stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    stream.Position = 0;
+
+                    // Write the stream to the response
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ToolMeasureData.xlsx");
+                }
+            }
         }
 
         // The following pages not in use:

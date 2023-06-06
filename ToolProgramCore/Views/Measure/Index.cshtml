@@ -34,8 +34,13 @@
     <div class="w-auto me-5">
         <h1 class="mt-5">Recent Tool Measure</h1>
 
-        <a asp-action="AddMeasure" class="btn btn-secondary buttonPurple btn-md " role="button">
-            Add New Measure</a>
+        <div class="w-100 d-flex mb-2 mt-3">
+            <a asp-action="AddMeasure" class="btn btn-secondary buttonPurple btn-md me-2 " role="button">Add New Measure</a>
+            <a class="btn btn-secondary btn-md " role="button" asp-action="Export">Export All</a>
+
+        </div>
+        
+            
     </div>
 
     <div class="w-auto ms-5">
@@ -93,7 +98,10 @@
                     </td>
                     <td>
                         @*@Html.DisplayFor(modelItem => item.EmpNo)*@
-                        @Html.DisplayFor(modelItem => item.EmpName)
+                        @*@Html.DisplayFor(modelItem => item.EmpName)*@
+                        @(item.EmpName == null ? "" :
+                            item.EmpName.Split(',')[0] + ( item.EmpName.Split(',').Length > 1 ?
+                            ", " + item.EmpName.Split(',')[1][1] : ""))
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.S_Size)

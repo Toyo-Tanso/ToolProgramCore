@@ -144,8 +144,12 @@
                     }
                     
                     <td>
-                        @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-                        @Html.ActionLink("Return", "Return", new { id=item.ID })
+                        @Html.ActionLink("Details", "Details", new { id=item.ID })
+                        @(item.Returned_Date != null ? "" : "|")
+
+                        @(item.Returned_Date != null ? "" : Html.ActionLink("Return", "Return", new { id = item.ID }))
+                        
+                        
                     </td>
                 </tr>
             }
