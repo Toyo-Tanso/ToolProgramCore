@@ -75,9 +75,23 @@
         <form asp-action="Return">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group visually-hidden">
+                <label asp-for="ReturnToolNo" class="control-label"></label>
+                <input asp-for="ReturnToolNo" class=" form-control" readonly/>
+            </div>
+
+            <div class="form-group visually-hidden">
+                <label asp-for="WC_To" class="control-label"></label>
+                <input asp-for="WC_To" class="form-control" readonly />
+            </div>
+
+            <div class="form-group visually-hidden">
+                <label asp-for="WC_From" class="control-label"></label>
+                <input asp-for="WC_From" class="form-control" readonly />
+            </div>
+
+            <div class="form-group visually-hidden">
                 <label asp-for="ID" class="control-label"></label>
-                <input asp-for="ID" class="form-control" />
-                <span asp-validation-for="ID" class="text-danger"></span>
+                <input asp-for="ID" class="form-control" readonly />
             </div>
 
             <div class="form-group ">

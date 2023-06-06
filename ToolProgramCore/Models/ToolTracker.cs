@@ -44,8 +44,12 @@ namespace ToolProgramCore.Models
         [Display(Name = "Returned On")]
         public DateTime? Returned_Date { get; set; }
 
+        [Required]
         [Display(Name = "Returned by")]
         public String? Return_EmpNo {get; set;}
+
+        // Non visible, used to pass tool number into return form
+        public string? ReturnToolNo { get; set; }
 
 
         public List<List<string>>? WCdropDownList { get; set; }

@@ -250,6 +250,8 @@ namespace ToolProgramCore.Controllers
 
         // TODO : complete return
         // GET: ToolTracker/Return/5
+        [HttpGet]
+        [AllowAnonymous]
         public ActionResult Return(int id)
         {
             // TODO: make runtime better by making a query that requests only ID
@@ -275,6 +277,8 @@ namespace ToolProgramCore.Controllers
             toolTrackerID.Returned_Date = DateTime.Today;
             
 
+            toolTrackerID.ReturnToolNo = toolTrackerID.ToolNo;
+
 
             return View(toolTrackerID);
         }
@@ -283,16 +287,74 @@ namespace ToolProgramCore.Controllers
         // TODO : return Post
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult Return( IFormCollection collection)
         {
             try
             {
+                string ToolNo = collection["ReturnToolNo"].ToString().ToUpper();
+                ReturnHelper(collection);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
                 return View();
             }
+        }
+
+        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
+        // add tool check in
+        [AllowAnonymous]
+        private void ReturnHelper(IFormCollection collection)
+        {
+
+            List<List<string>> toolList = getFields_dbl_lst("TOOL");
+            List<List<string>> WCList = getFields_dbl_lst("WC");
+
+            string WC_From = collection["WC_From"].ToString().ToUpper();
+            string WC_To = collection["WC_To"].ToString().ToUpper();
+            string ToolNo = collection["ReturnToolNo"].ToString().ToUpper();
+            string Return_EmpNo = collection["Return_EmpNo"].ToString();
+            string ID = collection["ID"].ToString();
+            string Returned_Date = DateTime.Now.Date.ToString();
+
+            // User DataLibrary to update
+            ReturnCheckOut(ID, Returned_Date, Return_EmpNo);
+
+            // Update locations data
+
+            // Get WC ID
+            // tuple = [*Name*, Description, WCUnder, *ID*]
+            // tuple = [  0   ,       1    ,    2   ,  3  ]
+            string str_WCID = findInList(WCList, WC_From, 0, 3);
+            int WCID = str_WCID == "" ? -1 : int.Parse(str_WCID);
+
+
+            // Get Tool ID
+            // toolRow = [*ID*, *Tool_ID*, Description]
+            string str_toolID = findInList(toolList, ToolNo, 1, 0);
+            int toolID = str_toolID == "" ? -1 : int.Parse(str_toolID);
+
+            // Get NewWC ID
+            // tuple = [*Name*, Description, WCUnder, *ID*]
+            // tuple = [  0   ,       1    ,    2   ,  3  ]
+            string str_NewWCID = findInList(WCList, WC_To, 0, 3);
+            int NewWCID = str_NewWCID == "" ? -1 : int.Parse(str_NewWCID);
+
+            // Catch error that they dont exist
+            if (WCID < 0 || toolID < 0 || NewWCID < 0)
+            {
+                throw new Exception("Could not find ID of WC");
+            }
+
+            // Find location, set as active
+            revertOldLocation(WCID, toolID);
+
+            // Enter in new Location
+            revertNewLocation(NewWCID, toolID);
+
+
         }
 
         // The following pages not in use:

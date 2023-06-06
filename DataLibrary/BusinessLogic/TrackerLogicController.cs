@@ -106,12 +106,76 @@ namespace DataLibrary.BusinessLogic
 
             // Return status of query
             return SqlDataAccess.SaveData(sql, data);
+        }
+
+        // Takes original WC and checks to see if it's there and sets status to 1
+        public static int revertOldLocation(int WCID, int toolID)
+        {
+
+            // all instances of location ID that have WC and tool ID
+            string sql = @"SELECT Status
+                            FROM dbo.Tool_Locations1
+                            WHERE WC_ID='" + WCID +
+                            "' AND Tool_ID='" + toolID +
+                            "';";
+
+            // If location is not found
+            if (SqlDataAccess.LoadData<int>(sql).Count == 0)
+            {
+                throw new Exception("Old Location data not found");
+            }
+            // If more than one something is wrong, all duplicates should be deleted when returned
+            LocationData data = new LocationData();
+            data.WC_ID = WCID;
+            data.Tool_ID = toolID;
 
 
+            sql = @"UPDATE 
+                            dbo.Tool_Locations1
+
+                            SET Status = 1 
+                            WHERE WC_ID = @WC_ID " +
+                            "AND Tool_ID = @Tool_ID " +
+                            ";";
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        public static int revertNewLocation(int WCID, int toolID)
+        {
+            LocationData data = new LocationData();
+            data.WC_ID = WCID;
+            data.Tool_ID = toolID;
+
+            // all instances of location ID that have WC and tool ID
+            string sql = @"SELECT Status
+                            FROM dbo.Tool_Locations1
+                            WHERE WC_ID='" + WCID +
+                            "' AND Tool_ID='" + toolID +
+                            "' AND Borrowed = 1;";
+
+            // If location is not found
+            if (SqlDataAccess.LoadData<int>(sql).Count == 0)
+            {
+                throw new Exception("New Location data not found");
+            }
+
+
+            // Add new location and make it active, and set it as borrowed
+            sql = @"DELETE FROM
+                            dbo.Tool_Locations1
+                            WHERE WC_ID = @WC_ID
+                            AND Tool_ID = @Tool_ID
+                            AND Borrowed = 1
+                            " +
+                            ";";
+
+            // Return status of query
+            return SqlDataAccess.SaveData(sql, data);
         }
 
 
-            public static int saveCheckOut(string ToolNo, string Promise_Return_Date, 
+
+        public static int saveCheckOut(string ToolNo, string Promise_Return_Date, 
                 string WC_From, string WC_To, string EmpNo, string Date_Removed)
         {
             // Turns data into local toolMeasure class
@@ -127,6 +191,23 @@ namespace DataLibrary.BusinessLogic
 
             string sql = @"INSERT into dbo.Tool_Moves1 (ToolNo, WC_From, WC_To, EmpNo, Date_Removed, Promise_Return_Date) 
                             Values (@ToolNo, @WC_From, @WC_To, @EmpNo, @Date_Removed, @Promise_Return_Date);";
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        // Returns the check out 
+        public static int ReturnCheckOut(string ID, string Returned_Date, string Return_EmpNo)
+        {
+            // Turns data into local toolMeasure class
+            BorrowedToolModel data = new BorrowedToolModel
+            {
+                ID = ID,
+                Return_EmpNo = Return_EmpNo,
+                Returned_Date= Returned_Date,
+            };
+
+            string sql = @"UPDATE dbo.Tool_Moves1 SET Returned_Date = @Returned_Date, Return_EmpNo = @Return_EmpNo 
+                            WHERE ID = @ID;";
 
             return SqlDataAccess.SaveData(sql, data);
         }
