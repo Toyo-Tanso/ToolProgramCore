@@ -39,3 +39,18 @@ body {
         font-weight: 500;
     }
 
+.admin {
+    background-color: #240DFD;
+    color: black;
+}
+
+.adminButton {
+    border-color: #9C0DFD;
+}
+.adminButton:hover {
+    background-color: #9C0DFD;
+    color: white;
+
+}
+
+

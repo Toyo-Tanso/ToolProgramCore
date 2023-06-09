@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Title"] = "AdminLoggedIn";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="text-center">
+    <h1 class="display-4 mt-5 ">Admin Console</h1>
+</div>
+
+<div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Quick Links</h2>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3 text-white admin">
+                <h3 class="my-0 fw-normal">WorkCenter</h3>
+            </div>
+            <div class="card-body">
+                @*<h3>Available locations</h3>*@
+                <img alt="ruler Icon" class="bi bi my-2 mb-3" width="140" height="140" src="/Images/Admin/WorkCenterEdit.png" />
+
+                <button type="button" class="w-100 btn btn-lg adminButton">Edit</button>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3 text-white admin">
+                <h3 class="my-0 fw-normal">Employee List</h3>
+            </div>
+            <div class="card-body">
+                @*<h3>Available locations</h3>*@
+                <img alt="ruler Icon" class="bi bi my-2 mb-3" width="140" height="140" src="/Images/Admin/EmployeeEdit.png" />
+
+                <button type="button" class="w-100 btn btn-lg adminButton">Edit</button>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+            <div class="card-header py-3 text-white admin border-primary">
+                <h3 class="my-0 fw-normal">Tools List</h3>
+            </div>
+            <div class="card-body">
+                <img alt="ruler Icon" class="bi my-2 mb-3" width="140" height="140" src="/Images/Admin/ToolEdit.png" />
+
+                <button type="button" class="w-100 btn btn-lg adminButton">Edit</button>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class=" w-100 m-0 g-0">
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm admin visually-hidden">
+                <div class="card-header py-3 text-white adminButton">
+                </div>
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm border-primary">
+                <div class="card-header py-3 text-white text-white admin">
+                    <h4 class="my-0 fw-normal">Verified Users</h4>
+                </div>
+                <div class="card-body">
+                    <img alt="ruler Icon" class="bi bi my-2 mb-3" width="120" height="120" src="/Images/Admin/AdminEdit.png" />
+                    <button type="button" class="w-100 btn btn-lg adminButton">Add/Remove</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
