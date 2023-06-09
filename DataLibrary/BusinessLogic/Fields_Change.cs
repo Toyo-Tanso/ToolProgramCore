@@ -8,6 +8,7 @@ namespace DataLibrary.BusinessLogic
     {
         // Creates a new tool with it being active,
         // does not verify format nor does it add a locations
+        // Used by Measure
         public static int CreateTool(string ToolNo)
         {
             ToolDB data = new ToolDB
@@ -23,6 +24,7 @@ namespace DataLibrary.BusinessLogic
         }
 
         // Finds the ID of the tool, if it exists
+        // Used by Measure
         public static int FindToolID(string ToolNo)
         {
 
@@ -34,6 +36,7 @@ namespace DataLibrary.BusinessLogic
 
 
         // Adds Location given a toolID, and a WCID
+        // Used by Measure
         public static int AddLocation(int ToolID, int WCID)
         {
 
@@ -53,6 +56,7 @@ namespace DataLibrary.BusinessLogic
         }
 
         // TODO implement: sets tool as inactive in the DB
+        // Used by Measure
         public static int DeleteTool(string ToolNo)
         {
             throw new NotImplementedException();
@@ -72,6 +76,7 @@ namespace DataLibrary.BusinessLogic
 
         // Recieves type of list needed and executes sql code to return a list
         //      for dropdown lists
+        // Used by Measure
         public static List<List<string>> LoadFields_dbl_lst(string type)
         {
             string sql = "";
@@ -117,6 +122,8 @@ namespace DataLibrary.BusinessLogic
             else { throw new Exception("Incorrect type entered"); }
 
         }
+
+
 
     }
 }

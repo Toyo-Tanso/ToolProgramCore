@@ -8,14 +8,17 @@ namespace ToolProgramCore.Models
 
         // Employee Factors
         [Required]
+        [Display(Name = "First Name")]
         public string? FirstName { get; set; }
 
         [Required]
+        [Display(Name = "Last Name")]
         public string? LastName { get; set; }
 
         // Internal value
         public string? FullName { get; set; }
 
+        [Display(Name = "Clock Code")]
         public string? Clock_Code { get; set; }
 
 

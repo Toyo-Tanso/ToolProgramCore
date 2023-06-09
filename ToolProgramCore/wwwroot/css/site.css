@@ -45,12 +45,14 @@ body {
 }
 
 .adminButton {
+    background-color: white;
+    color: #212529;
     border-color: #9C0DFD;
 }
-.adminButton:hover {
-    background-color: #9C0DFD;
-    color: white;
-
-}
+    .adminButton:hover {
+        background-color: #9C0DFD;
+        color: white;
+        border-color: #9C0DFD;
+    }
 
 
