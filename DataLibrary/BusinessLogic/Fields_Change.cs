@@ -97,6 +97,7 @@ namespace DataLibrary.BusinessLogic
         // Recieves type of list needed and executes sql code to return a list
         //      for dropdown lists
         // Used by Measure
+        // TODO: remove all of the _alls into an new function
         public static List<List<string>> LoadFields_dbl_lst(string type)
         {
             string sql = "";
@@ -117,6 +118,17 @@ namespace DataLibrary.BusinessLogic
 
                 return SqlDataAccess.LoadListData<List<string>>(sql, "Name", "Clock_Code");
             }
+
+            else if (type.Equals("WC_ALL"))
+            {
+                sql = @"SELECT Name, Description, WCUnder, ID, Active
+                            FROM dbo.WorkCenter3                            
+                            ORDER BY Name ASC;";
+
+                return SqlDataAccess.LoadListData<List<string>>(sql, "Name", 
+                    "Description", "WCUnder", "ID", "Active");
+            }
+
             else if (type.Equals("WC"))
             {
                 sql = @"SELECT Name, Description, WCUnder, ID

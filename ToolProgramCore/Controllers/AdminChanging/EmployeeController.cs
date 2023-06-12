@@ -55,11 +55,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
             string LastName = collection["LastName"].ToString();
             string Clock_Code = collection["Clock_Code"];
 
-           
-
-
             // Clock_Code will be unique because of model class data annotation
-
             // combine first and last name
             string fullName = LastName.Trim() + ", " + FirstName.Trim();
 
@@ -68,7 +64,6 @@ namespace ToolProgramCore.Controllers.AdminChanging
             if (fullName.Length > 50) {
                 throw new Exception("Name too long");
             }
-
 
             // enter the new employee with active status
             // call to data library
@@ -114,7 +109,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         {
 
             bool AllCap = true;
-            string Name = null;
+            string Name;
 
             if (FirstName.Equals(""))
             {
