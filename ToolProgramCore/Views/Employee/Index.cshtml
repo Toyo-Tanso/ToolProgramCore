@@ -54,7 +54,13 @@
                         @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
                         @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
 
-                        <a class="btn disabled p-0">Remove</a>
+                       
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="N/A. Contact IT.">
+                            <a 
+                                class="btn disabled p-0"
+                               style="pointer-events: none;"
+                               >Remove</a>
+                        </span>
                         @*@Html.ActionLink("Remove", "Remove", new { /* id=item.PrimaryKey */ })*@
                     </td>
                 </tr>
@@ -65,4 +71,6 @@
 else
 {
     <div><p class="is-invalid">No Results Found...</p></div>
+
 }
+

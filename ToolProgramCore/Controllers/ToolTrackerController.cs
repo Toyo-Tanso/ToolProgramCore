@@ -648,7 +648,7 @@ namespace ToolProgramCore.Controllers
 
         // This verifies input in the form (Helper) [called in the model class]
         // Returns error if the employee does not exist in the Database
-        // TDOD: remove duplicate
+        // TODO: remove duplicate
         [AllowAnonymous]
         public IActionResult VerifyEmpNo(string empNo)
         {

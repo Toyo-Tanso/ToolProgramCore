@@ -73,6 +73,26 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<int>(sql)[0];
         }
 
+        // Insert new employee with active status
+        // DL stands for data libary
+        public static int AddEmployeeDL(string Name, string Clock_Code)
+        {
+
+            Locations_DB data = new Locations_DB
+            {
+                Tool_ID = (ToolID),
+                WC_ID = (WCID),
+                Status = 1
+            };
+
+            string sql = @"INSERT INTO dbo.Tool_Locations1
+                            (Tool_ID, WC_ID, Status) 
+                            VALUES (@Tool_ID, @WC_ID, @Status)
+                             ;";
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
 
         // Recieves type of list needed and executes sql code to return a list
         //      for dropdown lists
@@ -86,6 +106,14 @@ namespace DataLibrary.BusinessLogic
                 sql = @"SELECT Name, Clock_Code
                             FROM dbo.Employee1
                             WHERE Active = 1;";
+
+                return SqlDataAccess.LoadListData<List<string>>(sql, "Name", "Clock_Code");
+            }
+            else if (type.Equals("EMP_ALL"))
+            {
+                sql = @"SELECT Name, Clock_Code
+                            FROM dbo.Employee1
+                            ;";
 
                 return SqlDataAccess.LoadListData<List<string>>(sql, "Name", "Clock_Code");
             }
