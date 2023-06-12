@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 using ToolProgramCore.Models;
+using static DataLibrary.BusinessLogic.Fields_Change;
 
 namespace ToolProgramCore.Controllers.AdminChanging
 {
@@ -131,24 +133,47 @@ namespace ToolProgramCore.Controllers.AdminChanging
         public void GetWCList()
         {
 
-            //List<List<string>> data = LoadFields_dbl_lst("EMP");
-            //List<Employee> employeesTemp = new();
+            List<List<string>> data = LoadFields_dbl_lst("WC_ALL");
+            List<WorkCenter> workCenters = new();
 
-            //// row = [name, Clock] 
-            //foreach (List<string> row in data)
-            //{
-            //    // Enter values into this model: Employee. Then add to list
-            //    employeesTemp.Add(new Employee
-            //    {
-            //        FirstName = row[0].Split(',')[1].Trim(),
-            //        LastName = row[0].Split(',')[0].Trim(),
-            //        FullName = row[0],
-            //        Clock_Code = row[1]
+            // row = [Name, Description, WCUnder(wrapped), ID, Active] 
+            foreach (List<string> row in data)
+            {
+                // Make list of WC under based on format
+                // WCUnder = #WC1, #WC2
 
-            //    });
-            //}
-            //employeeList = employeesTemp;
-            throw new NotImplementedException();
+                List<string> ? WCUnderList = new List<string>();
+
+                string WCUnder = row[2];
+                if (string.IsNullOrEmpty(WCUnder))
+                {
+                    WCUnderList = null;
+                }
+                else
+                {
+                    string[] tempList = WCUnder.Split(',');
+
+                    foreach (string WC in tempList)
+                    {
+                        if (!string.IsNullOrEmpty(WC) && WC.Length > 0)
+                        {
+                            WCUnderList.Add(WC.Trim());
+                        }
+                    }
+                }
+
+                // Enter values into this model: Workcenter. Then add to list
+                workCenters.Add(new WorkCenter
+                {
+                    Name = row[0].Trim(),
+                    Description = row[1].Trim(),
+                    WCUnder = WCUnderList,
+                    Active = row[4].Trim(),
+                    ID = row[3].Trim(),
+
+                });
+            }
+            WorkCenterList = workCenters;
         }
 
     }

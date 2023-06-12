@@ -125,7 +125,8 @@ namespace DataLibrary.BusinessLogic
                             FROM dbo.WorkCenter3                            
                             ORDER BY Name ASC;";
 
-                return SqlDataAccess.LoadListData<List<string>>(sql, "Name", 
+                return SqlDataAccess.LoadListData<List<string>>(sql, 
+                    "Name",
                     "Description", "WCUnder", "ID", "Active");
             }
 

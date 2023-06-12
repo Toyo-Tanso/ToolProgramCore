@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<ToolProgramCore.Models.WorkCenter>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "WorkCenters";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 
-<h1 class="mt-2">WorkCenters</h1>
+<h1 class="mt-4">WorkCenters</h1>
 
-<div class="w-100 d-flex mb-2 mt-3">
+<div class="w-100 d-flex mb-3 mt-3">
     <a class="btn btn-primary adminButton btn-md me-2"
        role="button" asp-action="AddWC">Add WorkCenter</a>
     <a class="btn btn-secondary adminButtonFilled btn-md "
@@ -16,10 +16,11 @@
 </div>
 @if (@Model.Count() != 0)
 {
+    <p class="mt-3 mb-0">For more information, see details.</p>
     <table class="table">
         <thead>
             <tr>
-                <th>
+                <th class="visually-hidden">
                     @Html.DisplayNameFor(model => model.ID)
                 </th>
                 <th>
@@ -28,17 +29,21 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
-                <th>
+                <th class="visually-hidden">
+                    @Html.DisplayNameFor(model => model.WCUnder)
+                </th>
+                <th class="visually-hidden">
                     @Html.DisplayNameFor(model => model.Active)
                 </th>
+
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
+                <tr class="@(item.Active=="True" ? "" : "table-inactive")">
+                    <td class="visually-hidden">
                         @Html.DisplayFor(modelItem => item.ID)
                     </td>
                     <td>
@@ -47,13 +52,27 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td>
+                    <td class="visually-hidden">
+                        [See Details]
+                    </td>
+                    <td class ="visually-hidden">
                         @Html.DisplayFor(modelItem => item.Active)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        @if(item.Active=="True") {
+                        @Html.ActionLink("Edit", "edit", null,
+                new {id=item.ID}, new{ @class="btn adminSec"})
+                        @Html.ActionLink("Details", "Details", null,
+                            new {id=item.ID}, new{ @class="btn adminSec" })
+                        @Html.ActionLink("Deactivate", "Deactivate", null,
+                new {id=item.ID}, new{ @class="btn adminSec "})
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Reactivate", "Reactivate", null,
+                new {id=item.ID}, new{ @class="btn adminInactive "})
+                        }
+
                     </td>
                 </tr>
             }
