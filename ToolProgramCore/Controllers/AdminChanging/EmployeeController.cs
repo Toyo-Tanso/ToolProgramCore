@@ -34,6 +34,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         {
             try
             {
+                // Helper Function to insert employee
                 AddEmplHelper(collection);
                 return RedirectToAction(nameof(Index));
             }
@@ -51,7 +52,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         {
 
             string FirstName = collection["FirstName"].ToString();
-            string LastName = collection["LastName"].ToString().ToUpper();
+            string LastName = collection["LastName"].ToString();
             string Clock_Code = collection["Clock_Code"];
 
            
@@ -72,9 +73,6 @@ namespace ToolProgramCore.Controllers.AdminChanging
             // enter the new employee with active status
             // call to data library
             AddEmployeeDL(fullName, Clock_Code);
-
-
-            throw new NotImplementedException();
 
         }
 
@@ -101,6 +99,44 @@ namespace ToolProgramCore.Controllers.AdminChanging
             if (EmplExists)
             {
                 return Json($"Employee Number Exists. Please enter another code.");
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
+        [AllowAnonymous]
+
+        // Ensures that every word is capitalized
+        // Not 100% necessary but it's nice to have consistency in the database
+        public IActionResult VerifyCapitalization(string FirstName = "", string LastName = "")
+        {
+
+            bool AllCap = true;
+            string Name = null;
+
+            if (FirstName.Equals(""))
+            {
+                Name = LastName;
+            }
+            else
+            {
+                Name = FirstName;
+            }
+
+            // check first character of every string
+            foreach (string word in Name.Trim().Split(' '))
+            {
+                if (word.Length > 0 && !Char.IsUpper(word[0]))
+                {
+                    AllCap = false;
+                }
+            }
+
+            if (! AllCap)
+            {
+                return Json($"Each word must be capitalized.");
             }
             else
             {

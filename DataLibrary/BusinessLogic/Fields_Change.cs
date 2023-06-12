@@ -78,16 +78,16 @@ namespace DataLibrary.BusinessLogic
         public static int AddEmployeeDL(string Name, string Clock_Code)
         {
 
-            Locations_DB data = new Locations_DB
+            Employee_DB data = new Employee_DB
             {
-                Tool_ID = (ToolID),
-                WC_ID = (WCID),
-                Status = 1
+                Name = Name,
+                Clock_Code = Clock_Code,
+                Active = 1
             };
 
-            string sql = @"INSERT INTO dbo.Tool_Locations1
-                            (Tool_ID, WC_ID, Status) 
-                            VALUES (@Tool_ID, @WC_ID, @Status)
+            string sql = @"INSERT INTO dbo.Employee1
+                            (Name, Clock_Code, Active) 
+                            VALUES (@Name, @Clock_Code, @Active)
                              ;";
 
             return SqlDataAccess.SaveData(sql, data);

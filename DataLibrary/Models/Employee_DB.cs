@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
-    public class WorkCenter_DB
+    public class Employee_DB
     {
 
         // Main Value
         public string? Name { get; set; }
 
         public string? Clock_Code { get; set; }
+
+        public int ? Active { get; set; }
+
     }
 }

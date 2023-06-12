@@ -14,13 +14,14 @@ namespace ToolProgramCore.Models
         [MinLength(2)]
         [MaxLength(24)]
         [Display(Name = "First Name")]
-        [RegularExpression("[A-Z][a-z]*", ErrorMessage = "Must begin with capital letter")]
+        //[RegularExpression("[A-Z][a-z]*", ErrorMessage = "Must begin with capital letter")]
+        [Remote(action: "VerifyCapitalization", controller: "Employee")]
         public string? FirstName { get; set; }
 
         [Required]
         [MaxLength(24)]
         [MinLength(2)]
-        [RegularExpression("[A-Z][a-z]*", ErrorMessage = "Must begin with capital letter")]
+        [Remote(action: "VerifyCapitalization", controller: "Employee")]
         [Display(Name = "Last Name")]
         public string? LastName { get; set; }
 
