@@ -126,10 +126,28 @@ namespace ToolProgramCore.Controllers.AdminChanging
 
 
         // GET: WorkCenterController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+
+        // TODO: future project, this requires changing all existing Databases?
+        // It's more complex since all DB do not go off of ID
+        //public ActionResult Edit(int id)
+        //{
+        //    var data = getWCDetails(id);
+
+        //    List<string>? WCUnderList = strToArray(data.WCUnder ?? "");
+
+        //    WorkCenter curWC = new WorkCenter
+        //    {
+        //        Name = data.Name,
+        //        Description = data.Description,
+        //        WCUnder = WCUnderList,
+        //        ID = id.ToString(),
+        //        Active = data.Active.ToString(),
+        //    };
+
+        //    return RedirectToAction(nameof(Index));
+
+        //    throw new NotImplementedException();
+        //}
 
         // POST: WorkCenterController/Edit/5
         [HttpPost]
