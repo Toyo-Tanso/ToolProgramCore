@@ -34,5 +34,7 @@ namespace ToolProgramCore.Models
         public List<List<string>>? WCdropDownList { get; set; }
 
         public List<List<string>> ? Tools { get; set; }
+
+        public bool? IsRemoval { get; set; }
     }
 }

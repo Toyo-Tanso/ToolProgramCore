@@ -60,8 +60,8 @@
                     </td>
                     <td>
                         @if(item.Active=="True") {
-                        @Html.ActionLink("Edit", "edit", null,
-                new {id=item.ID}, new{ @class="btn adminSec"})
+                        @*@Html.ActionLink("Edit", "edit", null,
+                new {id=item.ID}, new{ @class="btn adminSec"})*@
                         @Html.ActionLink("Details", "Details", null,
                             new {id=item.ID}, new{ @class="btn adminSec" })
                         @Html.ActionLink("Deactivate", "Deactivate", null,

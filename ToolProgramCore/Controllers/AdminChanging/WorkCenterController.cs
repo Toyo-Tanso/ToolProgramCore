@@ -42,12 +42,13 @@ namespace ToolProgramCore.Controllers.AdminChanging
             return View(curWC);
         }
 
-        public IActionResult ToolPartial(int id)
+        public IActionResult ToolPartial(int id, bool removal=false)
         {
-            
+            Console.WriteLine(removal);
             WorkCenter toolCarrier = new WorkCenter
             {
                 Tools = getToolofWC(id),
+                IsRemoval = removal,
             };
 
             return PartialView("_ToolAtWC", toolCarrier);
@@ -149,31 +150,45 @@ namespace ToolProgramCore.Controllers.AdminChanging
         //    throw new NotImplementedException();
         //}
 
-        // POST: WorkCenterController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        //// POST: WorkCenterController/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+
+        // GET: WorkCenterController/Deactivate/5
+        public ActionResult Deactivate(int id)
         {
-            try
+
+            var data = getWCDetails(id);
+
+            List<string>? WCUnderList = strToArray(data.WCUnder ?? "");
+
+            WorkCenter curWC = new WorkCenter
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                Name = data.Name,
+                Description = data.Description,
+                WCUnder = WCUnderList,
+                ID = id.ToString(),
+                Active = data.Active.ToString(),
+            };
+
+            return View(curWC);
         }
 
-        // GET: WorkCenterController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: WorkCenterController/Delete/5
+        // POST: WorkCenterController/Deactivate/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Deactivate(int id, IFormCollection collection)
         {
             try
             {

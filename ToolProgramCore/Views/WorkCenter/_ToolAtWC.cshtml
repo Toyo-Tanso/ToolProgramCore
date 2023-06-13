@@ -8,7 +8,7 @@
     else
     {
         <h3>Tools</h3>
-        <table class="table table-striped">
+        <table class="table @(Model.IsRemoval??false ? "":"table-striped ")">
             <thead>
                 <tr>
                     <th>Tool</th>
@@ -18,7 +18,7 @@
             <tbody>
                 @foreach(List<string> tool in Model.Tools)
                 {
-                    <tr class="tableHover">
+                    <tr class="tableHover @(Model.IsRemoval??false ? "table-danger":"")">
                         <td>@(tool[0])</td>
                         <td>@(tool[1])</td>
                     </tr>
