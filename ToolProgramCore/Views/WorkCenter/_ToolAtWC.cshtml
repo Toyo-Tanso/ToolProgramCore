@@ -1,12 +1,13 @@
 ﻿@model ToolProgramCore.Models.WorkCenter
 
 @{
-    if(Model == null || Model.Tools == null)
+    if(Model == null || Model.Tools == null || Model.Tools.Count < 1)
     {
         <p>No tools found!</p>
     }
     else
     {
+        <h3>Tools</h3>
         <table class="table table-striped">
             <thead>
                 <tr>
