@@ -55,8 +55,27 @@
     </div>
 
     
+
     <form asp-action="Deactivate" class="my-5">
-        <input type="submit" value="Deactivate" class="btn btn-danger me-2" /> |
+        @if (Model.canDelete ?? false)
+        {
+
+        }
+        else
+        {
+            <div>
+                <p class="text-danger">
+                    Cannot Deactivate.
+                    There are tools that are checked out that are currently using this WorkCenter.
+
+                    <br/>
+
+                    <span style="font-weight:700; text-decoration:underline;">Please Return these first.</span> 
+
+                </p>
+            </div>
+        }
+        <input @(Model.canDelete??false ? "" : "disabled") type="submit" value="Deactivate" class="btn btn-danger me-2" /> |
         <a asp-action="Index" class="ms-2">Back to List</a>
     </form>
 </div>

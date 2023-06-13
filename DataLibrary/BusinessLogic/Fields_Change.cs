@@ -210,6 +210,20 @@ namespace DataLibrary.BusinessLogic
 
         }
 
+        // Used to check if a WC can be deactivated
+        public static bool CheckOutToolExists(string WCName)
+        {
+            string sql = @"SELECT ID
+                            
+                            FROM dbo.Tool_Moves1
+                            WHERE Returned_Date is NULL
+                            AND (WC_From like '" + WCName + "' " +
+                            "OR WC_To like '" + WCName + "'); ";
+
+            return SqlDataAccess.LoadData<int>(sql).Count > 0;
+        }
+    
+
 
         public static List<List<string>> getToolofWC (int id)
         {

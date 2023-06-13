@@ -166,6 +166,8 @@ namespace ToolProgramCore.Controllers.AdminChanging
         //}
 
         // GET: WorkCenterController/Deactivate/5
+        // Checks to see if there are any tools that include the WC
+        //      that you plan to deactivate
         public ActionResult Deactivate(int id)
         {
 
@@ -180,6 +182,8 @@ namespace ToolProgramCore.Controllers.AdminChanging
                 WCUnder = WCUnderList,
                 ID = id.ToString(),
                 Active = data.Active.ToString(),
+                // See if there are checked out tools
+                canDelete = !CheckOutToolExists((data.Name??"").Trim()),
             };
 
             return View(curWC);
@@ -198,6 +202,22 @@ namespace ToolProgramCore.Controllers.AdminChanging
             {
                 return View();
             }
+        }
+
+        private void AddDeactivateHelper(int id)
+        {
+            // Update the WorkCenter DB by taking 
+
+
+            // remove all Location Data where WCID = WC
+
+            // Note: does not get here if there are checked out tools
+
+
+
+            // enter the new WC with active status
+            // call to data library
+            //AddWCDL(Name, Description, WCUnder);
         }
 
 

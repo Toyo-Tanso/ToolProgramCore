@@ -33,8 +33,13 @@ namespace ToolProgramCore.Models
 
         public List<List<string>>? WCdropDownList { get; set; }
 
+        // This is used when loading partial view
         public List<List<string>> ? Tools { get; set; }
 
+        // This is used when loading partial view
         public bool? IsRemoval { get; set; }
+
+        // used to verify there are no checked out tools for the WC
+        public bool? canDelete { get; set; }
     }
 }
