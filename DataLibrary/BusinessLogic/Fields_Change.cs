@@ -90,19 +90,20 @@ namespace DataLibrary.BusinessLogic
 
         // Insert new WC with active status
         // DL stands for data libary
-        public static int AddEmployeeDL(string Name, string Clock_Code)
+        public static int AddWCDL(string Name, string Description, string WCUnder)
         {
 
-            Employee_DB data = new Employee_DB
+            WC_DB data = new WC_DB
             {
                 Name = Name,
-                Clock_Code = Clock_Code,
+                Description = Description,
+                WCUnder = WCUnder,
                 Active = 1
             };
 
-            string sql = @"INSERT INTO dbo.Employee1
-                            (Name, Clock_Code, Active) 
-                            VALUES (@Name, @Clock_Code, @Active)
+            string sql = @"INSERT INTO dbo.WorkCenter3
+                            (Name, Description, WCUnder, Active) 
+                            VALUES (@Name, @Description, @WCUnder, @Active)
                              ;";
 
             return SqlDataAccess.SaveData(sql, data);

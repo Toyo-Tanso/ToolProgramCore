@@ -72,7 +72,6 @@ namespace ToolProgramCore.Controllers.AdminChanging
             // enter the new WC with active status
             // call to data library
             AddWCDL(Name, Description, WCUnder);
-            throw new NotImplementedException();
         }
 
         // This verifies input in the form (Helper) [called in the model class]
