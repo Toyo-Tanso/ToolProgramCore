@@ -111,3 +111,32 @@ body {
     color: #b9b9b9;
 }
 
+.tableLines dt {
+    border-bottom: solid;
+    border-right: solid;
+    border-radius: 4px;
+    border-color: darkgrey;
+    margin-bottom: 5px;
+}
+
+
+.slowTransition {
+    transition: all 150ms ease-in-out;
+}
+
+.slowerTransition {
+    transition: all 600ms ease-in-out;
+}
+
+.tableHover:hover td {
+    opacity: 60%;
+
+    
+}
+
+/*.tableLines dd {
+    
+    border: solid;
+    border-color: darkgrey;
+}*/
+

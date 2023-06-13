@@ -1,0 +1,98 @@
+﻿@model ToolProgramCore.Models.WorkCenter
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1 class="mt-4 ">Details</h1>
+
+<div class="w-100 d-flex mb-3 mt-3">
+
+    <a class="btn btn-secondary adminButtonFilled btn-md "
+       role="button" href="/WorkCenter/">Back to List</a>
+</div>
+
+<div>
+    <h4>WorkCenter</h4>
+    <hr />
+    <dl class="row tableLines">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Description
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            Active
+        </dt>
+        <dd class = "col-sm-10">
+            @(Model.Active == "0" ? "Not Active" : "Active")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.WCUnder)
+        </dt>
+        <dd class="col-sm-10">
+            @if(Model.WCUnder != null)
+            {
+                @foreach (string WC in Model.WCUnder)
+                {
+                    <span>| @WC |</span>
+                }
+
+            }
+            else
+            {
+                <span>| N/A |</span>
+            }
+            
+            
+        </dd>
+    </dl>
+</div>
+<a class="btn btn-primary adminSec slowTransition"
+   id="Loadpartial" 
+onclick="loadPartial()">Load this WC Tools</a>
+
+<div class="collapse" id="collapseDiv">
+    <div id="partialZone" class="card card-body">
+        
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        function loadPartial() {
+            $('#partialZone').load("/WorkCenter/ToolPartial/" + @(Model.ID));
+            document.getElementById("Loadpartial").textContent = "Refresh";
+            $('#collapseDiv').collapse("toggle");
+            document.getElementById('Loadpartial').onclick = loadPartialSecondary();
+        }
+        function loadPartialSecondary() {
+            $('#partialZone').load("/WorkCenter/ToolPartial/" + @(Model.ID));
+            
+        }
+
+        
+
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@model ToolProgramCore.Models.WorkCenter
+
+@{
+    if(Model == null || Model.Tools == null)
+    {
+        <p>No tools found!</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tool</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(List<string> tool in Model.Tools)
+                {
+                    <tr class="tableHover">
+                        <td>@(tool[0])</td>
+                        <td>@(tool[1])</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        // Structure : [Name, Desc]
+        //foreach(List<string> tool in Model.Tools)
+        //{
+        //    <span>@(tool[0])</span>
+        //    <span>@(tool[1])</span>
+        //}
+        //if(Model.Tools)
+    }
+
+}

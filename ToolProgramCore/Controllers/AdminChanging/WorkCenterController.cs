@@ -23,7 +23,34 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // GET: WorkCenterController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+
+            var data = getWCDetails(id);
+
+            List<string> ? WCUnderList = strToArray(data.WCUnder??"");
+
+            WorkCenter curWC = new WorkCenter
+                {
+                Name = data.Name,
+                Description = data.Description,
+                WCUnder = WCUnderList,
+                ID = id.ToString(),
+                Active = data.Active.ToString(),
+                }
+            ;
+
+            
+            return View(curWC);
+        }
+
+        public IActionResult ToolPartial(int id)
+        {
+            
+            WorkCenter toolCarrier = new WorkCenter
+            {
+                Tools = getToolofWC(id),
+            };
+
+            return PartialView("_ToolAtWC", toolCarrier);
         }
 
         // GET: WorkCenterController/AddWC
@@ -165,23 +192,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
 
                 List<string> ? WCUnderList = new List<string>();
 
-                string WCUnder = row[2];
-                if (string.IsNullOrEmpty(WCUnder))
-                {
-                    WCUnderList = null;
-                }
-                else
-                {
-                    string[] tempList = WCUnder.Split(',');
-
-                    foreach (string WC in tempList)
-                    {
-                        if (!string.IsNullOrEmpty(WC) && WC.Length > 0)
-                        {
-                            WCUnderList.Add(WC.Trim());
-                        }
-                    }
-                }
+                strToArray(row[2]);
 
                 // Enter values into this model: Workcenter. Then add to list
                 workCenters.Add(new WorkCenter
@@ -195,6 +206,32 @@ namespace ToolProgramCore.Controllers.AdminChanging
                 });
             }
             WorkCenterList = workCenters;
+        }
+
+        public List<string> ? strToArray(string list)
+        {
+            List<string>? WCUnderList = new List<string>();
+
+            string WCUnder = list;
+            if (string.IsNullOrEmpty(WCUnder))
+            {
+                WCUnderList = null;
+            }
+            else
+            {
+                string[] tempList = WCUnder.Split(',');
+
+                foreach (string WC in tempList)
+                {
+                    if (!string.IsNullOrEmpty(WC) && WC.Length > 0)
+                    {
+                        WCUnderList.Add(WC.Trim());
+                    }
+                }
+            }
+
+            return WCUnderList;
+
         }
 
     }

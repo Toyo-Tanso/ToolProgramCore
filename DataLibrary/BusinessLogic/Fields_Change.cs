@@ -129,6 +129,16 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
+        public static WC_DB getWCDetails(int id)
+        {
+            string sql = @"SELECT Name, Description, WCUnder, Active
+                            FROM dbo.WorkCenter3
+                            WHERE ID=" + id  +
+                            ";";
+
+            return SqlDataAccess.LoadData<WC_DB>(sql)[0];
+        }
+
 
         // Recieves type of list needed and executes sql code to return a list
         //      for dropdown lists
@@ -200,6 +210,22 @@ namespace DataLibrary.BusinessLogic
 
         }
 
+
+        public static List<List<string>> getToolofWC (int id)
+        {
+
+            // build in Access, and you can copy and paste it in an access to view the relationship
+            // basically gets WC ID and uses location to get all tool names and description
+            string sql = @"SELECT dbo.Gage_List_Main.Tool_ID, dbo.Gage_List_Main.Description
+                            FROM (dbo.Tool_Locations1 INNER JOIN dbo.Gage_List_Main ON dbo.Tool_Locations1.Tool_ID = dbo.Gage_List_Main.ID) INNER JOIN dbo.WorkCenter3 ON dbo.Tool_Locations1.WC_ID = dbo.WorkCenter3.ID
+                            WHERE (((dbo.WorkCenter3.ID)="+ id + 
+                            ") AND ((dbo.Gage_List_Main.Active)=1));";
+
+            // Note: deactivated WC should not have any tools
+
+            return SqlDataAccess.LoadListData<List<string>>(sql, "Tool_ID", "Description");
+
+        }
 
 
     }

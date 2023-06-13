@@ -32,5 +32,7 @@ namespace ToolProgramCore.Models
         public string? Active { get; set; }
 
         public List<List<string>>? WCdropDownList { get; set; }
+
+        public List<List<string>> ? Tools { get; set; }
     }
 }
