@@ -29,7 +29,9 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // GET: WorkCenterController/AddWC
         public ActionResult AddWC()
         {
-            return View();
+            WorkCenter emptyWorkCenter = new WorkCenter();
+            emptyWorkCenter.WCdropDownList = LoadFields_dbl_lst("WC");
+            return View(emptyWorkCenter);
         }
 
         // POST: WorkCenterController/AddWC
@@ -39,11 +41,12 @@ namespace ToolProgramCore.Controllers.AdminChanging
         {
             try
             {
-                AddWC(collection);
+                AddWCHelper(collection);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                // TODO : Add a toast that said there was an error
                 return View();
             }
         }
@@ -55,27 +58,46 @@ namespace ToolProgramCore.Controllers.AdminChanging
         private void AddWCHelper(IFormCollection collection)
         {
 
-            //string FirstName = collection["FirstName"].ToString();
-            //string LastName = collection["LastName"].ToString();
-            //string Clock_Code = collection["Clock_Code"];
+            string Name = collection["Name"].ToString().ToUpper();
+            string Description = collection["Description"].ToString();
+            string WCUnder = collection["WCUnder"];
 
-            //// Clock_Code will be unique because of model class data annotation
-            //// combine first and last name
-            //string fullName = LastName.Trim() + ", " + FirstName.Trim();
+            // TODO: WCUnder is in correct format?
 
-            //// ensure length is less than 50
-            //// shouldn't be activated but just in case
-            //if (fullName.Length > 50)
-            //{
-            //    throw new Exception("Name too long");
-            //}
+            // Ensure that there is not a deactivated version of WC
+            // (this is done in the model class)
 
-            //// enter the new employee with active status
-            //// call to data library
-            //AddEmployeeDL(fullName, Clock_Code);
+
+
+            // enter the new WC with active status
+            // call to data library
+            AddWCDL(Name, Description, WCUnder);
             throw new NotImplementedException();
-
         }
+
+        // This verifies input in the form (Helper) [called in the model class]
+        // Returns error if the employee does not exist in the Database
+        // TODO: remove duplicate
+        // TODO: update description
+        public IActionResult VerifyWC(string Name)
+        {
+            // Returns ID if it finds it
+            int ID = WC_Exists(Name);
+
+            if (ID == -1)
+            {
+                return Json(true);
+            }
+            else if(ID == 0)
+            {
+                return Json($"WC Exists, Please reactivate it in the list page");
+            }
+            else
+            {
+                return Json($"WC Exists, No need to add it.");
+            }
+        }
+
 
         // GET: WorkCenterController/Edit/5
         public ActionResult Edit(int id)

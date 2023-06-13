@@ -73,6 +73,41 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<int>(sql)[0];
         }
 
+        // Find the wc status given a WC even if inactive
+        // Returns -1 if not found
+        public static int WC_Exists(string WC)
+        {
+
+            string sql = @"SELECT Active FROM dbo.WorkCenter3  
+                            WHERE Name='" + WC + "'" +
+                            ";";
+
+            List<int> returnValue = SqlDataAccess.LoadData<int>(sql);
+
+
+            return (returnValue == null || returnValue.Count < 1 ? -1 : returnValue[0]);
+        }
+
+        // Insert new WC with active status
+        // DL stands for data libary
+        public static int AddEmployeeDL(string Name, string Clock_Code)
+        {
+
+            Employee_DB data = new Employee_DB
+            {
+                Name = Name,
+                Clock_Code = Clock_Code,
+                Active = 1
+            };
+
+            string sql = @"INSERT INTO dbo.Employee1
+                            (Name, Clock_Code, Active) 
+                            VALUES (@Name, @Clock_Code, @Active)
+                             ;";
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
         // Insert new employee with active status
         // DL stands for data libary
         public static int AddEmployeeDL(string Name, string Clock_Code)

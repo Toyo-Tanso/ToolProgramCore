@@ -13,7 +13,8 @@ namespace ToolProgramCore.Models
         [Required]
         [MinLength(2)]
         [MaxLength(10)]
-        [Display(Name = "Name")]
+        [Remote(action: "VerifyWC", controller: "WorkCenter")]
+        [Display(Name = "WC Name")]
         public string? Name { get; set; }
 
         [MaxLength(50)]
@@ -30,5 +31,6 @@ namespace ToolProgramCore.Models
         [Display(Name = "Currently Active")]
         public string? Active { get; set; }
 
+        public List<List<string>>? WCdropDownList { get; set; }
     }
 }
