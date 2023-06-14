@@ -139,6 +139,22 @@ body {
 
 }
 
+.cursorHover {
+    cursor: pointer;
+    background-color: #BAEFFF;
+    /*border: solid darkred 2px;*/
+    transition: all 600ms ease-in-out;
+}
+
+.lightGreenBorder {
+    /*border: solid #D5FFBA 2px;*/
+    background-color: #D5FFBA;
+}
+
+.lightGrayBorder {
+
+    border: 1px solid #ced4da;
+}
 /*.tableLines dd {
     
     border: solid;

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Add Measure";
+    
 }
 
 @{
@@ -65,7 +66,8 @@
         
             <div class="form-group">
                 <label asp-for="ToolNo" class="control-label"></label>
-                <input asp-for="ToolNo" id="tool" class="form-control" onfocus="toolFocus()" onblur="getWC()" value="TTU "  list="Tool_Data">
+                
+                    <input asp-for="ToolNo" id="tool" class="form-control" onfocus="toolFocus()" onblur="getWC()" value="TTU "  list="Tool_Data">
                     <datalist id="Tool_Data">
                             @if (!(Model is null))
                             {
@@ -75,25 +77,39 @@
                                 <option value="@tool_lst[1]">@(tool_lst[2])</option>
                                 }
                             }
-                    </datalist>
+                    </datalist>        
+                   
+                
                 <span asp-validation-for="ToolNo" class="text-danger"></span>
             </div>
        
             <div class="form-group">
                 <label asp-for="WC">Work Center</label>
-                <input asp-for="WC" id="wc" class="form-control" list="Work_Center" placeholder="Type to search...">
-                <datalist id="Work_Center">
-                        @if (!(Model is null))
-                        {
-                            foreach (var wc in Model.WCdropDownList)
+                <div class="input-group">
+                    <input asp-for="WC" id="wc" class="form-control" list="Work_Center" placeholder="Type to search...">
+                    <datalist id="Work_Center">
+                            @if (!(Model is null))
                             {
-                            <option value="@wc[0].Trim()">
-                                @(wc[2] != null && !wc[2].Trim().Equals("") ? wc[2] : (wc[1] == null ? "" : wc[1]))
-                            </option>
+                                foreach (var wc in Model.WCdropDownList)
+                                {
+                                <option value="@wc[0].Trim()">
+                                    @(wc[2] != null && !wc[2].Trim().Equals("") ? wc[2] : (wc[1] == null ? "" : wc[1]))
+                                </option>
+                                }
                             }
-                        }
-                </datalist>
-
+                    </datalist>
+                    <div class="input-group-text slowerTransition" id="WCText">[ ]</div>
+                    <button type="button" 
+                        class="btn btn-sm btn-light slowerTransition 
+                        visually-hidden lightGrayBorder" 
+                        data-bs-toggle="popover" 
+                        data-bs-title="Help" 
+                        id="helpPopover"
+                        data-bs-trigger="focus"
+                        data-bs-content="If this is not the correct WC, it may need to be returned first.">
+                        ?
+                    </button>
+                </div>
                 
                 <span asp-validation-for="WC" class="text-danger"></span>
             </div>
@@ -156,18 +172,49 @@
 <div class="mt-2">
     <a asp-action="Index">Back to List</a>
 </div>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script >
 
+
+    // Enable pop overs
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+    var popoverList = [...popoverTriggerList].map(
+        popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+    
+    // deactivates wc input and sets style
     function toolFocus() {
-        $("#wc").prop("disabled",true);
+        $("#WCText").text("[ ]");
+        $("#WCText").addClass("cursorHover");
+        $("#WCText").removeClass("lightGreenBorder");
+        $("#wc").attr('readonly', 'readonly');
+        $("#helpPopover").addClass("visually-hidden");
     }
 
+    // sets part of the wcInput to a not found style
+    function setNotFound() {
+        $("#WCText").text("N/A");
+        $("#WCText").removeClass("cursorHover");
+        $("#wc").removeAttr('readonly');
+        $("#helpPopover").addClass("visually-hidden");
+    }
+
+    // sets part of the wcInput to a found style
+    function setFound() {
+        $("#WCText").text("Auto");
+        $("#WCText").addClass("lightGreenBorder");
+        $("#WCText").removeClass("cursorHover");
+        $("#wc").attr('readonly', 'readonly');
+        $("#helpPopover").removeClass("visually-hidden");
+    }
+
+
+    // Function for the on focus of the tool number
+    //      Auto sets the WC if it is found
     function getWC() {
       // Get the tool value from the input
 
       var toolValue = $("#tool").val();
-
-      // TODO: can maybe used to pass in lists //var LocationsList = $("#toolListRaw").value
 
       // Check if the tool value len is greater than "TTU "
       if (toolValue.length > 5) {
@@ -179,13 +226,24 @@
                     },
             url: '/Measure/GetWC',
         }).done(function (result) {
+
+            // auto fill wc input
             $("#wc").val(result);
+
+            // set style based on if found
+            if(result === "") {
+                setNotFound();
+            }
+            else {
+                setFound(); 
+            }
         });
       }
       else {
         //alert("Tool too short");
+        $("#WCText").text("N/A");
+        $("#WCText").removeClass("cursorHover");
       }
-      $("#wc").prop("disabled",false);
     }
 
 </script>
