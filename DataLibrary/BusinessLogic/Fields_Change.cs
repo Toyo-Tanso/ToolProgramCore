@@ -1,5 +1,6 @@
 ﻿using DataLibrary.DataAccess;
 using DataLibrary.Models;
+using System.ComponentModel.Design;
 
 namespace DataLibrary.BusinessLogic
 {
@@ -223,13 +224,30 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<int>(sql).Count > 0;
         }
 
+        // Reactivates a work center
         public static int DeactivateWC(int id)
+        {
+            // Deactivates
+            return activateWCHelper(id, 0);
+
+        }
+
+        // Reactivates a work center
+        public static int ReactivateWC(int id)
+        {
+            // Deactivates
+            return activateWCHelper(id, 1);
+
+        }
+
+        // Helper Function that helps make code reusable
+        public static int activateWCHelper(int id, int active)
         {
 
             WC_DB data = new WC_DB
             {
                 ID = id,
-                Active = 0,
+                Active = active,
             };
 
             string sql = @"UPDATE dbo.WorkCenter3

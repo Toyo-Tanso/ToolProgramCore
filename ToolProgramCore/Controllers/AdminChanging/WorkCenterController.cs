@@ -165,6 +165,50 @@ namespace ToolProgramCore.Controllers.AdminChanging
         //    }
         //}
 
+        // GET: WorkCenterController/Reactivate/5
+        // Reactivate a deactivated WC if there was a mistake
+        public ActionResult Reactivate(int id)
+        {
+            var data = getWCDetails(id);
+
+            List<string>? WCUnderList = strToArray(data.WCUnder ?? "");
+
+            WorkCenter curWC = new WorkCenter
+            {
+                Name = data.Name,
+                Description = data.Description,
+                WCUnder = WCUnderList,
+                ID = id.ToString(),
+                Active = data.Active.ToString(),
+               
+            };
+
+            return View(curWC);
+        }
+
+        // POST: WorkCenterController/Reactivate/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Reactivate(int id, IFormCollection collection)
+        {
+            try
+            {
+                AddReactivateHelper(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // Helper FUnction for Reactivate, does the logic
+        private void AddReactivateHelper(int id)
+        {
+            // Update the WorkCenter DB making it active
+            ReactivateWC(id);
+        }
+
         // GET: WorkCenterController/Deactivate/5
         // Checks to see if there are any tools that include the WC
         //      that you plan to deactivate
@@ -205,6 +249,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
         }
 
+        // Helper FUnction for deactivate, does the logic
         private void AddDeactivateHelper(int id)
         {
             // Update the WorkCenter DB making it inactive

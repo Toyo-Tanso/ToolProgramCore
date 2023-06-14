@@ -1,0 +1,51 @@
+﻿@model ToolProgramCore.Models.WorkCenter
+
+@{
+    ViewData["Title"] = "Reactivate";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1 class="mt-3">Reactivate</h1>
+
+<div class="w-100 d-flex mb-3 mt-3">
+
+    <a class="btn btn-secondary adminButtonFilled btn-md "
+       role="button" href="/WorkCenter/">Back to List</a>
+</div>
+
+<h3>Are you sure you want to reactivate this?</h3>
+<div>
+    <h3 class="text-danger">@(Model != null ? Model.Name : "")</h3>
+    <hr />
+    <dl class="row tableLines">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            Active
+        </dt>
+        <dd class = "col-sm-10">
+            Inactive
+        </dd>
+    </dl>
+    
+    <form asp-action="Reactivate">
+        <input type="submit" value="Reactivate" class="btn btn-success me-2" /> |
+        <a asp-action="Index" class=" ms-2">Back to List</a>
+    </form>
+</div>
