@@ -222,7 +222,41 @@ namespace DataLibrary.BusinessLogic
 
             return SqlDataAccess.LoadData<int>(sql).Count > 0;
         }
-    
+
+        public static int DeactivateWC(int id)
+        {
+
+            WC_DB data = new WC_DB
+            {
+                ID = id,
+                Active = 0,
+            };
+
+            string sql = @"UPDATE dbo.WorkCenter3
+                            SET Active = @Active 
+                            WHERE ID = @ID
+                             ;";
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        public static int DeleteWCToolLocation(int id)
+        {
+
+            var data = new WC_DB
+            {
+                ID=id,
+            };
+
+            string sql = @"DELETE FROM dbo.Tool_Locations1
+                            WHERE WC_ID = @ID AND Status = 1 AND Borrowed = 0
+                            ;";
+                             
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+
 
 
         public static List<List<string>> getToolofWC (int id)

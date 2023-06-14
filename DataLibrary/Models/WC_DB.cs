@@ -15,5 +15,7 @@ namespace DataLibrary.Models
         public string? WCUnder { get; set; }
 
         public int Active { get; set; }
+
+        public int ID { get; set; }
     }
 }

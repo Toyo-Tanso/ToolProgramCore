@@ -196,6 +196,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         {
             try
             {
+                AddDeactivateHelper(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -206,18 +207,13 @@ namespace ToolProgramCore.Controllers.AdminChanging
 
         private void AddDeactivateHelper(int id)
         {
-            // Update the WorkCenter DB by taking 
-
+            // Update the WorkCenter DB making it inactive
+            DeactivateWC(id);
 
             // remove all Location Data where WCID = WC
-
             // Note: does not get here if there are checked out tools
-
-
-
-            // enter the new WC with active status
-            // call to data library
-            //AddWCDL(Name, Description, WCUnder);
+            DeleteWCToolLocation(id);
+            
         }
 
 
