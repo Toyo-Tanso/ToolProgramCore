@@ -16,7 +16,8 @@ namespace ToolProgramCore.Models
         [MinLength(4)]
         [MaxLength(40)]
         [Display(Name = "Tool Name")]
-        //[Remote(action: "VerifyCapitalization", controller: "Employee")]
+        [Remote(action: "EnsureToolValidation", controller: "ToolEdit")]
+
         public string? Tool_ID { get; set; }
 
         [MaxLength(49)]
@@ -24,7 +25,7 @@ namespace ToolProgramCore.Models
         [Display(Name = "Description")]
         public string? Description { get; set; }
 
-        public int? Active { get; set; }
+        public string? Active { get; set; }
 
     }
 }

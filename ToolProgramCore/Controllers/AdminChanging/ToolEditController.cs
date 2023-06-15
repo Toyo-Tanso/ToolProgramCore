@@ -119,50 +119,98 @@ namespace ToolProgramCore.Controllers.AdminChanging
 
         [AllowAnonymous]
 
-        // Ensures that every word is capitalized
-        // Not 100% necessary but it's nice to have consistency in the database
-        // TODO: implement change desc
-        public IActionResult VerifyStartsWithTTU(string Tool_ID)
+        public IActionResult EnsureToolValidation(string Tool_ID)
         {
 
-            if (!AllCap)
+            string result1 = VerifyStartsWithTTU(Tool_ID);
+            string result2 = VerifyUniqueID(Tool_ID);
+
+            string trueResult = "true";
+
+            if (result1 == trueResult)
             {
-                return Json($"Each word must be capitalized.");
+                if (result2 == trueResult)
+                {
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(result2);
+                }
             }
             else
             {
-                return Json(true);
+                return Json(result1);
             }
-            throw new NotImplementedException();
+
+            // Looks complex, but its just the above I just wanted to be fancy
+            //return result1 == Json(true) ?
+                
+            //    (result2 == Json(true) ? Json(true) : result2) 
+                
+            //    : result1; 
+
+
+        }
+
+        // Ensures that every word is capitalized
+        // Not 100% necessary but it's nice to have consistency in the database
+        // TODO: implement change desc
+        public string VerifyStartsWithTTU(string Tool_ID)
+        {
+            // If it's empty
+            if (string.IsNullOrEmpty(Tool_ID) 
+                || string.IsNullOrEmpty(Tool_ID.Trim())) {
+                return ($"Cannot be empty");
+            }
+
+            // check that it is the correct length, and that it has TTU_ at the 0 index
+            bool validLength = Tool_ID.Trim().Length > 4;
+            int index = Tool_ID.Trim().IndexOf("TTU ");
+            bool validStart = validLength ? index==0 : false;
+
+            if (!validStart)
+            {
+                return ($"Must be in the following format: 'TTU ###'");
+            }
+            else
+            {
+                return ("true");
+            }
+            
         }
 
         // TODO: implement add desc
+        // Kinda repeating code that is found in employee and WC
+        // TODO consolidate function
         [AllowAnonymous]
-        public IActionResult VerifyUniqueID(string Tool_ID)
+        public string VerifyUniqueID(string Tool_ID)
         {
-            //List<List<string>> cur_empl = LoadFields_dbl_lst("EMP_ALL");
+            List<List<string>> cur_tools = LoadFields_dbl_lst("TOOL_ALL");
 
-            //bool EmplExists = false;
+            bool toolExists = false;
 
-            //// if it's in the list
-            //foreach (var row in cur_empl)
-            //{
-            //    if (row[1].Trim() == Clock_Code)
-            //    {
-            //        EmplExists = true;
-            //    }
-            //}
+            // set formating
+            Tool_ID = Tool_ID.ToUpper();
 
-            //if (EmplExists)
-            //{
-            //    return Json($"Employee Number Exists. Please enter another code.");
-            //}
-            //else
-            //{
-            //    return Json(true);
-            //}
+            // if it's in the list
+            // structure = ["ID, Tool_ID Description, Active"]
+            foreach (var row in cur_tools)
+            {
+                if (row[1].Trim() == Tool_ID)
+                {
+                    toolExists = true;
+                }
+            }
+            if (toolExists)
+            {
+                return ($"Tool Number Exists. Please enter another ID.");
+            }
+            else
+            {
+                return ("true");
+            }
 
-            throw new NotImplementedException();
         }
 
 
