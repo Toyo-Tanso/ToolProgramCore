@@ -198,6 +198,16 @@ namespace DataLibrary.BusinessLogic
 
             }
 
+            else if (type.Equals("TOOL_ALL"))
+            {
+                sql = @"SELECT ID, Tool_ID, Description, Active
+                            FROM dbo.Gage_List_Main
+                            ORDER BY Tool_ID ASC;";
+                return SqlDataAccess.LoadListData<List<string>>(sql, "ID",
+                                                "Tool_ID", "Description", "Active");
+
+            }
+
             else if (type.Equals("LOCATE"))
             {
                 sql = @"SELECT Tool_ID, WC_ID

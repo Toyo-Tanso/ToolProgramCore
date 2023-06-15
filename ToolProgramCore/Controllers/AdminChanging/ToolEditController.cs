@@ -1,23 +1,43 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 using ToolProgramCore.Models;
+using static DataLibrary.BusinessLogic.Fields_Change;
 
 namespace ToolProgramCore.Controllers.AdminChanging
 {
     public class ToolEditController : Controller
     {
         // GET: ToolEditController
-        // TODO: implement change desc page numbers
+        // TODO: implement change add search?
         public ActionResult Index()
         {
-            return View();
+            GetToolList();
+
+            return View(toolList);
         }
 
         // GET: ToolEditController/Details/5
         // TODO: implement change desc
         public ActionResult Details(int id)
         {
+            //var data = getWCDetails(id);
+
+            //List<string>? WCUnderList = strToArray(data.WCUnder ?? "");
+
+            //WorkCenter curWC = new WorkCenter
+            //{
+            //    Name = data.Name,
+            //    Description = data.Description,
+            //    WCUnder = WCUnderList,
+            //    ID = id.ToString(),
+            //    Active = data.Active.ToString(),
+            //}
+            //;
+
+
+            //return View(curWC);
             return View();
         }
 
@@ -26,7 +46,11 @@ namespace ToolProgramCore.Controllers.AdminChanging
         public ActionResult AddTool()
         {
             // TODO: add model
-            //return View();
+            
+            return View();
+            //WorkCenter emptyWorkCenter = new WorkCenter();
+            //emptyWorkCenter.WCdropDownList = LoadFields_dbl_lst("WC");
+            //return View(emptyWorkCenter);
             throw new NotImplementedException();
 
         }
@@ -38,16 +62,16 @@ namespace ToolProgramCore.Controllers.AdminChanging
         [ValidateAntiForgeryToken]
         public ActionResult AddTool(IFormCollection collection)
         {
-            //try
-            //{
-            //    // Helper Function to insert employee
-            //    AddEmplHelper(collection);
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
+            try
+            {
+                // Helper Function to insert employee
+                //AddEmplHelper(collection);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
             throw new NotImplementedException();
         }
 
@@ -101,14 +125,14 @@ namespace ToolProgramCore.Controllers.AdminChanging
         public IActionResult VerifyStartsWithTTU(string Tool_ID)
         {
 
-            //if (!AllCap)
-            //{
-            //    return Json($"Each word must be capitalized.");
-            //}
-            //else
-            //{
-            //    return Json(true);
-            //}
+            if (!AllCap)
+            {
+                return Json($"Each word must be capitalized.");
+            }
+            else
+            {
+                return Json(true);
+            }
             throw new NotImplementedException();
         }
 
@@ -146,34 +170,61 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // ** Data Loaders **
 
                 // holds current list
-        public List<Employee>? employeeList;
+        public List<ToolEdit>? toolList;
 
         [AllowAnonymous]
-        // Gets the employee list and stores them in a new list with local Employee class
+        // Gets the tool list and stores them in a new list shared in class 
         // This loads each time the index runs, gets new values every refresh
         // TODO: implement change desc
         public void GetToolList()
         {
 
-            //List<List<string>> data = LoadFields_dbl_lst("EMP");
-            //List<Employee> employeesTemp = new();
+            List<List<string>> data = LoadFields_dbl_lst("TOOL_ALL");
+            List<ToolEdit> toolsTemp = new();
 
-            //// row = [name, Clock] 
-            //foreach (List<string> row in data)
-            //{
-            //    // Enter values into this model: Employee. Then add to list
-            //    employeesTemp.Add(new Employee
-            //    {
-            //        FirstName = row[0].Split(',')[1].Trim(),
-            //        LastName = row[0].Split(',')[0].Trim(),
-            //        FullName = row[0],
-            //        Clock_Code = row[1]
+            // structure = ["ID, Tool_ID Description, Active"]
+            foreach (List<string> row in data)
+            {
+                // Enter values into this model: Employee. Then add to list
+                toolsTemp.Add(new ToolEdit
+                {
+                    ID = int.Parse(row[0]),
+                    Tool_ID = (row[1]),
+                    Description = (row[2]),
+                    Active = row[3],
 
-            //    });
-            //}
-            //employeeList = employeesTemp;
+                });
+                
+            }
+            toolList = toolsTemp;
+            sortList();
+        }
 
-            throw new NotImplementedException();
+        public void sortList()
+        {
+            if (toolList!=null) { 
+                // Sort Tool List
+                toolList = toolList.OrderBy(x =>
+                {
+                    // get the first group of digits in the string
+                    var match = Regex.Match(x.Tool_ID??"", @"\d+");
+                    // if there is a match, parse it as an int
+                    if (match.Success)
+                    {
+                        return int.Parse(match.Value);
+                    }
+                    // otherwise, return a default value
+                    else
+                    {
+                        return 0;
+                    }
+
+                }).ToList();
+            }
+            else
+            {
+                throw new Exception("Called before list was intialized");
+            }
         }
 
     }

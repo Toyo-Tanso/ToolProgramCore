@@ -130,12 +130,18 @@ body {
 
 .tableHover:hover td {
     opacity: 60%;
+    
 
     
 }
 
+.tableHoverTR tr:hover {
+    
+    background-color: #ededed;
+}
+
 .dangerRows table {
-    table-dange
+    color: teal;
 
 }
 
