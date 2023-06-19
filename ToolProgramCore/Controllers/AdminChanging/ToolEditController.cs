@@ -65,14 +65,36 @@ namespace ToolProgramCore.Controllers.AdminChanging
             try
             {
                 // Helper Function to insert employee
-                //AddEmplHelper(collection);
+                AddToolHelper(collection);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
                 return View();
             }
-            throw new NotImplementedException();
+         
+        }
+
+        // TODO: change description
+        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
+        // add tool check in
+        private void AddToolHelper(IFormCollection collection)
+        {
+
+            string Tool_ID = collection["Tool_ID"].ToString();
+            string Description = collection["Description"];
+
+            // ensure length is less than 50
+            // shouldn't be activated but just in case
+            if (Description.Length > 50)
+            {
+                throw new Exception("Description too long");
+            }
+
+            // enter the new tool with active status
+            // call to data library
+            AddToolDL(Tool_ID, Description);
+
         }
 
         // GET: ToolEditController/Edit/5
@@ -143,12 +165,17 @@ namespace ToolProgramCore.Controllers.AdminChanging
                 return Json(result1);
             }
 
-            // Looks complex, but its just the above I just wanted to be fancy
-            //return result1 == Json(true) ?
-                
-            //    (result2 == Json(true) ? Json(true) : result2) 
-                
-            //    : result1; 
+            //// Simplified version? I am not sure
+            //bool startsTTU = result1 == trueResult; 
+            //bool uniqueID = result2 == trueResult;
+
+            //if (startsTTU && uniqueID) {
+            //    return Json(true);
+            //}
+            //else
+            //{
+            //    return startsTTU ? Json(result2) : Json(result1);
+            //}
 
 
         }

@@ -7,6 +7,8 @@ namespace DataLibrary.BusinessLogic
     // Intended to be the class to manipulate some of the fields
     public class Fields_Change
     {
+        // TODO: just make this into several files
+
         // Creates a new tool with it being active,
         // does not verify format nor does it add a locations
         // Used by Measure
@@ -280,6 +282,26 @@ namespace DataLibrary.BusinessLogic
                             WHERE WC_ID = @ID AND Status = 1 AND Borrowed = 0
                             ;";
                              
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        // Insert new tool with active status
+        // DL stands for data libary
+        public static int AddToolDL(string Tool_ID, string Description)
+        {
+
+            ToolDB data = new ToolDB
+            {
+                Tool_ID = Tool_ID,
+                Description = Description,
+                Active = 1
+            };
+
+            string sql = @"INSERT INTO dbo.Gage_List_Main
+                            (Tool_ID, Description, Active) 
+                            VALUES (@Tool_ID, @Description, @Active)
+                             ;";
 
             return SqlDataAccess.SaveData(sql, data);
         }
