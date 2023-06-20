@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,6 +27,20 @@ namespace ToolProgramCore.Models
         public string? Description { get; set; }
 
         public string? Active { get; set; }
+
+        
+        // Used for details and Edit
+        
+        // TODO add validation
+        public string? WC { get; set; }
+
+
+        public int? WC_ID { get; set; }
+
+        // if tool is currently borrowed will be not null
+        public string? BorrowedWC { get; set; }
+
+
 
     }
 }

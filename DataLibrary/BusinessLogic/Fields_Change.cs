@@ -142,6 +142,29 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<WC_DB>(sql)[0];
         }
 
+        public static ToolDB getToolDetails(int id)
+        {
+            string sql = @"SELECT Tool_ID, Description, Active
+                            FROM dbo.Gage_List_Main
+                            WHERE ID=" + id +
+                            ";";
+
+            return SqlDataAccess.LoadData<ToolDB>(sql)[0];
+        }
+
+        // Get all the tool details including all WC and if they are borrowed or not
+        public static List<List<string>> getToolWCDetails(int id)
+        {
+            string sql = @"SELECT ID_T, ID_W, WC, Tool_ID, Status, Borrowed
+                            FROM dbo.Tool_WorkCenters
+                            WHERE ID_T = " + id +
+                            " " +
+                            "  ORDER BY Status ASC;";
+
+            return SqlDataAccess.LoadListData<List<string>>(sql, "ID_T",
+                "ID_W", "WC", "Tool_ID", "Status", "Borrowed");
+        }
+
 
         // Recieves type of list needed and executes sql code to return a list
         //      for dropdown lists

@@ -22,23 +22,52 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // TODO: implement change desc
         public ActionResult Details(int id)
         {
-            //var data = getWCDetails(id);
+            var data = getToolDetails(id);
 
-            //List<string>? WCUnderList = strToArray(data.WCUnder ?? "");
+            // get WC details
+            List<List<string>> wcData = getToolWCDetails(id);
 
-            //WorkCenter curWC = new WorkCenter
-            //{
-            //    Name = data.Name,
-            //    Description = data.Description,
-            //    WCUnder = WCUnderList,
-            //    ID = id.ToString(),
-            //    Active = data.Active.ToString(),
-            //}
-            //;
+            string ? OG_WC = null;
+            string ? OG_WC_ID = null;
+            string? borrowed_WC = null;
+
+            // Has 1 or more WC
+            if (wcData.Count > 0)
+            {
+                // Structure ["ID_T", "ID_W", "WC", "Tool_ID", "Status", "Borrowed"]
+                List<string> row = wcData[0];
+
+                OG_WC = row[2];
+                OG_WC_ID = row[1];
+
+                // If there are two, the second one is the borrowed WC
+                if (wcData.Count == 2 && wcData[1][4] == "True")
+                {
+                    row = wcData[1];
+                    borrowed_WC = row[2];
+                }
+                else if (wcData.Count > 2)
+                {
+                    throw new Exception("WC DATA is incorrect");
+                }
+            }
 
 
-            //return View(curWC);
-            return View();
+            // Throw error if there is a discrency witht the WC
+
+            ToolEdit curTool = new ToolEdit
+            {
+                Tool_ID = data.Tool_ID,
+                Description = data.Description,
+                ID = id,
+                Active = data.Active.ToString(),
+                WC = OG_WC,
+                WC_ID = OG_WC_ID == null? null : int.Parse(OG_WC_ID),
+                BorrowedWC = borrowed_WC,
+            }
+            ;
+
+            return View(curTool);
         }
 
         // GET: ToolEditController/AddTool

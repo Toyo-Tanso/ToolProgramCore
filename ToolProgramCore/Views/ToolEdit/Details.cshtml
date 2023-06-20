@@ -1,0 +1,66 @@
+﻿@model ToolProgramCore.Models.ToolEdit
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<h1 class="mt-4 ">Details</h1>
+
+<div class="w-100 d-flex mb-3 mt-3">
+
+    <a class="btn btn-secondary adminButtonFilled btn-md "
+       role="button" href="/ToolEdit/">Back to List</a>
+</div>
+
+<div>
+    <h4>Tool Edit</h4>
+    <hr />
+    <dl class="row tableLines">
+        <dt class = "col-sm-2 visually-hidden">
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd class="col-sm-10 visually-hidden">
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tool_ID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tool_ID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @(Model.Description ?? "[None]")
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+        <dd class = "col-sm-10">
+            
+            @(Model.Active == "1" ? "Active" : "Inactive")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.WC)
+        </dt>
+        <dd class="col-sm-10">
+            <span class="
+        @(Model.BorrowedWC == null ? "" :  "text-muted fw-bold" )
+                ">@(Model.WC ?? "[None]")</span> 
+            <span class="fst-italic">
+                @(Model.BorrowedWC == null ? "" : " (Currently at: " + Model.BorrowedWC.Trim() + ")")
+            </span>
+        </dd>
+    </dl>
+</div>
+<div class="mt-3">
+    
+    @Html.ActionLink("Edit Tool", "EditTool", null,
+    new {id=(Model==null? -1 : Model.ID)}, new{ @class=" btn adminButton "})
+    
+    <a class="btn adminButtonFilled btn-md "
+       role="button" href="/ToolEdit/">Back to List</a>
+</div>
