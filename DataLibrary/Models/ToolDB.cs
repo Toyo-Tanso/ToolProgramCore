@@ -7,5 +7,8 @@
         public string? Description { get; set; }
         public int? Active { get; set; }
 
+        public string? WCUnder { get; set; }
+        public int? WC_ID { get; set; }
+
     }
 }

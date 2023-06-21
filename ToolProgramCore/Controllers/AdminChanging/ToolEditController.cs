@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Text.RegularExpressions;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.Fields_Change;
@@ -22,53 +23,11 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // TODO: implement change desc
         public ActionResult Details(int id)
         {
-            var data = getToolDetails(id);
 
-            // get WC details
-            List<List<string>> wcData = getToolWCDetails(id);
-
-            string ? OG_WC = null;
-            string ? OG_WC_ID = null;
-            string? borrowed_WC = null;
-
-            // Has 1 or more WC
-            if (wcData.Count > 0)
-            {
-                // Structure ["ID_T", "ID_W", "WC", "Tool_ID", "Status", "Borrowed"]
-                List<string> row = wcData[0];
-
-                OG_WC = row[2];
-                OG_WC_ID = row[1];
-
-                // If there are two, the second one is the borrowed WC
-                if (wcData.Count == 2 && wcData[1][4] == "True")
-                {
-                    row = wcData[1];
-                    borrowed_WC = row[2];
-                }
-                else if (wcData.Count > 2)
-                {
-                    throw new Exception("WC DATA is incorrect");
-                }
-            }
-
-
-            // Throw error if there is a discrency witht the WC
-
-            ToolEdit curTool = new ToolEdit
-            {
-                Tool_ID = data.Tool_ID,
-                Description = data.Description,
-                ID = id,
-                Active = data.Active.ToString(),
-                WC = OG_WC,
-                WC_ID = OG_WC_ID == null? null : int.Parse(OG_WC_ID),
-                BorrowedWC = borrowed_WC,
-            }
-            ;
-
-            return View(curTool);
+            return View(GetToolInfo(id));
         }
+
+        
 
         // GET: ToolEditController/AddTool
         // TODO: implement change desc
@@ -129,8 +88,14 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // GET: ToolEditController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            // TODO : make is so the WC has to exists in the model class
+            ToolEdit curTool = GetToolInfo(id);
+            curTool.WCDropDownList = LoadFields_dbl_lst("WC");
+
+            return View(curTool);
         }
+
+        // TODO make error handling like the one done in edit
 
         // POST: ToolEditController/Edit/5
         [HttpPost]
@@ -139,12 +104,168 @@ namespace ToolProgramCore.Controllers.AdminChanging
         {
             try
             {
+                EditHelper(collection, id);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
                 return View();
             }
+        }
+
+        // TODO: change it so when A new tool is added you can include the WC already?
+        //TODO: unrelated check && statments may have messed up
+
+        public void EditHelper(IFormCollection collection, int id)
+        {
+            string Description = collection["Description"];
+            string Active = collection["Active"].ToString();
+            string? WC = collection["WC"].ToString().Trim();
+            int? WC_ID = null;
+
+            // ensure that it is active
+            if (Active == "False")
+            {
+                throw new Exception("Item is inactive and cannot be changed");
+            }
+
+            // get new WC ID
+            if (!string.IsNullOrEmpty(WC)) 
+            {
+                var data = findWCByToolID(WC);
+
+                if (data == null)
+                {
+                    throw new Exception("WC is not found.");
+                }
+                WC_ID = data.ID;
+            }
+
+            // check if WC is different than expected
+            List<string?> wcData = getToolWCList(id);
+
+            string? OG_WC = wcData[0];
+
+            // No change in WC
+            if (OG_WC != null && OG_WC.Equals(WC))
+            {
+                // Don't change location
+            }
+            // new WC
+            else if (OG_WC == null)
+            {
+
+                if (string.IsNullOrEmpty(WC))
+                {
+                    // do not insert location
+                    WC = null;
+                }
+                else
+                {
+                    if (WC_ID == null)
+                    {
+                        throw new Exception("Model error handling incorrect");
+                    }
+                    // add new location
+                    AddWCToolIDLocation(WC_ID ?? -1, id);
+
+                }
+
+            }
+            // replace existing WC
+            else
+            {
+                // TODO BEware of repeating code and long functions
+                if (string.IsNullOrEmpty(WC))
+                {
+                    // do not insert location
+                    WC = null;
+                }
+                else
+                {
+                    // delete old location
+                    // Should not be able to access this if it borrowed
+                    DeleteWCToolIDLocation(id);
+
+                    // WCID should have been found
+                    if (WC_ID == null)
+                    {
+                        throw new Exception("Model error handling incorrect");
+                    }
+                    // add new location
+                    AddWCToolIDLocation(WC_ID ?? -1, id);
+                }
+            }
+
+            // Then Finally update gauge list
+            UpdateToolDL(id, Description);
+            
+
+        }
+
+        public ToolEdit GetToolInfo(int id)
+        {
+            // Get tool data
+            var data = getToolDetails(id);
+
+            // get WC details
+            List<string?> wcData = getToolWCList(id);
+
+            string? OG_WC = wcData[0];
+            string? OG_WC_ID = wcData[1];
+            string? borrowed_WC = wcData[2];
+
+            // Throw error if there is a discrency witht the WC
+
+            ToolEdit curTool = new ToolEdit
+            {
+                Tool_ID = data.Tool_ID,
+                Description = data.Description,
+                ID = id,
+                Active = data.Active.ToString(),
+                WC = OG_WC,
+                WC_ID = OG_WC_ID == null ? null : int.Parse(OG_WC_ID),
+                BorrowedWC = borrowed_WC,
+            }
+            ;
+
+            return curTool;
+
+        }
+
+        public List<string?> getToolWCList(int id)
+        {
+            var data = getToolDetails(id);
+
+            // get WC details
+            List<List<string>> wcData = getToolWCDetails(id);
+
+            string? OG_WC = null;
+            string? OG_WC_ID = null;
+            string? borrowed_WC = null;
+
+            // Has 1 or more WC
+            if (wcData.Count > 0)
+            {
+                // Structure ["ID_T", "ID_W", "WC", "Tool_ID", "Status", "Borrowed"]
+                List<string> row = wcData[0];
+
+                OG_WC = row[2].Trim();
+                OG_WC_ID = row[1];
+
+                // If there are two, the second one is the borrowed WC
+                if (wcData.Count == 2 && wcData[1][4] == "True")
+                {
+                    row = wcData[1];
+                    borrowed_WC = row[2].Trim();
+                }
+                else if (wcData.Count > 2)
+                {
+                    throw new Exception("WC DATA is incorrect");
+                }
+            }
+
+            return new List<string?> { OG_WC, OG_WC_ID, borrowed_WC };
         }
 
         // GET: ToolEditController/RemoveTool/5

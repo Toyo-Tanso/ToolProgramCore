@@ -309,6 +309,41 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
+        public static int DeleteWCToolIDLocation(int id)
+        {
+
+            var data = new ToolDB
+            {
+                ID = id,
+            };
+
+            string sql = @"DELETE FROM dbo.Tool_Locations1
+                            WHERE Tool_ID = @ID
+                            ;";
+
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        public static int AddWCToolIDLocation(int W_ID, int T_ID)
+        {
+
+            var data = new ToolDB
+            {
+                ID = T_ID,
+                WC_ID = W_ID,
+
+            };
+
+            string sql = @"INSERT INTO dbo.Tool_Locations1
+                            (Tool_ID, WC_ID, Status, Borrowed)
+                             VALUES (@ID, @WC_ID, 1, 0)
+                            ;";
+
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
         // Insert new tool with active status
         // DL stands for data libary
         public static int AddToolDL(string Tool_ID, string Description)
@@ -330,7 +365,27 @@ namespace DataLibrary.BusinessLogic
         }
 
 
+        // Update tool
+        // DL stands for data libary
+        public static int UpdateToolDL(int id, string Description)
+        {
 
+            ToolDB data = new ToolDB
+            {
+                Description = Description,
+                Active = 1,
+                ID = id
+            };
+
+            string sql = @"UPDATE dbo.Gage_List_Main
+                            SET Description = @Description, 
+                            Active = @Active 
+                            WHERE ID = @ID
+                          
+                             ;";
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
 
         public static List<List<string>> getToolofWC (int id)
         {
@@ -346,6 +401,15 @@ namespace DataLibrary.BusinessLogic
 
             return SqlDataAccess.LoadListData<List<string>>(sql, "Tool_ID", "Description");
 
+        }
+
+        public static WC_DB findWCByToolID(string Name)
+        {
+            string sql = @"SELECT ID
+                            FROM dbo.WorkCenter3
+                            WHERE Name='" + Name +
+                            "';";
+            return SqlDataAccess.LoadData<WC_DB>(sql)[0];
         }
 
 

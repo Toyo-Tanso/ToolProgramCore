@@ -117,6 +117,11 @@ body {
     border-radius: 4px;
     border-color: darkgrey;
     margin-bottom: 5px;
+    
+}
+
+.tableLines {
+    align-items:center;
 }
 
 

@@ -40,7 +40,7 @@ namespace ToolProgramCore.Models
         // if tool is currently borrowed will be not null
         public string? BorrowedWC { get; set; }
 
-
+        public List<List<string>> ? WCDropDownList { get; set; }
 
     }
 }
