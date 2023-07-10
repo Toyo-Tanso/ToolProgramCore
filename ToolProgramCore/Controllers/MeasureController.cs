@@ -1,4 +1,6 @@
 ﻿using ClosedXML.Excel;
+using DataLibrary.Models;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.VariantTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +50,17 @@ namespace ToolProgramCore.Controllers
                 .Take(pageSize) // take only the current page
                 .ToList();
 
-            shortMeasureList[0].TotalPages = totalPages;
+            if(shortMeasureList.Count != 0 )
+            {
+                shortMeasureList[0].TotalPages = totalPages;
+            }
+            else
+            {
+                shortMeasureList = null;
+            }
+
+            
+            
 
 
             return View(shortMeasureList);
@@ -161,6 +173,7 @@ namespace ToolProgramCore.Controllers
             // TODO : tool must contain "TTU "
 
             bool toolExists = false;
+            string OGToolID = "-1";
             // Check if the tool is in the tool List
             // [*ID *, *Tool_ID *, Description]
             foreach (List<string> toolTuple in toolList)
@@ -168,6 +181,7 @@ namespace ToolProgramCore.Controllers
                 if (toolTuple[1].Equals(ToolNo))
                 {
                     toolExists = true;
+                    OGToolID = (toolTuple[0]);
                 }
             }
 
@@ -192,6 +206,24 @@ namespace ToolProgramCore.Controllers
                 }
                 // TODO: send email saying a new tool is added
             }
+            else
+            {
+                // Check if there is a location
+                if (OGToolID == "-1")
+                {
+                    throw new Exception("Error tool does not have a valid ID");
+                }
+
+                // If there is not an associated location, add location
+                if (!ToolLocationExist(OGToolID))
+                {
+                    int WCID = FindWCID(WC);
+                    AddLocation(int.Parse(OGToolID), WCID);
+                }
+
+
+            }
+            
 
             // User DataLibrary to insert
             CreateMeasure(T_Date, ToolNo, S_Size, WC, EmpNo, Condition);

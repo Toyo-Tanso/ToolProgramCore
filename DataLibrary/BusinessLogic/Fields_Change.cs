@@ -37,6 +37,17 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<int>(sql)[0];
         }
 
+        // Finds the ID of the tool, if it exists in locations
+        // Used by Measure
+        public static bool ToolLocationExist(string Tool_ID)
+        {
+
+            string sql = @"SELECT WC_ID FROM dbo.Tool_Locations1 
+                            WHERE Tool_ID='" + Tool_ID + "';";
+
+            return SqlDataAccess.LoadData<int>(sql).Count != 0;
+        }
+
 
         // Adds Location given a toolID, and a WCID
         // Used by Measure

@@ -49,7 +49,7 @@
 
 </div>
 
-@if(Model != null)
+@if ((Model != null) && (Model.ToList().Count != 0))
 {
     <table class="table">
         
@@ -127,60 +127,61 @@ else
 }
 
 
+@if ((Model != null) && (Model.ToList().Count != 0)) {
+    <ul class="pagination">
 
-<ul class="pagination">
-
-    @{
-        int pageNum = string.IsNullOrEmpty(Context.Request.Query["page"]) ? 1 :
-            int.Parse(Context.Request.Query["page"]);
-        int prevPage = pageNum - 1;
-        int nextPage = pageNum + 1;
-        int totalPages = Model.ToList()[0].TotalPages ?? 1;
-    }
-
-    @*Prev btn*@
-    @if (prevPage == 0)
-    {
-        <li class="page-item disabled">
-            <a class="page-link disabled" href="@Url.Action("Index", new { page = 0 })">Previous</a>
-        </li>
-    }
-    else
-    {
-        <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", new { page =  int.Parse(Context.Request.Query["page"])-1 })">Previous</a>
-        </li>
-    }
-    @*TODO : fix the page numbers some variables are not up to date, remove isActive function*@
-    @*Page numbers*@
-    @for (int i = 1; i <= Model.ToList()[0].TotalPages; i++)
-    {
-        <li class="page-item @isActive(@Context.Request.Query["page"], @i)">
-            
-            <!-- add the current page index and size to the query string -->
-            <a class="page-link"
-            
-               href="@Url.Action("Index", new { page = i })">@i</a>
-        </li>
-    }
-
-    @{ 
-        // If the page Num is less than total pages make the button enabled
-        if (pageNum < totalPages) {
-            <li class="page-item">
-                <a class="page-link"
-                   href="@Url.Action("Index", new {
-                   page = string.IsNullOrEmpty(Context.Request.Query["page"]) ?
-                   2 : int.Parse(Context.Request.Query["page"])+1
-                   })">Next</a>
-            </li>
+        @{
+            int pageNum = string.IsNullOrEmpty(Context.Request.Query["page"]) ? 1 :
+                int.Parse(Context.Request.Query["page"]);
+            int prevPage = pageNum - 1;
+            int nextPage = pageNum + 1;
+            int totalPages = Model== null ? 0 : Model.ToList()[0].TotalPages ?? 1;
         }
-        else {
+
+        @*Prev btn*@
+        @if (prevPage == 0)
+        {
             <li class="page-item disabled">
-                <a class="page-link disabled"
-                   href="@Url.Action("Index", new { page = 0 })">Next</a>
+                <a class="page-link disabled" href="@Url.Action("Index", new { page = 0 })">Previous</a>
             </li>
         }
-    }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { page =  int.Parse(Context.Request.Query["page"])-1 })">Previous</a>
+            </li>
+        }
+        @*TODO : fix the page numbers some variables are not up to date, remove isActive function*@
+        @*Page numbers*@
+        @for (int i = 1; i <= Model.ToList()[0].TotalPages; i++)
+        {
+            <li class="page-item @isActive(@Context.Request.Query["page"], @i)">
+            
+                <!-- add the current page index and size to the query string -->
+                <a class="page-link"
+            
+                   href="@Url.Action("Index", new { page = i })">@i</a>
+            </li>
+        }
 
-</ul>
+        @{ 
+            // If the page Num is less than total pages make the button enabled
+            if (pageNum < totalPages) {
+                <li class="page-item">
+                    <a class="page-link"
+                       href="@Url.Action("Index", new {
+                       page = string.IsNullOrEmpty(Context.Request.Query["page"]) ?
+                       2 : int.Parse(Context.Request.Query["page"])+1
+                       })">Next</a>
+                </li>
+            }
+            else {
+                <li class="page-item disabled">
+                    <a class="page-link disabled"
+                       href="@Url.Action("Index", new { page = 0 })">Next</a>
+                </li>
+            }
+        }
+
+    </ul>
+}
