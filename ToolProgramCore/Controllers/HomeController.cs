@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.InkML;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
@@ -6,6 +7,8 @@ using System.Composition;
 using System.Diagnostics;
 using System.DirectoryServices.Protocols;
 using ToolProgramCore.Models;
+using ToolProgramCore.Policies.Requirements;
+using static ToolProgramCore.Policies.Requirements.AdminRequirement;
 
 namespace ToolProgramCore.Controllers
 {
@@ -34,26 +37,20 @@ namespace ToolProgramCore.Controllers
         // Verify that the user is an admin
         public bool VerifyUser()
         {
-            List<string> verifyiedUsers = new List<string>{ 
-                "TTUSA\\rpalma", 
-                "", } ;
-
             string username = base.User.Identities.ElementAt(0).Name ?? "";
 
-            
-            if( ! username.Equals("")) { 
 
-                foreach(string verified in verifyiedUsers)
+            List<string> authList = new AdminRequirement().AuthorizedUsers;
+            foreach (string authorizedUser in authList)
+            {
+                if (username.Equals("TTUSA\\" + authorizedUser))
                 {
-                    if (username == verified)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-            }
 
+            }
             return false;
-            
+
         }
 
         [Authorize]
@@ -61,13 +58,14 @@ namespace ToolProgramCore.Controllers
         {
             if (VerifyUser())
             {
+
                 return RedirectToAction("AdminLoggedIn");
             }
 
             return View();
         }
 
-        [Authorize]
+        [Authorize(Policy = "MustBeAdmin")]
         public IActionResult AdminLoggedIn()
         {
             return View();

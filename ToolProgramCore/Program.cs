@@ -1,9 +1,12 @@
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 using ToolProgramCore.Models;
+using ToolProgramCore.Policies.Handlers;
+using ToolProgramCore.Policies.Requirements;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,12 +17,13 @@ builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
     .AddNegotiate(
     );
 
+builder.Services.AddSingleton<IAuthorizationHandler, AdminRequirementHandler>();
 
 builder.Services.AddAuthorization(options =>
 {
     // By default, all incoming requests will be authorized according to the default policy.
     options.FallbackPolicy = options.DefaultPolicy;
-    options.AddPolicy("MustBeAdmin", policy => policy.RequireClaim("Role", "Admin"));
+    options.AddPolicy("MustBeAdmin", policy => policy.Requirements.Add(new AdminRequirement()));
     
 });
 
@@ -43,6 +47,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

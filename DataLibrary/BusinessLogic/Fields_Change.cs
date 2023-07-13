@@ -147,7 +147,7 @@ namespace DataLibrary.BusinessLogic
         {
             string sql = @"SELECT Name, Description, WCUnder, Active
                             FROM dbo.WorkCenter3
-                            WHERE ID=" + id  +
+                            WHERE ID=" + id +
                             ";";
 
             return SqlDataAccess.LoadData<WC_DB>(sql)[0];
@@ -208,7 +208,7 @@ namespace DataLibrary.BusinessLogic
                             FROM dbo.WorkCenter3                            
                             ORDER BY Name ASC;";
 
-                return SqlDataAccess.LoadListData<List<string>>(sql, 
+                return SqlDataAccess.LoadListData<List<string>>(sql,
                     "Name",
                     "Description", "WCUnder", "ID", "Active");
             }
@@ -309,13 +309,13 @@ namespace DataLibrary.BusinessLogic
 
             var data = new WC_DB
             {
-                ID=id,
+                ID = id,
             };
 
             string sql = @"DELETE FROM dbo.Tool_Locations1
                             WHERE WC_ID = @ID AND Status = 1 AND Borrowed = 0
                             ;";
-                             
+
 
             return SqlDataAccess.SaveData(sql, data);
         }
@@ -398,14 +398,14 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
-        public static List<List<string>> getToolofWC (int id)
+        public static List<List<string>> getToolofWC(int id)
         {
 
             // build in Access, and you can copy and paste it in an access to view the relationship
             // basically gets WC ID and uses location to get all tool names and description
             string sql = @"SELECT dbo.Gage_List_Main.Tool_ID, dbo.Gage_List_Main.Description
                             FROM (dbo.Tool_Locations1 INNER JOIN dbo.Gage_List_Main ON dbo.Tool_Locations1.Tool_ID = dbo.Gage_List_Main.ID) INNER JOIN dbo.WorkCenter3 ON dbo.Tool_Locations1.WC_ID = dbo.WorkCenter3.ID
-                            WHERE (((dbo.WorkCenter3.ID)="+ id + 
+                            WHERE (((dbo.WorkCenter3.ID)=" + id +
                             ") AND ((dbo.Gage_List_Main.Active)=1));";
 
             // Note: deactivated WC should not have any tools
@@ -423,6 +423,16 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<WC_DB>(sql)[0];
         }
 
+        public static List<List<string>> Load_Auth_List()
+        {
+            string sql = "";
 
+            sql = @"SELECT UserName
+                        FROM dbo.Admin_Authorization
+                        WHERE Access = 1;";
+
+            return SqlDataAccess.LoadListData<List<string>>(sql, "UserName");
+
+        }
     }
 }
