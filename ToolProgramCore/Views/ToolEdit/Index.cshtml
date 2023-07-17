@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+@{
+    bool searchTerm = !string.IsNullOrEmpty(Context.Request.Query["search"]);
+}
 
 <h1 class="mt-4">Tools</h1>
 
@@ -14,6 +17,32 @@
     <a class="btn btn-secondary adminButtonFilled btn-md "
        role="button" href="/Home/AdminLoggedIn">Back to Console</a>
 </div>
+<form asp-controller="ToolEdit" asp-action="Index" method="get">
+    
+    <div class="input-group mt-3 mb-1">
+         <span class="input-group-text" >Search:</span>
+        
+        <input type="text" name="search"
+               value="@( searchTerm ? @Context.Request.Query["search"] : "")" 
+               placeholder="WC or Name..."/>
+        
+        <input class="btn adminSec"  type="submit" value="Filter" />
+    </div >
+    <div class="form-check mt-2 mb-2">
+            <input onchange="this.form.submit()"
+                   class="form-check-input" type="checkbox" value="checked" id="flexCheckDefault"
+                   name="checkClicked" @(Context.Request.Query["checkClicked"] == "checked" ? "checked" : "")>
+            <label class="form-check-label" for="flexCheckDefault">
+                No WC
+            </label>
+        </div>
+    
+    
+
+</form>
+<a href="/ToolEdit/" class="btn adminSec">Clear</a>
+
+
 @if (@Model.Count() != 0)
 {
     <p class="mt-3 mb-0">For more information, see details.</p>
@@ -27,6 +56,13 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Tool_ID)
                 </th>
+
+                <th>
+                    Permenent WC
+                </th>
+                <th>
+                    Currently at
+                </th>
                 <th class="visually-hidden">
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
@@ -39,38 +75,56 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr class="@(item.Active=="True" ? "" : "table-inactive")">
-                    <td class ="visually-hidden">
-                        @Html.DisplayFor(modelItem => item.ID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Tool_ID)
-                    </td>
-                    <td class="visually-hidden">
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td class="visually-hidden">
-                        @Html.DisplayFor(modelItem => item.Active)
-                    </td>
-                    <td>
-                        @if (item.Active == "True")
-                        {
-                            @*@Html.ActionLink("Edit", "edit", null,
+                if (true)
+                {
+                    <tr class="@(item.Active=="True" ? "" : "table-inactive")">
+                        <td class ="visually-hidden">
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tool_ID)
+                        </td>
+                        <td>
+
+                            @if (string.IsNullOrEmpty(item.WC))
+                            {
+                                <span class="noneMark">X</span>
+                            }
+                            else
+                            {
+                                <span>@item.WC</span>
+
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BorrowedWC)
+                        </td>
+                        <td class="visually-hidden">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td class="visually-hidden">
+                            @Html.DisplayFor(modelItem => item.Active)
+                        </td>
+                        <td>
+                            @if (item.Active == "True")
+                            {
+                                @*@Html.ActionLink("Edit", "edit", null,
                 new {id=item.ID}, new{ @class="btn adminSec"})*@
-                            @Html.ActionLink("Details/Edit", "Details", null,
+                                @Html.ActionLink("Details/Edit", "Details", null,
                 new {id=item.ID}, new{ @class="btn adminSec" })
-                            @Html.ActionLink("Remove Tool", "RemoveTool", null,
+                                @Html.ActionLink("Remove Tool", "RemoveTool", null,
                 new {id=item.ID}, new{ @class="btn adminSec "})
-                        }
-                        else
-                        {
-                            @*@Html.ActionLink("Reactivate", "", null,
+                            }
+                            else
+                            {
+                                @*@Html.ActionLink("Reactivate", "", null,
                 new {id=item.ID}, new{ @class="btn btn-disabled "})*@
-                // Implemeted later
-                <button class="btn btn-secondary" disabled>Re-Add</button>
-                        }
+                                // Implemeted later
+                                <button class="btn btn-secondary" disabled>Re-Add</button>
+                            }
                     </td>
                 </tr>
+                }
             }
         </tbody>
     </table>
@@ -79,3 +133,7 @@ else
 {
     <div><p class="is-invalid">No Results Found...</p></div>
 }
+
+<script>
+
+</script>

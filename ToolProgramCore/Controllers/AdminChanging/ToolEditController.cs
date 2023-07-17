@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using ToolProgramCore.Models;
 using static DataLibrary.BusinessLogic.Fields_Change;
@@ -12,11 +14,45 @@ namespace ToolProgramCore.Controllers.AdminChanging
     {
         // GET: ToolEditController
         // TODO: implement change add search?
-        public ActionResult Index()
+        public ActionResult Index(string search = "", string checkClicked = "")
         {
             GetToolList();
 
+
+            bool checkClickedBool = checkClicked == "" ? false : true;
+            Console.WriteLine(checkClickedBool);
+
+
+            if (String.IsNullOrEmpty(search))
+            {
+                //return View(toolList);
+                search = "";
+            }
+
+            search = search.Trim().ToUpper();
+            
+            if(toolList != null)
+            {
+                return View(
+                    
+                    toolList.Where(s => 
+                    (s.Tool_ID!= null &&
+                    s.Tool_ID.Contains(search) &&
+                    (!checkClickedBool || String.IsNullOrEmpty(s.WC)))
+
+                    ||
+                    (s.WC != null &&
+                    s.WC.Contains(search) &&
+                    (!checkClickedBool || String.IsNullOrEmpty(s.WC)))
+                    )
+
+                );
+            }
+            
+
             return View(toolList);
+
+
         }
 
         // GET: ToolEditController/Details/5
@@ -407,9 +443,20 @@ namespace ToolProgramCore.Controllers.AdminChanging
             List<List<string>> data = LoadFields_dbl_lst("TOOL_ALL");
             List<ToolEdit> toolsTemp = new();
 
+            
+
+
             // structure = ["ID, Tool_ID Description, Active"]
             foreach (List<string> row in data)
             {
+
+                // get WC details
+                List<string?> wcData = getToolWCList(int.Parse(row[0]));
+
+                string? OG_WC = wcData[0];
+                string? OG_WC_ID = wcData[1];
+                string? borrowed_WC = wcData[2];
+
                 // Enter values into this model: Employee. Then add to list
                 toolsTemp.Add(new ToolEdit
                 {
@@ -417,6 +464,8 @@ namespace ToolProgramCore.Controllers.AdminChanging
                     Tool_ID = (row[1]),
                     Description = (row[2]),
                     Active = row[3],
+                    WC = OG_WC,
+                    BorrowedWC = borrowed_WC,
 
                 });
                 
