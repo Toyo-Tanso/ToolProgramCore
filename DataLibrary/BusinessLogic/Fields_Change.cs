@@ -244,6 +244,17 @@ namespace DataLibrary.BusinessLogic
 
             }
 
+            else if (type.Equals("POWER_USERS"))
+            {
+                sql = @"SELECT UserName, Date_Changed, Access, UpdatedBy, SuperAdmin
+                            FROM dbo.Admin_Authorization
+                            ;";
+                return SqlDataAccess.LoadListData<List<string>>(sql, "UserName",
+                                                "Date_Changed", "Access", "UpdatedBy"
+                                                , "SuperAdmin");
+
+            }
+
             else if (type.Equals("LOCATE"))
             {
                 sql = @"SELECT Tool_ID, WC_ID

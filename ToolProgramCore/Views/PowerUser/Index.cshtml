@@ -1,0 +1,80 @@
+﻿@model IEnumerable<ToolProgramCore.Models.PowerUser>
+
+@{
+    ViewData["Title"] = "Power Users";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Power Users</h1>
+
+
+<div class="w-100 d-flex mb-3 mt-3">
+    <a class="btn btn-primary adminButton btn-md me-2"
+       role="button" asp-action="AddPowerUser">Add Power User</a>
+    <a class="btn btn-secondary adminButtonFilled btn-md "
+       role="button" href="/Home/AdminLoggedIn">Back to Console</a>
+</div>
+
+@if (@Model!=null&& @Model.Count() != 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateChanged)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Access)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.UpdatedBy)*@
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.SuperAdmin)*@
+                    Elevated
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        TTUSA/@Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateChanged)
+                        
+                    </td>
+                    <td>
+                        @(item.Access ?? false || false ? "Yes" : "")
+                    </td>
+                    <td>
+                        @*TTUSA/@Html.DisplayFor(modelItem => item.UpdatedBy)*@
+                    </td>
+                    <td>
+                        @(item.SuperAdmin??false || false ? "Yes" : "")
+                    </td>
+                    <td>
+                        @if(item.Access ?? false || false)
+                        {
+                            @Html.ActionLink("Remove Acess", "RemoveAccess", null,
+                new {id=item.UserName}, new{ @class="btn adminSec "})
+                            
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Reinstate", "Details", null,
+                new {id=item.UserName}, new{ @class="btn adminSec" })
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
