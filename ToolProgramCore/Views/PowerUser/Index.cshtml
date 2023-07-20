@@ -14,6 +14,7 @@
     <a class="btn btn-secondary adminButtonFilled btn-md "
        role="button" href="/Home/AdminLoggedIn">Back to Console</a>
 </div>
+@((!Model.ElementAt(0).isAddUserAdmin ?? false))
 
 @if (@Model!=null&& @Model.Count() != 0)
 {
@@ -60,12 +61,24 @@
                         @(item.SuperAdmin??false || false ? "Yes" : "")
                     </td>
                     <td>
-                        @if(item.Access ?? false || false)
+                        @if(
+                            item.Access ?? false || false)
                         {
-                            @Html.ActionLink("Remove Acess", "RemoveAccess", null,
+                            if (Model.ElementAt(0).isAddUserAdmin ?? false)
+                            {
+                                @Html.ActionLink("Remove Acess", "RemoveAccess", null,
                 new {id=item.UserName}, new{ @class="btn adminSec "})
+
+                            }
+                            else
+                            {
+                                <a class="btn disabled adminSec ">Remove Acess</a>
+                                
+                            }
                             
+
                         }
+                        
                         else
                         {
                             @Html.ActionLink("Reinstate", "Details", null,

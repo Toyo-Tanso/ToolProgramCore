@@ -6,6 +6,8 @@ namespace ToolProgramCore.Models
     {
         [Key]
         [Display(Name = "User")]
+        [MaxLength(10)]
+        [MinLength(3)]
         public string? UserName { get; set; }
 
         [Display(Name = "Changed")]
@@ -21,6 +23,9 @@ namespace ToolProgramCore.Models
         [Required]
         [Display(Name = "Elevated")]
         public bool? SuperAdmin { get; set; }
+
+        
+        public bool? isAddUserAdmin { get; set; }
 
     }
 }

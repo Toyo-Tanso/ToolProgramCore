@@ -26,10 +26,24 @@ namespace DataLibrary.DataAccess
         // Generic method that takes sql, and 1 or more parameters of the attributes it is looking for
         public static List<List<string>> LoadListData<T>(string sql, params string[] fields) where T : class
         {
+            return LoadListDataImplemented<List<string>>(sql, null, fields);
+        }
+
+        // Generic method that takes sql, and 1 or more parameters of the attributes it is looking for
+        public static List<List<string>> LoadListDataWithParams<T>(string sql, DynamicParameters? sqlParams = null, params string[] fields) where T : class
+        {
+
+            return LoadListDataImplemented<List<string>>(sql, sqlParams, fields);
+
+        }
+
+        // Generic method that takes sql, and 1 or more parameters of the attributes it is looking for
+        public static List<List<string>> LoadListDataImplemented<T>(string sql, DynamicParameters? sqlParams, params string[] fields) where T : class
+        {
             using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
             {
                 // Use Query<T> to get an IEnumerable<T> of each row as an object
-                var result = cnn.Query<dynamic>(sql).ToList();
+                var result = cnn.Query<dynamic>(sql, sqlParams).ToList();
                 List<List<string>> EmplList = new List<List<string>>();
 
                 // Get each row and but into a list

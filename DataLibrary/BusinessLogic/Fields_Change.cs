@@ -1,4 +1,5 @@
-﻿using DataLibrary.DataAccess;
+﻿using Dapper;
+using DataLibrary.DataAccess;
 using DataLibrary.Models;
 using System.ComponentModel.Design;
 
@@ -266,6 +267,59 @@ namespace DataLibrary.BusinessLogic
             }
             else { throw new Exception("Incorrect type entered"); }
 
+        }
+
+        public static bool userSuperAdmin(string UserName)
+        {
+            
+
+            string sql = @"SELECT UserName
+                        FROM dbo.Admin_Authorization
+                        WHERE UserName = @UserName
+                        AND SuperAdmin = 1
+                        ;";
+
+            DynamicParameters sqlParams = new DynamicParameters();
+            sqlParams.Add("UserName", UserName);
+
+
+            List<List<string>> superAdminLookUp = SqlDataAccess.LoadListDataWithParams<List<string>>(
+                sql,
+                sqlParams,
+                "UserName",
+                                            "Date_Changed", "Access", "UpdatedBy"
+                                            , "SuperAdmin");
+            if (superAdminLookUp.Count > 0) 
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public static int AddNewUser(string userName, string updatedBy,
+                                                bool superAdmin)
+        {
+
+            var data = new 
+            {
+                UserName = userName,
+                UpdatedBy = updatedBy,
+                SuperAdmin = superAdmin
+
+            };
+
+            string sql = @"INSERT INTO
+                        dbo.Admin_Authorization
+                        (UserName, Access, UpdatedBy, SuperAdmin)
+                        VALUES(@UserName, 1, @UpdatedBy, @SuperAdmin)
+                        ;";
+
+
+            return SqlDataAccess.SaveData(sql, data);
         }
 
         // Used to check if a WC can be deactivated
