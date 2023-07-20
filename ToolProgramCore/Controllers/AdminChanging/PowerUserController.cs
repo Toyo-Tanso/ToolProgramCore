@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToolProgramCore.Models;
 
@@ -13,6 +17,24 @@ namespace ToolProgramCore.Controllers.AdminChanging
         public ActionResult Index()
         {
             GetUserList();
+
+            // See if user has access
+            string username = base.User.Identities.ElementAt(0).Name ?? "";
+            username = username != "" ? username.Split('\\')[1] : "Unknown";
+            bool hasAccess = isCurrentUserSuperAdmin(username);
+
+            if (userList == null) {
+                // TODO make a helper function
+                List<PowerUser> emptyList = new List<PowerUser>();
+                PowerUser emptyUser = new PowerUser();
+                emptyUser.isAddUserAdmin = false;
+                emptyUser.isAddUserAdmin = hasAccess;
+                emptyList.Add(emptyUser);
+
+
+                return View(emptyList); 
+            }
+            userList[0].isAddUserAdmin = hasAccess;
             return View(userList);
         }
 
@@ -23,24 +45,57 @@ namespace ToolProgramCore.Controllers.AdminChanging
         }
 
         // GET: PowerUserController/Create
-        public ActionResult Create()
+        public ActionResult AddPowerUser()
         {
-            return View();
+            PowerUser newUser = new PowerUser();
+            string username = base.User.Identities.ElementAt(0).Name ?? "";
+            username = username != "" ? username.Split('\\')[1] : "Unknown";
+            newUser.UpdatedBy = username;
+            newUser.isAddUserAdmin = isCurrentUserSuperAdmin(username);
+
+            return View(newUser);
+        }
+
+        public bool isCurrentUserSuperAdmin(string UserName)
+        {
+            return userSuperAdmin(UserName);
+
         }
 
         // POST: PowerUserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult AddPowerUser(IFormCollection collection)
         {
             try
             {
+                AddPowerUserHelper(collection);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
                 return View();
             }
+        }
+
+        // TODO: change description
+        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
+        // add tool check in
+        private void AddPowerUserHelper(IFormCollection collection)
+        {
+
+            string UserName = collection["UserName"];
+            string EditBy = collection["UpdatedBy"];
+            string SuperAdminString = collection["SuperAdmin"];
+            bool SuperAdmin = bool.Parse(SuperAdminString);
+
+
+            // TODO: Maybe if the username doesn't exist
+
+
+            // TODO: Check to see if this turns out correct
+            AddNewUser(UserName, EditBy, SuperAdmin);
+
         }
 
         // GET: PowerUserController/Edit/5
@@ -134,6 +189,8 @@ namespace ToolProgramCore.Controllers.AdminChanging
             userList = usersTemp;
             
         }
+
+
 
     }
 }
