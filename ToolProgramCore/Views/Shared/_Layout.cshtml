@@ -8,16 +8,16 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ToolProgramCore.styles.css" asp-append-version="true" />
-    <link rel="icon" type="image/x-icon" href="/Images/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="~/Images/favicon.ico" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
       <div class="justify-content-center d-flex">
-        <img alt="ruler Icon" class="bi" width="50" height="50" src="/Images/tools.png" />
+                    <img alt="ruler Icon" class="bi" width="50" height="50" src="~/Images/tools.png" />
 
-        <a class="navbar-brand ms-3 mt-1" href="/">Tool Program</a>
+                    <a class="navbar-brand ms-3 mt-1" href="~/">Tool Program</a>
     </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -25,33 +25,32 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a 
-              class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Home")?? false ? "active" : "")" href="/">
+          <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Home")?? false ? "active" : "")" href="~/">
               Home
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
         <li class="nav-item dropdown">
-           <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Measure")?? false ? "active" : "")" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Measure</a>
+                            <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Measure")?? false ? "active" : "")" data-bs-toggle="dropdown" href="~#" role="button" aria-haspopup="true" aria-expanded="false">Measure</a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="/Measure/AddMeasure">Create Measure</a>
+                                <a class="dropdown-item" href="~/Measure/AddMeasure">Create Measure</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/Measure/index">Recent Checks</a>
+                                <a class="dropdown-item" href="~/Measure/index">Recent Checks</a>
           </div>
         </li>
         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("CheckOut")?? false ? "active" : "")"
-                               data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tool Tracking</a>
+                               data-bs-toggle="dropdown" href="~#" role="button" aria-haspopup="true" aria-expanded="false">Tool Tracking</a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="/ToolTracker/CheckOut">Check out</a>
+                                <a class="dropdown-item" href="~/ToolTracker/CheckOut">Check out</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/ToolTracker/index">Return (List)</a>
+                                <a class="dropdown-item" href="~/ToolTracker/index">Return (List)</a>
           </div>
         </li>
       </ul>
       <ul class="navbar-nav me-right">
         <li class="nav-item">
-                <a class="nav-link" href="/Home/AdminLogIn">Admin log in</a>
+                            <a class="nav-link" href="~/Home/AdminLogIn">Admin log in</a>
         </li>
     </ul>
       

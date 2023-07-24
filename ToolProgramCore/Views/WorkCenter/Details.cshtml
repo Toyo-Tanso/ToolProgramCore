@@ -10,7 +10,7 @@
 <div class="w-100 d-flex mb-3 mt-3">
 
     <a class="btn btn-secondary adminButtonFilled btn-md "
-       role="button" href="/WorkCenter/">Back to List</a>
+       role="button" href="~/WorkCenter/">Back to List</a>
 </div>
 
 <div>
@@ -86,14 +86,14 @@ onclick="loadPartial()">Load this WC Tools</a>
 @section Scripts {
     <script>
         function loadPartial() {
-            $('#partialZone').load("/WorkCenter/ToolPartial/" + @(Model.ID));
+            $('#partialZone').load("~/WorkCenter/ToolPartial/" + @(Model.ID));
             document.getElementById("Loadpartial").textContent = "Refresh";
             $('#collapseDiv').collapse("toggle");
             document.getElementById('Loadpartial').onclick = loadPartialSecondary();
             document.getElementById('closePartial').className = "btn btn-primary adminSec slowTransition";
         };
         function loadPartialSecondary() {
-            $('#partialZone').load("/WorkCenter/ToolPartial/" + @(Model.ID));
+            $('#partialZone').load("~/WorkCenter/ToolPartial/" + @(Model.ID));
             
         };
 

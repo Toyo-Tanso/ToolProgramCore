@@ -8,17 +8,17 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ToolProgramCore.styles.css" asp-append-version="true" />
-    <link rel="icon" type="image/x-icon" href="/Images/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="~/Images/favicon.ico" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark admin">
   <div class="container-fluid">
       <div class="justify-content-center d-flex">
-          <a href="/">
-            <img alt="ruler Icon" class="bi" width="50" height="50" src="/Images/tools.png" />
+                    <a href="~/">
+            <img alt="ruler Icon" class="bi" width="50" height="50" src="~/Images/tools.png" />
           </a>
-           <a class="navbar-brand ms-3 mt-1" href="/Home/AdminLogIn">
+                    <a class="navbar-brand ms-3 mt-1" href="~/Home/AdminLogIn">
                Tool Program 
                <span class="text-decoration-underline">
                    [Admin]
@@ -31,7 +31,7 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Home")?? false ? "active" : "")" href="/Home/AdminLogIn">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Home")?? false ? "active" : "")" href="~/Home/AdminLogIn">
               Home
             <span class="visually-hidden">(current)</span>
           </a>
@@ -39,15 +39,15 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("WorkCenter")?? false ? "active" : "")"
                 data-bs-toggle="dropdown"
-                href="#" role="button"
+                               href="~#" role="button"
                 aria-haspopup="true"
                 aria-expanded="false">
                 WorkCenters
             </a>
             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/WorkCenter/AddWC">Add WC</a>
+                                <a class="dropdown-item" href="~/WorkCenter/AddWC">Add WC</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/WorkCenter/index">View list</a>
+                                <a class="dropdown-item" href="~/WorkCenter/index">View list</a>
             </div>
 
         </li>
@@ -55,30 +55,30 @@
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Employee")?? false ? "active" : "")"
             data-bs-toggle="dropdown"
-            href="#" role="button"
+                               href="~#" role="button"
             aria-haspopup="true"
             aria-expanded="false">
             Employees
         </a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="/Employee/AddEmployee">Add Employee</a>
+                                <a class="dropdown-item" href="~/Employee/AddEmployee">Add Employee</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/Employee/index">View list</a>
+                                <a class="dropdown-item" href="~/Employee/index">View list</a>
         </div>
 
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("ToolEdit")?? false ? "active" : "")"
             data-bs-toggle="dropdown"
-            href="#" role="button"
+                               href="~#" role="button"
             aria-haspopup="true"
             aria-expanded="false">
             Tools
         </a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="/ToolEdit/AddTool">Add Tool</a>
+                                <a class="dropdown-item" href="~/ToolEdit/AddTool">Add Tool</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/ToolEdit/index">View list</a>
+                                <a class="dropdown-item" href="~/ToolEdit/index">View list</a>
         </div>
 
     </li>
@@ -92,13 +92,13 @@
           </div>
         </li>*@
     <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("PowerUser")?? false ? "active" : "")">
-        <a class="nav-link" href="/PowerUser/">Verified Users</a>
+                            <a class="nav-link" href="~/PowerUser/">Verified Users</a>
     </li>
       </ul>
 
       <ul class="navbar-nav me-right">
         <li class="nav-item">
-          <a class="nav-link" href="/">Back To Site</a>
+                            <a class="nav-link" href="~/">Back To Site</a>
         </li>
     </ul>
       
