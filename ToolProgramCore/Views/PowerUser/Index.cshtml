@@ -66,8 +66,8 @@
                         {
                             if (Model.ElementAt(0).isAddUserAdmin ?? false)
                             {
-                                @Html.ActionLink("Remove Acess", "RemoveAccess", null,
-                new {id=item.UserName}, new{ @class="btn adminSec "})
+                                @Html.ActionLink("Remove Access", "RemoveAccess", null,
+                new {username=item.UserName}, new{ @class="btn adminSec "})
 
                             }
                             else
@@ -81,8 +81,8 @@
                         
                         else
                         {
-                            @Html.ActionLink("Reinstate", "Details", null,
-                new {id=item.UserName}, new{ @class="btn adminSec" })
+                            @Html.ActionLink("Reinstate", "Reinstate", null,
+                new {username=item.UserName}, new{ @class="btn adminSec" })
                         }
 
                     </td>

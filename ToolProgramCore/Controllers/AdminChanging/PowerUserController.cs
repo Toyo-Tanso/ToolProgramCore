@@ -93,8 +93,9 @@ namespace ToolProgramCore.Controllers.AdminChanging
             // TODO: Maybe if the username doesn't exist
 
 
+
             // TODO: Check to see if this turns out correct
-            AddNewUser(UserName, EditBy, SuperAdmin);
+            AddNewUser(UserName.ToLower(), EditBy, SuperAdmin);
 
         }
 
@@ -119,25 +120,145 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
         }
 
-        // GET: PowerUserController/Delete/5
-        public ActionResult Delete(int id)
+        
+
+        // GET: PowerUserController/RemoveAccess/5
+        public ActionResult RemoveAccess(string username)
+
         {
-            return View();
+            //string username = id;
+            GetUserList();
+            if (userList == null || string.IsNullOrEmpty(username)) {
+                throw new Exception("No users found");
+            }
+
+            // Find out what if user can edit
+            string curUser = base.User.Identities.ElementAt(0).Name ?? "";
+            curUser = curUser != "" ? curUser.Split('\\')[1] : "Unknown";
+
+            var adminFound = userList.Where(
+                user => user != null && 
+                user.UserName.Trim() == curUser &&
+                (user.SuperAdmin ?? false)                                               
+                );
+
+            // get the user to be removed
+            var list = userList.Where(user => user != null && user.UserName == username);
+            PowerUser removeUser = list.ElementAt(0);
+
+            // Enter user accessing site permissions into poweruser
+            // Also if the user to be removed is not an admin too
+            removeUser.isAddUserAdmin = adminFound.Count() > 0 && !(removeUser.SuperAdmin ?? false);
+            
+            return View(removeUser);
         }
 
-        // POST: PowerUserController/Delete/5
+        // POST: PowerUserController/RemoveAccess/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult RemoveAccess(string username, IFormCollection collection)
         {
             try
             {
+                RemovePowerUserHelper(collection, username);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                // TODO Error Catching
                 return View();
             }
+        }
+
+        // TODO: change description
+        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
+        // add tool check in
+        private void RemovePowerUserHelper(IFormCollection collection, string UserName)
+        {
+            // should be a suficient ID
+            string foundUser = collection["UserName"];
+
+            string curUser = base.User.Identities.ElementAt(0).Name ?? "";
+            curUser = curUser != "" ? curUser.Split('\\')[1] : "Unknown";
+
+
+            Console.WriteLine(foundUser, UserName);
+
+
+
+            // TODO: Check to see if this turns out correct
+            RemoveUser(UserName, curUser);
+
+        }
+
+
+        // GET: PowerUserController/Reinstate/5
+        public ActionResult Reinstate(string username)
+
+        {
+            //string username = id;
+            GetUserList();
+            if (userList == null || string.IsNullOrEmpty(username))
+            {
+                throw new Exception("No users found");
+            }
+
+            // Find out what if user can edit
+            string curUser = base.User.Identities.ElementAt(0).Name ?? "";
+            curUser = curUser != "" ? curUser.Split('\\')[1] : "Unknown";
+
+            var adminFound = userList.Where(
+                user => user != null &&
+                user.UserName.Trim() == curUser &&
+                (user.SuperAdmin ?? false)
+                );
+
+            // get the user to be removed
+            var list = userList.Where(user => user != null && user.UserName == username);
+            PowerUser removeUser = list.ElementAt(0);
+
+            // Enter user accessing site permissions into poweruser
+            // Also if the user to be removed is not an admin too
+            removeUser.isAddUserAdmin = adminFound.Count() > 0 && !(removeUser.SuperAdmin ?? false);
+
+            return View(removeUser);
+        }
+
+        // POST: PowerUserController/RemoveAccess/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Reinstate(string username, IFormCollection collection)
+        {
+            try
+            {
+                ReinstateHelper(collection, username);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                // TODO Error Catching
+                return View();
+            }
+        }
+
+        // TODO: change description
+        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
+        // add tool check in
+        private void ReinstateHelper(IFormCollection collection, string UserName)
+        {
+            // should be a suficient ID
+            string foundUser = collection["UserName"];
+
+            string curUser = base.User.Identities.ElementAt(0).Name ?? "";
+            curUser = curUser != "" ? curUser.Split('\\')[1] : "Unknown";
+
+            Console.WriteLine(foundUser, UserName);
+
+
+
+            // TODO: Check to see if this turns out correct
+            GiveBackAccess(UserName, curUser);
+
         }
 
 

@@ -322,6 +322,53 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
+        //TODO : create the description
+        public static int RemoveUser(string userName, string curUser)
+        {
+
+            var data = new
+            {
+                UserName = userName,
+                curUser,
+                today = DateTime.Now,
+
+                
+            };
+
+            string sql = @"UPDATE
+                        dbo.Admin_Authorization
+                        SET Access = 0, UpdatedBy = @curUser,
+                        Date_Changed = @today
+                        WHERE UserName = @userName
+                        ;";
+
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        //TODO : create the description
+        // Repeated code
+        public static int GiveBackAccess(string userName, string curUser)
+        {
+
+            var data = new
+            {
+                UserName = userName
+                , CurUser = curUser,
+                today = DateTime.Now
+            };
+
+            string sql = @"UPDATE
+                        dbo.Admin_Authorization
+                        SET Access = 1, UpdatedBy = @curUser,
+                        Date_Changed = @today
+                        WHERE UserName = @userName
+                        ;";
+
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
         // Used to check if a WC can be deactivated
         public static bool CheckOutToolExists(string WCName)
         {

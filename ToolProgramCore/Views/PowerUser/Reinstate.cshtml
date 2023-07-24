@@ -1,0 +1,87 @@
+﻿
+
+@model ToolProgramCore.Models.PowerUser
+
+@{
+    ViewData["Title"] = "Reinstate Access";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<h1 class="mt-5">Reinsate Access</h1>
+
+<div class="w-100 d-flex mb-3 mt-3">
+
+    <a class="btn btn-secondary adminButtonFilled btn-md "
+       role="button" asp-action="Index">Back to List</a>
+</div>
+
+
+<h3>Are you sure you want to reinstate access?</h3>
+<div>
+
+    <h3 class="text-success">@(Model != null ? Model.UserName : "")</h3>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateChanged)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateChanged)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Access)
+        </dt>
+        @if (Model != null)
+        {
+            <dd class="col-sm-10">
+                @(Model.Access ?? false ? "Yes" : "No")
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.UpdatedBy)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UpdatedBy)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.SuperAdmin)
+            </dt>
+            <dd class="col-sm-10">
+                @(Model.SuperAdmin ?? false ? "Yes" : "No")
+            </dd>
+        }
+
+    </dl>
+
+    <form asp-action="Reinstate">
+        @if (Model != null && (Model.isAddUserAdmin ?? false))
+        {
+            <input class="visually-hidden" value="@(Model.UserName)" type="text"
+                   id="UserName" name="UserName" />
+            <input type="submit" value="Reinstate" class="btn btn-primary buttonPurple me-2" />
+            <a asp-action="Index" class="ms-2">Back to List</a>
+
+        }
+        else
+        {
+            <div>
+                <p class="text-danger">
+                    Cannot reinstate access.
+                    <br />
+                    <span style="font-weight:700; text-decoration:underline;">Please Contact IT.</span>
+
+                </p>
+            </div>
+            <input disabled type="submit" value="Reinstate" class="btn buttonPurple me-2 " />
+            <a asp-action="Index" class="ms-2">Back to List</a>
+
+        }
+
+    </form>
+</div>
