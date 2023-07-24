@@ -13,6 +13,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
 
 
         // GET: WorkCenterController
+        [Authorize(Policy = "MustBeAdmin")]
         public ActionResult Index()
         {
             GetWCList();
@@ -21,6 +22,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         }
 
         // GET: WorkCenterController/Details/5
+        [Authorize(Policy = "MustBeAdmin")]
         public ActionResult Details(int id)
         {
 
@@ -42,6 +44,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
             return View(curWC);
         }
 
+        [Authorize(Policy = "MustBeAdmin")]
         public IActionResult ToolPartial(int id, bool removal=false)
         {
             Console.WriteLine(removal);
@@ -55,6 +58,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         }
 
         // GET: WorkCenterController/AddWC
+        [Authorize(Policy = "MustBeAdmin")]
         public ActionResult AddWC()
         {
             WorkCenter emptyWorkCenter = new WorkCenter();
@@ -63,6 +67,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         }
 
         // POST: WorkCenterController/AddWC
+        [Authorize(Policy = "MustBeAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddWC(IFormCollection collection)
@@ -83,6 +88,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
         // add tool check in
         // TODO: Implement / change description
+        [Authorize(Policy = "MustBeAdmin")]
         private void AddWCHelper(IFormCollection collection)
         {
 
@@ -106,6 +112,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // Returns error if the employee does not exist in the Database
         // TODO: remove duplicate
         // TODO: update description
+        [Authorize(Policy = "MustBeAdmin")]
         public IActionResult VerifyWC(string Name)
         {
             // Returns ID if it finds it
@@ -167,6 +174,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
 
         // GET: WorkCenterController/Reactivate/5
         // Reactivate a deactivated WC if there was a mistake
+        [Authorize(Policy = "MustBeAdmin")]
         public ActionResult Reactivate(int id)
         {
             var data = getWCDetails(id);
@@ -189,6 +197,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // POST: WorkCenterController/Reactivate/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "MustBeAdmin")]
         public ActionResult Reactivate(int id, IFormCollection collection)
         {
             try
@@ -203,6 +212,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         }
 
         // Helper FUnction for Reactivate, does the logic
+        [Authorize(Policy = "MustBeAdmin")]
         private void AddReactivateHelper(int id)
         {
             // Update the WorkCenter DB making it active
@@ -212,6 +222,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // GET: WorkCenterController/Deactivate/5
         // Checks to see if there are any tools that include the WC
         //      that you plan to deactivate
+        [Authorize(Policy = "MustBeAdmin")]
         public ActionResult Deactivate(int id)
         {
 
@@ -236,6 +247,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // POST: WorkCenterController/Deactivate/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "MustBeAdmin")]
         public ActionResult Deactivate(int id, IFormCollection collection)
         {
             try
@@ -250,6 +262,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         }
 
         // Helper FUnction for deactivate, does the logic
+        [Authorize(Policy = "MustBeAdmin")]
         private void AddDeactivateHelper(int id)
         {
             // Update the WorkCenter DB making it inactive
@@ -267,7 +280,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // holds current list
         public List<WorkCenter>? WorkCenterList;
 
-        [AllowAnonymous]
+        [Authorize(Policy = "MustBeAdmin")]
         // TODO: remove nonymous and update description
         // Gets the employee list and stores them in a new list with local Employee class
         // This loads each time the index runs, gets new values every refresh
@@ -302,6 +315,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
             WorkCenterList = workCenters;
         }
 
+        [Authorize(Policy = "MustBeAdmin")]
         public List<string> ? strToArray(string list)
         {
             List<string>? WCUnderList = new List<string>();

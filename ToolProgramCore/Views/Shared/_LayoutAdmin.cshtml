@@ -37,19 +37,51 @@
           </a>
         </li>
         <li class="nav-item dropdown">
-           <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Employee")?? false ? "active" : "")"
-           data-bs-toggle="dropdown" 
-           href="#" role="button" 
-           aria-haspopup="true" 
-           aria-expanded="false">
-               Employee
-               </a>
-          <div class="dropdown-menu">
+            <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("WorkCenter")?? false ? "active" : "")"
+                data-bs-toggle="dropdown"
+                href="#" role="button"
+                aria-haspopup="true"
+                aria-expanded="false">
+                WorkCenters
+            </a>
+            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/WorkCenter/AddWC">Add WC</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/WorkCenter/index">View list</a>
+            </div>
+
+        </li>
+        
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("Employee")?? false ? "active" : "")"
+            data-bs-toggle="dropdown"
+            href="#" role="button"
+            aria-haspopup="true"
+            aria-expanded="false">
+            Employees
+        </a>
+        <div class="dropdown-menu">
             <a class="dropdown-item" href="/Employee/AddEmployee">Add Employee</a>
             <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/Employee/index">View list</a>
-          </div>
-        </li>
+            <a class="dropdown-item" href="/Employee/index">View list</a>
+        </div>
+
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("ToolEdit")?? false ? "active" : "")"
+            data-bs-toggle="dropdown"
+            href="#" role="button"
+            aria-haspopup="true"
+            aria-expanded="false">
+            Tools
+        </a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="/ToolEdit/AddTool">Add Tool</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/ToolEdit/index">View list</a>
+        </div>
+
+    </li>
         @*<li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("CheckOut")?? false ? "active" : "")"
                                data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tool Tracking</a>
@@ -59,7 +91,11 @@
             <a class="dropdown-item" href="/ToolTracker/index">Return (List)</a>
           </div>
         </li>*@
+    <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString().Equals("PowerUser")?? false ? "active" : "")">
+        <a class="nav-link" href="/PowerUser/">Verified Users</a>
+    </li>
       </ul>
+
       <ul class="navbar-nav me-right">
         <li class="nav-item">
           <a class="nav-link" href="/">Back To Site</a>

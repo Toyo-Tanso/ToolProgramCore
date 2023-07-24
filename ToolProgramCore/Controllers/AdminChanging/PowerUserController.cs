@@ -11,6 +11,7 @@ using static DataLibrary.BusinessLogic.Fields_Change;
 
 namespace ToolProgramCore.Controllers.AdminChanging
 {
+    [Authorize(Policy = "MustBeAdmin")]
     public class PowerUserController : Controller
     {
         // GET: PowerUserController

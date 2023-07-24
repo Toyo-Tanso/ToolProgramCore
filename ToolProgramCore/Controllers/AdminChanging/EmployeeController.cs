@@ -11,14 +11,16 @@ namespace ToolProgramCore.Controllers.AdminChanging
         //TODO add authentication data
 
 
+
         // GET: EmployeeController
+        [Authorize(Policy = "MustBeAdmin")]
         public ActionResult Index()
         {
             GetEmployeeList();
             
             return View(employeeList);
         }
-
+        [Authorize(Policy = "MustBeAdmin")]
         // GET: EmployeeController/AddEmployee
         public ActionResult AddEmployee()
         {
@@ -28,6 +30,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         }
 
         // POST: EmployeeController/AddEmployee
+        [Authorize(Policy = "MustBeAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddEmployee(IFormCollection collection)
@@ -48,6 +51,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // TODO: change description
         // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
         // add tool check in
+        [Authorize(Policy = "MustBeAdmin")]
         private void AddEmplHelper(IFormCollection collection)
         {
 
@@ -75,7 +79,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // Returns error if the employee does not exist in the Database
         // TODO: remove duplicates update desc
         // TODO check EMP unactives
-        [AllowAnonymous]
+        [Authorize(Policy = "MustBeAdmin")]
         public IActionResult VerifyClockCode(string Clock_Code)
         {
             List<List<string>> cur_empl = LoadFields_dbl_lst("EMP_ALL");
@@ -101,8 +105,8 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
         }
 
-        [AllowAnonymous]
-
+        
+        [Authorize(Policy = "MustBeAdmin")]
         // Ensures that every word is capitalized
         // Not 100% necessary but it's nice to have consistency in the database
         public IActionResult VerifyCapitalization(string FirstName = "", string LastName = "")
@@ -168,9 +172,10 @@ namespace ToolProgramCore.Controllers.AdminChanging
         // holds current list
         public List<Employee>? employeeList;
 
-        [AllowAnonymous]
+        
         // Gets the employee list and stores them in a new list with local Employee class
         // This loads each time the index runs, gets new values every refresh
+        [Authorize(Policy = "MustBeAdmin")]
         public void GetEmployeeList()
         {
 
