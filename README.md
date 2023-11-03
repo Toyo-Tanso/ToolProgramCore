@@ -1,6 +1,6 @@
 # Tools Program
 
-<img src="${Images}\tools.png" alt="ruler Icon" style="zoom:500px;" />
+<img src="${Images}\tools.png" alt="ruler Icon" style="zoom:50px;" />
 
 ### General description
 
