@@ -1,6 +1,6 @@
 # Tools Program
 
-<img src="${Images}\tools.png" alt="ruler Icon" style="width:50px;" />
+<img src="${Images}\tools.png" alt="ruler Icon" width:"50px" />
 
 ### General description
 
@@ -53,7 +53,7 @@ Please take into consideration the design of the underlying database when making
 
 #### Home Page
 
-<img src="${Images}\image-20231103104721857.png" alt="image-20231103104721857" style="zoom:80%;" />
+<img src="${Images}\image-20231103104721857.png" alt="image-20231103104721857" zoom:"80%;" />
 
 ### Recent tool Measure list
 
