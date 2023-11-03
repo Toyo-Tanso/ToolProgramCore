@@ -15,7 +15,7 @@
 
     <div class="w-auto ms-5">
         <div class="d-flex align-items-center ms-1">
-            <img alt="Icon" class="img-fluid" width="100" @*max-height="170"*@ src="~/Images/checkOut.png" />
+            <img alt="Icon" class="img-fluid" width="100" src="~/Images/checkOut.png" />
         </div>
     </div>
 
@@ -132,7 +132,7 @@
                 data: {
                     Tool: toolValue
                 },
-                url: '/ToolTracker/GetWC',
+                url: 'GetWC',
             }).done(function (result) {
                 $("#wc").val(result);
             });

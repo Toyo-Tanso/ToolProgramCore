@@ -34,7 +34,7 @@ namespace ToolProgramCore.Models
         [Remote(action: "VerifyEmpNo", controller: "Measure")]
         public String? EmpNo { get; set; }
 
-        [Range(0.5, 25)]
+        [Range(0, 25)]
         [MaxLength(10)]
         [Display(Name = "Standard Size")]
         [Required]

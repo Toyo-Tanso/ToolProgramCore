@@ -35,7 +35,7 @@
 
     <div class="w-auto ms-5">
         <div class="d-flex align-items-center ms-1">
-            <img alt="Icon" class="img-fluid" width="140" @*max-height="170"*@ src="~/Images/MeasureAdd.png" />
+            <img alt="Icon" class="img-fluid" width="140" src="~/Images/MeasureAdd.png"  />
         </div>
     </div>
         
@@ -130,7 +130,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="S_Size" class="control-label"></label>
-                <input asp-for="S_Size" class="form-control" type="number" step="0.1"
+                <input asp-for="S_Size" class="form-control" type="number" step="0.0001"
                 list="S_Size_lst">
 
                 <datalist id="S_Size_lst">                
@@ -224,7 +224,7 @@
             type: "POST",
             data: { Tool: toolValue
                     },
-            url: '/Measure/GetWC',
+            url: 'GetWC',
         }).done(function (result) {
 
             // auto fill wc input

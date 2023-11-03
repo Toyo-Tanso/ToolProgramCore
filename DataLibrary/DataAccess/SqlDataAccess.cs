@@ -10,7 +10,7 @@ namespace DataLibrary.DataAccess
         // TODO : find a way to abstract this out to another project
         public static string GetConnectionString(string connectionName = "NCPR_PROG1")
         {
-            return "Data Source = DATALINKSRVR\\SQLEXPRESS; Initial Catalog = NC_PROG; Integrated Security = True";
+            return "Data Source = SQLSRVR; Initial Catalog = Tool_Tracking; Integrated Security = True";
         }
 
         // Loads data into an List of an unnamed object
