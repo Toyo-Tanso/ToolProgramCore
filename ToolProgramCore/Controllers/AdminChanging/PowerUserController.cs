@@ -15,6 +15,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
     public class PowerUserController : Controller
     {
         // GET: PowerUserController
+        // home page start up for power users
         public ActionResult Index()
         {
             GetUserList();
@@ -25,27 +26,31 @@ namespace ToolProgramCore.Controllers.AdminChanging
             bool hasAccess = isCurrentUserSuperAdmin(username);
 
             if (userList == null) {
-                // TODO make a helper function
+                // Sets user as not privlidged and loads
                 List<PowerUser> emptyList = new List<PowerUser>();
                 PowerUser emptyUser = new PowerUser();
                 emptyUser.isAddUserAdmin = false;
                 emptyUser.isAddUserAdmin = hasAccess;
                 emptyList.Add(emptyUser);
 
-
                 return View(emptyList); 
             }
+
+            // access here allows them to add users; usually reserved for just the IT department
             userList[0].isAddUserAdmin = hasAccess;
             return View(userList);
         }
 
         // GET: PowerUserController/Details/5
+        // Do you need me to explain it?
+        // JK it's not being used
         public ActionResult Details(int id)
         {
             return View();
         }
 
         // GET: PowerUserController/Create
+        // Loads form and sends over current users username
         public ActionResult AddPowerUser()
         {
             PowerUser newUser = new PowerUser();
@@ -57,6 +62,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
             return View(newUser);
         }
 
+        //
         public bool isCurrentUserSuperAdmin(string UserName)
         {
             return userSuperAdmin(UserName);
@@ -64,6 +70,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
         }
 
         // POST: PowerUserController/Create
+        // Uses helper function
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddPowerUser(IFormCollection collection)
@@ -79,24 +86,26 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
         }
 
-        // TODO: change description
-        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
-        // add tool check in
+
+        // [Helper Function] Takes out values and uses the Fields_Change Controller to
+        // add a new pweruser
         private void AddPowerUserHelper(IFormCollection collection)
         {
+            string?  UserName = collection["UserName"];
+            string? EditBy = collection["UpdatedBy"];
+            string? SuperAdminString = collection["SuperAdmin"];
 
-            string UserName = collection["UserName"];
-            string EditBy = collection["UpdatedBy"];
-            string SuperAdminString = collection["SuperAdmin"];
-            bool SuperAdmin = bool.Parse(SuperAdminString);
-
-
-            // TODO: Maybe if the username doesn't exist
-
-
-
-            // TODO: Check to see if this turns out correct
-            AddNewUser(UserName.ToLower(), EditBy, SuperAdmin);
+            // Maybe if the username doesn't exist
+            if(UserName is null | EditBy is null | SuperAdminString is null)
+            {
+                throw new Exception("Missing data recieved");
+            }
+            else
+            {
+                // Double question mark is to get rid of the warning
+                bool SuperAdmin = bool.Parse(SuperAdminString??"");
+                AddNewUser(UserName??"".ToLower(), EditBy??"", SuperAdmin);
+            }
 
         }
 
@@ -121,14 +130,15 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
         }
 
-        
-
         // GET: PowerUserController/RemoveAccess/5
+        // removes access from a user. ? oo what happened?
         public ActionResult RemoveAccess(string username)
 
         {
             //string username = id;
             GetUserList();
+
+            // Edge case, not likely to happen
             if (userList == null || string.IsNullOrEmpty(username)) {
                 throw new Exception("No users found");
             }
@@ -138,23 +148,24 @@ namespace ToolProgramCore.Controllers.AdminChanging
             curUser = curUser != "" ? curUser.Split('\\')[1] : "Unknown";
 
             var adminFound = userList.Where(
-                user => user != null && 
-                user.UserName.Trim() == curUser &&
+                user => user is not null & user!.UserName is not null & 
+                user.UserName?.Trim() == curUser &
                 (user.SuperAdmin ?? false)                                               
                 );
 
             // get the user to be removed
             var list = userList.Where(user => user != null && user.UserName == username);
-            PowerUser removeUser = list.ElementAt(0);
+            PowerUser UserToBeRemoved = list.ElementAt(0);
 
-            // Enter user accessing site permissions into poweruser
-            // Also if the user to be removed is not an admin too
-            removeUser.isAddUserAdmin = adminFound.Count() > 0 && !(removeUser.SuperAdmin ?? false);
+            // Allow user to go to removeuser page, if current user is an admin
+            // Also if the user that is supposed to be removed is not an also admin
+            UserToBeRemoved.isAddUserAdmin = adminFound.Count() > 0 && !(UserToBeRemoved.SuperAdmin ?? false);
             
-            return View(removeUser);
+            return View(UserToBeRemoved);
         }
 
         // POST: PowerUserController/RemoveAccess/5
+        // Users helper function
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RemoveAccess(string username, IFormCollection collection)
@@ -166,34 +177,28 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
             catch
             {
-                // TODO Error Catching
-                return View();
+                throw new Exception("Could not remove user");
             }
         }
 
-        // TODO: change description
-        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
-        // add tool check in
+
+        // [Helper Function] that will take in username and remove it using fields change controller
         private void RemovePowerUserHelper(IFormCollection collection, string UserName)
         {
-            // should be a suficient ID
-            string foundUser = collection["UserName"];
+            // should be a sufficient ID
+            string foundUser = collection["UserName"]!;
 
             string curUser = base.User.Identities.ElementAt(0).Name ?? "";
             curUser = curUser != "" ? curUser.Split('\\')[1] : "Unknown";
 
 
-            Console.WriteLine(foundUser, UserName);
-
-
-
-            // TODO: Check to see if this turns out correct
+            // Does not truly removes, it just disables
             RemoveUser(UserName, curUser);
-
         }
 
 
         // GET: PowerUserController/Reinstate/5
+        // Add the user back by finding the ID
         public ActionResult Reinstate(string username)
 
         {
@@ -209,20 +214,20 @@ namespace ToolProgramCore.Controllers.AdminChanging
             curUser = curUser != "" ? curUser.Split('\\')[1] : "Unknown";
 
             var adminFound = userList.Where(
-                user => user != null &&
-                user.UserName.Trim() == curUser &&
+                user => user is not null & user!.UserName is not null &
+                user.UserName?.Trim() == curUser &&
                 (user.SuperAdmin ?? false)
-                );
+            );
 
             // get the user to be removed
             var list = userList.Where(user => user != null && user.UserName == username);
-            PowerUser removeUser = list.ElementAt(0);
+            PowerUser UserToBeReinstated = list.ElementAt(0);
 
             // Enter user accessing site permissions into poweruser
             // Also if the user to be removed is not an admin too
-            removeUser.isAddUserAdmin = adminFound.Count() > 0 && !(removeUser.SuperAdmin ?? false);
+            UserToBeReinstated.isAddUserAdmin = adminFound.Count() > 0 && !(UserToBeReinstated.SuperAdmin ?? false);
 
-            return View(removeUser);
+            return View(UserToBeReinstated);
         }
 
         // POST: PowerUserController/RemoveAccess/5
@@ -237,9 +242,9 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
             catch
             {
-                // TODO Error Catching
-                return View();
+                throw new Exception("Could not reinstate user. Unknown error.");  
             }
+
         }
 
         // TODO: change description
@@ -248,20 +253,17 @@ namespace ToolProgramCore.Controllers.AdminChanging
         private void ReinstateHelper(IFormCollection collection, string UserName)
         {
             // should be a suficient ID
-            string foundUser = collection["UserName"];
+            string? foundUser = collection["UserName"];
 
             string curUser = base.User.Identities.ElementAt(0).Name ?? "";
             curUser = curUser != "" ? curUser.Split('\\')[1] : "Unknown";
 
-            Console.WriteLine(foundUser, UserName);
+            if (foundUser is null) {
+                throw new Exception("User not found");
+            }
 
-
-
-            // TODO: Check to see if this turns out correct
             GiveBackAccess(UserName, curUser);
-
         }
-
 
         // ** Data Loaders **
 

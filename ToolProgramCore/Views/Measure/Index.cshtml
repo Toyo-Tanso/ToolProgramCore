@@ -151,18 +151,109 @@ else
                 <a class="page-link" href="@Url.Action("Index", new { page =  int.Parse(Context.Request.Query["page"])-1 })">Previous</a>
             </li>
         }
-        @*TODO : fix the page numbers some variables are not up to date, remove isActive function*@
+        @* @*TODO : fix the page numbers some variables are not up to date, remove isActive function*@
         @*Page numbers*@
-        @for (int i = 1; i <= Model.ToList()[0].TotalPages; i++)
+        @*for (int i = 1; i <= Model.ToList()[0].TotalPages; i++)
         {
             <li class="page-item @isActive(@Context.Request.Query["page"], @i)">
             
                 <!-- add the current page index and size to the query string -->
-                <a class="page-link"
+                <a class="page-link" 
             
                    href="@Url.Action("Index", new { page = i })">@i</a>
             </li>
+        } *@
+
+        
+        <li class="page-item @isActive(@Context.Request.Query["page"], 1)">
+            
+            <!-- add the current page index and size to the query string -->
+            <a class="page-link" 
+            
+                href="@Url.Action("Index", new { page = 1 })">1</a>
+        </li>
+        @if (Model.ToList()[0].TotalPages > 1) {
+            <li class="page-item @isActive(@Context.Request.Query["page"], 2)">
+            
+            <!-- add the current page index and size to the query string -->
+            <a class="page-link" 
+            
+                href="@Url.Action("Index", new { page = 2 })">2</a>
+            </li>
         }
+
+        @if (Model.ToList()[0].TotalPages > 5) {
+
+            <li class="page-item">
+            
+            <!-- add the current page index and size to the query string -->
+            <a class="page-link" 
+            
+               Disabled >...</a>
+            </li>
+            @* If its greater than 2 and 2 less than the max make it be half the page *@
+            @if(((Context.Request.Query["page"]).Count > 0) && ( (Model.ToList()[0].TotalPages)-2 > int.Parse(@Context.Request.Query["page"])) && int.Parse(@Context.Request.Query["page"]) > 2)
+            {
+                <li class="page-item @isActive(@Context.Request.Query["page"], int.Parse(Context.Request.Query["page"]))">
+            
+                    <!-- add the current page index and size to the query string -->
+                    <a class="page-link" 
+                       href="@Url.Action("Index", new { page = int.Parse(Context.Request.Query["page"]) })">@(int.Parse(Context.Request.Query["page"]))</a>
+                </li>
+                <li class="page-item">
+            
+                <!-- add the current page index and size to the query string -->
+                <a class="page-link" 
+            
+                   Disabled >...</a>
+                </li>
+            }
+            else {
+
+                <li class="page-item @isActive(@Context.Request.Query["page"], (Model.ToList()[0].TotalPages??0)/2)">
+            
+                    <!-- add the current page index and size to the query string -->
+                    <a class="page-link" 
+                       href="@Url.Action("Index", new { page = (Model.ToList()[0].TotalPages)/2 })">@((Model.ToList()[0].TotalPages)/2)</a>
+                </li>
+                <li class="page-item">
+            
+                <!-- add the current page index and size to the query string -->
+                <a class="page-link" 
+            
+                   Disabled >...</a>
+                </li>
+
+            }
+             @* The next two are flipped with 3 and 2 because if there is 4 it will show 3 then 4 if it is 3 pages it will show only show 3 *@
+            @if (Model.ToList()[0].TotalPages > 3) {
+            <li class="page-item @isActive(@Context.Request.Query["page"],(Model.ToList()[0].TotalPages??0)-2)">
+            
+            <!-- add the current page index and size to the query string -->
+            <a class="page-link" 
+            
+                href="@Url.Action("Index", new { page = (Model.ToList()[0].TotalPages)-2 })">@((Model.ToList()[0].TotalPages)-2)</a>
+            </li>
+            }
+
+        @if (Model.ToList()[0].TotalPages > 2) {
+            <li class="page-item @isActive(@Context.Request.Query["page"],(Model.ToList()[0].TotalPages??0)-1)">
+            
+            <!-- add the current page index and size to the query string -->
+            <a class="page-link" 
+            
+                href="@Url.Action("Index", new { page = (Model.ToList()[0].TotalPages)-1 })">@((Model.ToList()[0].TotalPages)-1)</a>
+            </li>
+            }
+
+            
+
+
+        }
+        
+        
+
+        
 
         @{ 
             // If the page Num is less than total pages make the button enabled

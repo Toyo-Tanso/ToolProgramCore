@@ -8,9 +8,6 @@ namespace ToolProgramCore.Controllers.AdminChanging
 {
     public class EmployeeController : Controller
     {
-        //TODO add authentication data
-
-
 
         // GET: EmployeeController
         [Authorize(Policy = "MustBeAdmin")]
@@ -47,10 +44,9 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
         }
 
-
-        // TODO: change description
-        // [Helper Function] Takes out values and uses the MeasuerLogic Controller to
+        // [Helper Function] Takes out values and uses the Fields_Change Controller to
         // add tool check in
+        // Ensures that the length is not more than 50 characters
         [Authorize(Policy = "MustBeAdmin")]
         private void AddEmplHelper(IFormCollection collection)
         {
@@ -58,6 +54,7 @@ namespace ToolProgramCore.Controllers.AdminChanging
             string FirstName = collection["FirstName"].ToString();
             string LastName = collection["LastName"].ToString();
             string Clock_Code = collection["Clock_Code"];
+            
 
             // Clock_Code will be unique because of model class data annotation
             // combine first and last name
@@ -68,14 +65,18 @@ namespace ToolProgramCore.Controllers.AdminChanging
             if (fullName.Length > 50) {
                 throw new Exception("Name too long");
             }
-
+            if (Clock_Code is null)
+            {
+                throw new Exception("No clock code");
+            }
+            
             // enter the new employee with active status
             // call to data library
             AddEmployeeDL(fullName, Clock_Code);
 
         }
 
-        // This verifies input in the form (Helper) [called in the model class]
+        // This verifies input in the form (Helper) [called in the cshtml class]
         // Returns error if the employee does not exist in the Database
         // TODO: remove duplicates update desc
         // TODO check EMP unactives
@@ -143,35 +144,12 @@ namespace ToolProgramCore.Controllers.AdminChanging
             }
         }
 
-        // TODO do I need a helper to use Load Fields_dbl_lst where it was made
+        // No delete, it's better for things to remain in there and just unactivate it in the database
 
-        //// NOT Allowed? because of loss of Data? or does it not matter?
-        //// GET: EmployeeController/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
+        // ** Data Loaders **\
 
-        //// POST: EmployeeController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        // ** Data Loaders **
-
-        // holds current list
+        // holds current list used to return to view class
         public List<Employee>? employeeList;
-
         
         // Gets the employee list and stores them in a new list with local Employee class
         // This loads each time the index runs, gets new values every refresh

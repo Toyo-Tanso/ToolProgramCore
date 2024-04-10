@@ -168,7 +168,7 @@ namespace DataLibrary.BusinessLogic
         public static List<List<string>> getToolWCDetails(int id)
         {
             string sql = @"SELECT ID_T, ID_W, WC, Tool_ID, Status, Borrowed
-                            FROM dbo.Tool_WorkCenters
+                            FROM dbo.View_Tool_WorkCenters
                             WHERE ID_T = " + id +
                             " " +
                             "  ORDER BY Status ASC;";
