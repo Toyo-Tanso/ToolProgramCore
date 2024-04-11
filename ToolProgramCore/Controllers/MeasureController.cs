@@ -34,9 +34,9 @@ namespace ToolProgramCore.Controllers
             GetMeasureList();
 
             // get the page index and size from query string or default values
-            string SetPageSize = "10";
+            string SetPageSize = "30";
             int pageIndex = int.Parse(page ?? "1");
-            int pageSize = int.Parse(SetPageSize ?? "10");
+            int pageSize = int.Parse(SetPageSize ?? "30");
 
             // get the total number of records
             int totalCount = MeasureList.Count();
